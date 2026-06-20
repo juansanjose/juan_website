@@ -13,12 +13,7 @@
     <link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Params.author }}">
   {{ end }}
 
-  <script>
-    (function() {
-      var theme = localStorage.getItem('theme');
-      if (theme) document.documentElement.setAttribute('data-theme', theme);
-    })();
-  </script>
+  <script src="{{ site.BaseURL }}js/theme.js" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -43,24 +38,11 @@
     </div>
   </footer>
 
-  <script>
-    var themeToggle = document.querySelector('.theme-toggle');
-
-    function updateThemeToggle() {
-      var blueTheme = document.documentElement.getAttribute('data-theme') === 'dark';
-      themeToggle.textContent = blueTheme ? 'white' : 'blue';
-      themeToggle.setAttribute('aria-label', blueTheme ? 'Switch to white theme' : 'Switch to blue theme');
-    }
-
-    updateThemeToggle();
-
-    themeToggle.addEventListener('click', function() {
-      var root = document.documentElement;
-      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      updateThemeToggle();
-    });
-  </script>
+  <video class="blue-roach" hidden muted loop playsinline preload="metadata" aria-hidden="true">
+    <source src="{{ site.BaseURL }}media/dancing-rainbow-roach.mp4" type="video/mp4">
+  </video>
+  <audio class="blue-song" preload="none">
+    <source src="{{ site.BaseURL }}media/blue-8-bit.mp3" type="audio/mpeg">
+  </audio>
 </body>
 </html>
