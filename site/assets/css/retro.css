@@ -1,21 +1,21 @@
 :root {
-  --bg: #f8f9fa;
-  --bg-shade: #e9ecef;
-  --fg: #1a1d23;
-  --muted: #5a6270;
-  --link: #0044cc;
-  --link-hover: #002288;
-  --border: #ced4da;
+  --bg: #ffffff;
+  --bg-shade: #eeeeee;
+  --fg: #202020;
+  --muted: #666666;
+  --link: #0000cc;
+  --link-hover: #000066;
+  --border: #aaaaaa;
 }
 
 [data-theme="dark"] {
-  --bg: #0d1117;
-  --bg-shade: #161b22;
-  --fg: #c9d1d9;
-  --muted: #8b949e;
-  --link: #58a6ff;
-  --link-hover: #79c0ff;
-  --border: #30363d;
+  --bg: #001b36;
+  --bg-shade: #082847;
+  --fg: #f2f5f8;
+  --muted: #b8c6d4;
+  --link: #9fc5ff;
+  --link-hover: #ffffff;
+  --border: #7890a8;
 }
 
 * {
@@ -26,32 +26,26 @@
 
 html {
   font-size: 16px;
+  background: var(--bg);
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.7;
+  max-width: 6in;
+  margin: 0 auto;
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.55;
   color: var(--fg);
   background-color: var(--bg);
   background-image: url("/bg-circuit.svg");
   background-repeat: repeat;
   background-attachment: fixed;
-  background-size: 160px;
+  background-size: 180px;
   min-height: 100vh;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  opacity: 0.94;
-  z-index: -1;
 }
 
 a {
   color: var(--link);
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 a:hover {
@@ -60,14 +54,13 @@ a:hover {
 }
 
 .container {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 1.5rem;
+  width: 100%;
+  padding: 0 1rem;
 }
 
 .site-header {
-  padding: 1.5rem 0;
-  margin-bottom: 2rem;
+  padding: 1rem 0 0;
+  margin-bottom: 2.25rem;
   border-bottom: 1px solid var(--border);
 }
 
@@ -79,12 +72,12 @@ a:hover {
 }
 
 .site-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font: bold 1.15rem Verdana, Arial, sans-serif;
 }
 
 .site-title a {
   color: var(--fg);
+  text-decoration: none;
 }
 
 .site-nav {
@@ -95,7 +88,7 @@ a:hover {
 
 .site-nav a {
   color: var(--muted);
-  font-size: 0.95rem;
+  font: 0.8rem Verdana, Arial, sans-serif;
 }
 
 .site-nav a:hover {
@@ -103,16 +96,18 @@ a:hover {
 }
 
 .theme-toggle {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--fg);
-  padding: 0.25rem 0.6rem;
-  font-size: 0.85rem;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: var(--link);
+  padding: 0;
+  font: 0.8rem Verdana, Arial, sans-serif;
+  text-decoration: underline;
   cursor: pointer;
 }
 
 .theme-toggle:hover {
-  border-color: var(--muted);
+  color: var(--link-hover);
 }
 
 main {
@@ -120,17 +115,18 @@ main {
 }
 
 h1, h2, h3 {
-  line-height: 1.25;
-  font-weight: 600;
+  font-family: Verdana, Arial, sans-serif;
+  line-height: 1.3;
+  font-weight: bold;
   margin-bottom: 0.75rem;
 }
 
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.45rem;
 }
 
 h2 {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
 }
 
 h3 {
@@ -150,7 +146,7 @@ li {
 }
 
 pre, code {
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 0.9rem;
 }
 
@@ -193,8 +189,7 @@ pre code {
 }
 
 .post-list a {
-  font-size: 1.05rem;
-  font-weight: 500;
+  font-size: 1rem;
 }
 
 .post-meta {
@@ -212,7 +207,7 @@ pre code {
 footer {
   padding: 1.5rem 0;
   border-top: 1px solid var(--border);
-  font-size: 0.85rem;
+  font: 0.75rem Verdana, Arial, sans-serif;
   color: var(--muted);
 }
 
@@ -225,6 +220,7 @@ footer {
 
   .site-nav {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1rem;
   }
 }

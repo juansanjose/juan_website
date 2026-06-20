@@ -28,7 +28,7 @@
         <a href="{{ site.BaseURL }}">home</a>
         <a href="{{ site.BaseURL }}blog/">blog</a>
         <a href="{{ site.BaseURL }}about/">about</a>
-        <button class="theme-toggle" aria-label="Toggle theme">theme</button>
+        <button class="theme-toggle" type="button" aria-label="Switch to blue theme">blue</button>
       </nav>
     </div>
   </header>
@@ -44,11 +44,22 @@
   </footer>
 
   <script>
-    document.querySelector('.theme-toggle').addEventListener('click', function() {
+    var themeToggle = document.querySelector('.theme-toggle');
+
+    function updateThemeToggle() {
+      var blueTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+      themeToggle.textContent = blueTheme ? 'white' : 'blue';
+      themeToggle.setAttribute('aria-label', blueTheme ? 'Switch to white theme' : 'Switch to blue theme');
+    }
+
+    updateThemeToggle();
+
+    themeToggle.addEventListener('click', function() {
       var root = document.documentElement;
       var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
+      updateThemeToggle();
     });
   </script>
 </body>
