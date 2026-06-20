@@ -6,6 +6,8 @@
   --link: #0000cc;
   --link-hover: #000066;
   --border: #aaaaaa;
+  --page-pattern: url("/bg-circuit.svg");
+  --pattern-size: 180px auto;
 }
 
 [data-theme="dark"] {
@@ -16,6 +18,8 @@
   --link: #ffffff;
   --link-hover: #8de7ff;
   --border: #70c9ff;
+  --page-pattern: url("/media/blue-alien.jpg");
+  --pattern-size: 12rem auto;
 }
 
 * {
@@ -27,19 +31,22 @@
 html {
   font-size: 16px;
   background: var(--bg);
+  background-image: var(--page-pattern);
+  background-repeat: repeat;
+  background-size: var(--pattern-size);
 }
 
 body {
-  max-width: 44rem;
+  max-width: 64rem;
   margin: 0 auto;
   font-family: Georgia, "Times New Roman", serif;
   line-height: 1.55;
   color: var(--fg);
   background-color: var(--bg);
-  background-image: url("/bg-circuit.svg");
+  background-image: var(--page-pattern);
   background-repeat: repeat;
   background-attachment: fixed;
-  background-size: 180px;
+  background-size: var(--pattern-size);
   min-height: 100vh;
 }
 
@@ -55,12 +62,12 @@ a:hover {
 
 .container {
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 0.75rem;
 }
 
 .site-header {
-  padding: 1rem 0 0;
-  margin-bottom: 2.25rem;
+  padding: 0.6rem 0 0;
+  margin-bottom: 1rem;
   border-bottom: 1px solid var(--border);
 }
 
@@ -83,7 +90,7 @@ a:hover {
 .site-nav {
   display: flex;
   align-items: baseline;
-  gap: 1.25rem;
+  gap: 0.85rem;
 }
 
 .site-nav a {
@@ -110,6 +117,12 @@ a:hover {
   color: var(--link-hover);
 }
 
+.sound-warning {
+  margin-right: -0.55rem;
+  font-size: 0.8rem;
+  cursor: help;
+}
+
 .blue-roach {
   position: fixed;
   right: 1rem;
@@ -133,7 +146,7 @@ a:hover {
 }
 
 main {
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 h1, h2, h3 {
@@ -227,7 +240,7 @@ pre code {
 }
 
 footer {
-  padding: 1.5rem 0;
+  padding: 0.75rem 0;
   border-top: 1px solid var(--border);
   font: 0.75rem Verdana, Arial, sans-serif;
   color: var(--muted);

@@ -34,7 +34,7 @@
     roach.hidden = false;
     roach.play().catch(function () {});
     song.play().catch(function () {});
-    partyTimer = window.setTimeout(stopParty, 15000);
+    partyTimer = window.setTimeout(stopParty, 30000);
   }
 
   try {
