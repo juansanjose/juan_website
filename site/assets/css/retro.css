@@ -45,6 +45,7 @@ body {
   min-height: 100vh;
   padding: 0;
   margin: 0;
+  font-size: 1.1rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -55,7 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   color: var(--accent);
   border-bottom: var(--border-thick);
   padding-bottom: var(--spacing-sm);
@@ -63,7 +64,7 @@ h1 {
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: var(--accent-light);
   border-bottom: var(--border-thin);
   padding-bottom: var(--spacing-sm);
@@ -71,19 +72,20 @@ h2 {
 }
 
 h3 {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   color: var(--text-primary);
   margin-bottom: var(--spacing-md);
 }
 
 h4 {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: var(--border-light);
 }
 
 p {
   margin-bottom: var(--spacing-md);
   color: var(--text-secondary);
+  font-size: 1.1rem;
 }
 
 a {
@@ -110,7 +112,7 @@ header {
 }
 
 header h1 {
-  font-size: 2rem;
+  font-size: 2.4rem;
   margin: 0;
   padding: 0;
   border: none;
@@ -139,7 +141,7 @@ nav li {
 
 nav a {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -175,14 +177,14 @@ article header {
 }
 
 article header h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   border: none;
   padding: 0;
 }
 
 article header .meta {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--border-light);
   margin-top: var(--spacing-sm);
 }
