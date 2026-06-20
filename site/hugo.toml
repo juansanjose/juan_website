@@ -4,7 +4,7 @@ title = "Juan's Tech Site"
 disableKinds = ["taxonomy", "term"]
 
 [params]
-description = "Technical blog and code uploads - A retro-styled personal site"
+description = "Technical blog and code uploads - Navy blue and white theme"
 
 [markup]
   [markup.goldmark]

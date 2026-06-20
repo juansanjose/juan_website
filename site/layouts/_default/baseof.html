@@ -36,50 +36,5 @@
 
   {{ $uploadJS := resources.Get "js/upload.js" | minify }}
   <script src="{{ $uploadJS.RelPermalink }}"></script>
-
-  <style>
-    body {
-      background: #0a0a0a;
-      color: #f5f5dc;
-      font-family: Georgia, serif;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    header {
-      border-bottom: 2px solid #d4af37;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-    }
-    header h1 a {
-      color: #d4af37;
-      text-decoration: none;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1rem;
-      padding: 0;
-    }
-    nav a {
-      color: #d4c4a8;
-      text-decoration: none;
-      font-family: monospace;
-      font-size: 0.9rem;
-    }
-    a:hover {
-      color: #d4af37;
-    }
-    footer {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 2px solid #d4af37;
-      text-align: center;
-    }
-  </style>
 </body>
 </html>

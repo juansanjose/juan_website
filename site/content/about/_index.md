@@ -1,33 +1,27 @@
 +++
 title = "About This Site"
 date = 2026-06-20
-description = "The story behind this retro-styled technical site"
+description = "The story behind this navy blue and white technical site"
 +++
 
 ## What Is This Place?
 
 This is a personal website for sharing technical knowledge, code snippets, and various programming-related writings. It's built with simplicity in mind, both in function and form.
 
-## The Aesthetic: Kuroda Bushi Retro
+## The Design: Navy Blue and White
 
-The design is inspired by a few different sources:
+The site features a clean, professional navy blue and white color scheme:
 
-### German Expressionist Cinema
+- **Navy Blue (#001f3f)** - Primary background for a professional, trustworthy feel
+- **White (#ffffff)** - Clean, readable text
+- **Light Blue Accents (#1e90ff, #add8e6)** - For links and highlights
+- **Steel Blue (#4682b4)** - For borders and secondary elements
 
-The primary visual inspiration comes from two classic silent films:
-
-- **Die Nibelungen: Siegfried (1924)** - Fritz Lang's epic fantasy with stunning set designs, deep shadows, and dramatic lighting
-- **Häxan (1922)** - Benjamin Christensen's dark, atmospheric film about witchcraft with woodcut-style visuals
-
-Both films feature:
-- High contrast between light and dark
-- Rich, symbolic colors (gold, deep red, brown)
-- Minimalist but striking compositions
-- A sense of mystery and atmosphere
-
-### Kuroda Bushi
-
-"Kuroda Bushi" refers to a style of Japanese folk song, but in this context, I'm using it to evoke a sense of minimalism and tradition. The Kuroda style is simple, direct, and timeless - qualities I wanted for this site.
+This color combination provides:
+- High contrast for excellent readability
+- A professional, clean appearance
+- A classic naval/military aesthetic
+- Works well in both light and dark contexts
 
 ## Technical Stack
 
