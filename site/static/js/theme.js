@@ -6,7 +6,6 @@
   var soundToggle = document.querySelector('.sound-toggle');
   var roach = document.querySelector('.blue-roach');
   var song = document.querySelector('.blue-song');
-  var partyTimer;
 
   function isBlue() {
     return root.getAttribute('data-theme') === 'dark';
@@ -29,7 +28,6 @@
   }
 
   function hideRoach() {
-    window.clearTimeout(partyTimer);
     roach.hidden = true;
     roach.pause();
     roach.currentTime = 0;
@@ -42,11 +40,9 @@
     updateSoundToggle();
   }
 
-  function startParty() {
-    stopAll();
+  function showRoach() {
     roach.hidden = false;
     roach.play().catch(function () {});
-    partyTimer = window.setTimeout(hideRoach, 30000);
   }
 
   try {
@@ -62,17 +58,22 @@
 
   soundToggle.addEventListener('click', function () {
     if (!song.paused && !song.ended) {
-      song.pause();
-      song.currentTime = 0;
-      updateSoundToggle();
+      stopAll();
       return;
     }
 
     song.currentTime = 0;
-    song.play().then(updateSoundToggle).catch(updateSoundToggle);
+    showRoach();
+    song.play().then(updateSoundToggle).catch(function () {
+      hideRoach();
+      updateSoundToggle();
+    });
   });
 
-  song.addEventListener('ended', updateSoundToggle);
+  song.addEventListener('ended', function () {
+    hideRoach();
+    updateSoundToggle();
+  });
 
   themeToggle.addEventListener('click', function () {
     var next = isBlue() ? 'light' : 'dark';
@@ -85,9 +86,7 @@
     }
 
     updateThemeToggle();
-    if (next === 'dark') {
-      startParty();
-    } else {
+    if (next !== 'dark') {
       stopAll();
     }
   });
