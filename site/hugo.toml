@@ -1,4 +1,4 @@
-baseURL = "https://example.com/"
+baseURL = "https://jsanjosep.com/"
 languageCode = "en"
 title = "Deployment Test Site"
 disableKinds = ["taxonomy", "term"]
