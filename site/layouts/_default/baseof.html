@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="{{ site.Language.LanguageCode }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ site.Params.description }}">
+  <title>{{ if not .IsHome }}{{ .Title }} · {{ end }}{{ site.Title }}</title>
+  {{ $style := resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+</head>
+<body>
+  <header><a href="/">{{ site.Title }}</a></header>
+  <nav>
+    <a href="/">Home</a> |
+    <a href="/test/">Test Page</a>
+  </nav>
+  <main>{{ block "main" . }}{{ end }}</main>
+</body>
+</html>

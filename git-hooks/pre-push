@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "Warning: the working tree has uncommitted changes." >&2
+fi
+
+make build

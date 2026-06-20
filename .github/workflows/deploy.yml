@@ -1,0 +1,95 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'Caddyfile'
+      - '.github/workflows/deploy.yml'
+      - 'Makefile'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.159.2'
+          extended: true
+
+      - name: Build site
+        run: make build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: public
+          path: site/public/
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: [self-hosted, linux, church-vps]
+    env:
+      DOMAIN: ${{ vars.PERSONAL_DOMAIN }}
+      DEPLOY_PATH: ${{ vars.PERSONAL_DEPLOY_PATH }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate deployment configuration
+        run: |
+          set -euo pipefail
+          test -n "$DOMAIN" || { echo "Set the PERSONAL_DOMAIN repository variable"; exit 1; }
+          test -n "$DEPLOY_PATH" || { echo "Set the PERSONAL_DEPLOY_PATH repository variable"; exit 1; }
+          case "$DEPLOY_PATH" in /var/www/*) ;; *) echo "PERSONAL_DEPLOY_PATH must be below /var/www"; exit 1;; esac
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: public
+          path: public/
+
+      - name: Deploy site with rollback copy
+        run: |
+          set -euo pipefail
+          mkdir -p "$DEPLOY_PATH"
+          rm -rf "${DEPLOY_PATH}-previous"
+          cp -a "$DEPLOY_PATH" "${DEPLOY_PATH}-previous"
+          rsync -av --delete public/ "$DEPLOY_PATH/"
+          chown -R www-data:www-data "$DEPLOY_PATH" "${DEPLOY_PATH}-previous"
+
+      - name: Deploy and validate Caddy site fragment
+        run: |
+          set -euo pipefail
+          grep -qF 'import /etc/caddy/sites/*.caddy' /etc/caddy/Caddyfile || {
+            echo "Caddy is not configured for site fragments. Run scripts/vps-setup.sh once."; exit 1;
+          }
+          mkdir -p /etc/caddy/sites
+          target=/etc/caddy/sites/juan-website.caddy
+          candidate="${target}.new"
+          backup="${target}.previous"
+          rm -f "$candidate" "$backup"
+          if test -f "$target"; then cp -a "$target" "$backup"; fi
+          sed -e "s|__DOMAIN__|$DOMAIN|g" -e "s|__DEPLOY_PATH__|$DEPLOY_PATH|g" Caddyfile > "$candidate"
+          mv "$candidate" "$target"
+          if ! caddy validate --config /etc/caddy/Caddyfile; then
+            if test -f "$backup"; then mv "$backup" "$target"; else rm -f "$target"; fi
+            echo "Invalid Caddy configuration; restored the prior site fragment."
+            exit 1
+          fi
+          rm -f "$backup"
+          systemctl reload caddy
+
+      - name: Verify production site
+        run: curl --fail --silent --show-error --retry 8 --retry-delay 3 --retry-all-errors "https://${DOMAIN}/" > /dev/null

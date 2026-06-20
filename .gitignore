@@ -1,0 +1,17 @@
+# Hugo output and caches
+site/public/
+site/resources/_gen/
+site/.hugo_build.lock
+.hugo_cache/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Editors and operating systems
+.DS_Store
+*.swp
+*.swo

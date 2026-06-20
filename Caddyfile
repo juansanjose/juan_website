@@ -1,0 +1,21 @@
+# This is a site fragment. CI replaces __DOMAIN__ and __DEPLOY_PATH__ before
+# installing it as /etc/caddy/sites/juan-website.caddy.
+__DOMAIN__ {
+    root * __DEPLOY_PATH__
+    encode gzip zstd
+
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; script-src 'self'; font-src 'self';"
+    }
+
+    try_files {path} {path}/ =404
+    file_server
+
+    handle_errors {
+        rewrite * /404.html
+        file_server
+    }
+}

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if git diff --cached --check; then
+  make build
+else
+  echo "Commit blocked: staged files contain whitespace errors." >&2
+  exit 1
+fi

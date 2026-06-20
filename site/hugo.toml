@@ -1,0 +1,7 @@
+baseURL = "https://example.com/"
+languageCode = "en"
+title = "Deployment Test Site"
+disableKinds = ["taxonomy", "term"]
+
+[params]
+description = "Dummy test website for GitHub Actions deployment verification"
