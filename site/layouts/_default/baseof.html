@@ -1,19 +1,85 @@
-<!doctype html>
-<html lang="{{ site.Language.LanguageCode }}">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="{{ site.Params.description }}">
-  <title>{{ if not .IsHome }}{{ .Title }} · {{ end }}{{ site.Title }}</title>
-  {{ $style := resources.Get "css/main.css" | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ site.Params.description | default "Personal site - Technical blog and code uploads" }}">
+  <title>{{ block "title" . }}{{ site.Title | default "Juan's Tech Site" }}{{ end }}</title>
+
+  {{ $retroCSS := resources.Get "css/retro.css" | minify }}
+  <link rel="stylesheet" href="{{ $retroCSS.RelPermalink }}">
+
+  {{ with .OutputFormats.Get "RSS" }}
+    <link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Title }}">
+  {{ end }}
 </head>
 <body>
-  <header><a href="/">{{ site.Title }}</a></header>
-  <nav>
-    <a href="/">Home</a> |
-    <a href="/test/">Test Page</a>
-  </nav>
-  <main>{{ block "main" . }}{{ end }}</main>
+  <header class="container">
+    <h1><a href="{{ site.BaseURL }}">{{ site.Title | default "Juan's Tech Site" }}</a></h1>
+    <nav>
+      <ul>
+        <li><a href="{{ site.BaseURL }}">Home</a></li>
+        <li><a href="{{ site.BaseURL }}blog/">Blog</a></li>
+        <li><a href="{{ site.BaseURL }}code/">Code</a></li>
+        <li><a href="{{ site.BaseURL }}about/">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer class="container">
+    <p>&copy; {{ now.Format "2006" }} Juan. All code shared under MIT License unless noted.</p>
+  </footer>
+
+  {{ $uploadJS := resources.Get "js/upload.js" | minify }}
+  <script src="{{ $uploadJS.RelPermalink }}"></script>
+
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #f5f5dc;
+      font-family: Georgia, serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    header {
+      border-bottom: 2px solid #d4af37;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+    }
+    header h1 a {
+      color: #d4af37;
+      text-decoration: none;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+      padding: 0;
+    }
+    nav a {
+      color: #d4c4a8;
+      text-decoration: none;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+    a:hover {
+      color: #d4af37;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #d4af37;
+      text-align: center;
+    }
+  </style>
 </body>
 </html>

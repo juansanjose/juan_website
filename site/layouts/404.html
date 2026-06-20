@@ -1,4 +1,11 @@
 {{ define "main" }}
-  <h1>Page not found</h1>
-  <p><a href="/">Return home</a></p>
+  <article class="error-page">
+    <h1>404 - Page Not Found</h1>
+    <p>The page you're looking for doesn't exist or has been moved.</p>
+    <p class="mt-lg text-center">
+      <a href="{{ .Site.BaseURL }}" class="btn">Return Home</a>
+      <a href="{{ .Site.BaseURL }}blog/" class="btn">Visit Blog</a>
+      <a href="{{ .Site.BaseURL }}code/" class="btn">Browse Code</a>
+    </p>
+  </article>
 {{ end }}

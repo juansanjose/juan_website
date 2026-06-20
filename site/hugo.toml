@@ -1,7 +1,21 @@
 baseURL = "https://jsanjosep.com/"
-languageCode = "en"
-title = "Deployment Test Site"
+languageCode = "en-us"
+title = "Juan's Tech Site"
 disableKinds = ["taxonomy", "term"]
 
 [params]
-description = "Dummy test website for GitHub Actions deployment verification"
+description = "Technical blog and code uploads - A retro-styled personal site"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS"]
+  page = ["HTML"]
+  section = ["HTML"]
+
+[permalinks]
+  blog = "/blog/:year/:month/:slug/"
+  code = "/code/:slug/"

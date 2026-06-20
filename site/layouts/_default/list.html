@@ -1,0 +1,56 @@
+{{ define "main" }}
+  {{/* List template for section pages */}}
+
+  <header class="section-header">
+    <h1>{{ .Title | default (title .Section) }}</h1>
+    {{ if eq .Section "blog" }}
+      <p>A collection of technical writings and explorations.</p>
+    {{ else if eq .Section "code" }}
+      <p>Code snippets, utilities, and technical resources.</p>
+    {{ else if eq .Section "tags" }}
+      <p>All posts tagged with "{{ .Title }}"</p>
+    {{ end }}
+  </header>
+
+  {{/* List of pages */}}
+  {{ $pages := .Paginator.Pages }}
+  {{ $sorted := sort $pages "Date" "desc" }}
+  {{ range $sorted }}
+  <article>
+    <header>
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p class="meta">
+        {{ if .Date }}{{ .Date.Format "Jan 2, 2006" }}{{ else }}No date{{ end }}
+        {{ if .Params.categories }}
+          | Categories: {{ delimit .Params.categories ", " }}
+        {{ end }}
+        {{ if .Params.tags }}
+          | Tags: {{ delimit .Params.tags ", " }}
+        {{ end }}
+      </p>
+    </header>
+    <div class="content">
+      {{ .Summary | default .Content | truncate 400 }}
+      {{ if .Truncated }}
+        <p><a href="{{ .RelPermalink }}" class="btn">Read More</a></p>
+      {{ end }}
+    </div>
+  </article>
+  {{ end }}
+
+  {{/* Pagination */}}
+  {{ if gt .Paginator.TotalPages 1 }}
+  <nav class="pagination mt-lg text-center">
+    {{ if .Paginator.HasPrev }}
+      <a href="{{ .Paginator.Prev.URL | relURL | safeURL }}" class="btn">&larr; Previous Page</a>
+    {{ end }}
+
+    <span class="page-info">Page {{ .Paginator.PageNumber }} of {{ .Paginator.TotalPages }}</span>
+
+    {{ if .Paginator.HasNext }}
+      <a href="{{ .Paginator.Next.URL | relURL | safeURL }}" class="btn">Next Page &rarr;</a>
+    {{ end }}
+  </nav>
+  {{ end }}
+
+{{ end }}

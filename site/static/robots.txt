@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jsanjosep.com/sitemap.xml
+
+# Crawl-delay: 2

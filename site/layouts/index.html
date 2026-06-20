@@ -1,3 +1,79 @@
 {{ define "main" }}
-  {{ .Content }}
+  {{/* Home page content */}}
+
+  {{/* Hero section */}}
+  <section class="hero">
+    <h2>Technical Writings & Code</h2>
+    <p class="subtitle">A retro-styled corner of the internet for technical exploration, inspired by the aesthetics of <em>Die Nibelungen</em> and <em>Häxan</em>.</p>
+  </section>
+
+  {{/* Featured Blog Posts */}}
+  <section class="blog-preview mt-lg">
+    <h3>Latest Blog Posts</h3>
+    <p>Explorations in code, systems, and technical concepts.</p>
+
+    {{ $pages := where site.RegularPages "Section" "blog" }}
+    {{ $sorted := sort $pages "Date" "desc" | first 3 }}
+    {{ range $sorted }}
+    <article>
+      <header>
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <p class="meta">Posted on {{ if .Date }}{{ .Date.Format "Jan 2, 2006" }}{{ else }}No date{{ end }} {{ if .Params.categories }}in {{ delimit .Params.categories ", " }}{{ end }}</p>
+      </header>
+      <div class="content">
+        {{ .Summary | default .Content | truncate 300 }}
+        {{ if .Truncated }}
+          <p><a href="{{ .RelPermalink }}" class="btn">Read More</a></p>
+        {{ end }}
+      </div>
+    </article>
+    {{ end }}
+
+    {{ $blog := where site.RegularPages "Section" "blog" }}
+    {{ if gt (len $blog) 3 }}
+    <p class="text-center mt-lg"><a href="{{ site.BaseURL }}blog/" class="btn">All Blog Posts &rarr;</a></p>
+    {{ end }}
+  </section>
+
+  {{/* Code Upload Section */}}
+  <section class="upload-section mt-lg">
+    <h2>Upload Code</h2>
+    <p>Share your code snippets, scripts, or utilities.</p>
+
+    <form id="code-upload-form" class="upload-form mt-lg">
+      <label for="upload-title">Title *</label>
+      <input type="text" id="upload-title" name="title" required placeholder="My useful script">
+
+      <label for="upload-desc">Description</label>
+      <textarea id="upload-desc" name="description" placeholder="What does this code do?"></textarea>
+
+      <label for="code-file">Code File *</label>
+      <input type="file" id="code-file" name="code-file" accept=".js,.py,.html,.css,.sh,.txt" required>
+
+      <label for="upload-category">Category</label>
+      <select id="upload-category" name="category">
+        <option value="script">Script</option>
+        <option value="utility">Utility</option>
+        <option value="demo">Demo</option>
+        <option value="snippet">Code Snippet</option>
+        <option value="other">Other</option>
+      </select>
+
+      <div id="code-preview" style="display: none;" class="mt-lg"></div>
+
+      <div id="upload-status" class="status mt-lg"></div>
+
+      <button type="submit">Upload Code</button>
+    </form>
+
+    <div id="recent-uploads" class="mt-lg"></div>
+  </section>
+
+  {{/* About Teaser */}}
+  <section class="about-teaser mt-lg">
+    <h3>About This Site</h3>
+    <p>This is a simple, retro-styled personal site for sharing technical knowledge and code. The design is inspired by the visual aesthetics of German Expressionist cinema - specifically <em>Die Nibelungen: Siegfried</em> (1924) and <em>Häxan</em> (1922) - with their dramatic contrasts, dark tones, and golden highlights.</p>
+    <p class="mt-lg text-center"><a href="{{ site.BaseURL }}about/" class="btn">Learn More</a></p>
+  </section>
+
 {{ end }}
