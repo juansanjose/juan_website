@@ -1,21 +1,21 @@
 baseURL = "https://jsanjosep.com/"
 languageCode = "en-us"
-title = "Juan's Tech Site"
+title = "Juan"
 disableKinds = ["taxonomy", "term"]
 
 [params]
-description = "Technical blog and code uploads - Navy blue and white theme"
+  author = "Juan"
+  description = "Personal blog"
 
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
+[permalinks]
+  blog = "/blog/:year/:month/:slug/"
 
 [outputs]
   home = ["HTML", "RSS"]
   page = ["HTML"]
   section = ["HTML"]
 
-[permalinks]
-  blog = "/blog/:year/:month/:slug/"
-  code = "/code/:slug/"
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

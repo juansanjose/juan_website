@@ -1,36 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{{ site.Params.description | default "Personal site - Technical blog and code uploads" }}">
-  <title>{{ block "title" . }}{{ site.Title | default "Juan's Tech Site" }}{{ end }}</title>
+  <meta name="description" content="{{ site.Params.description }}">
+  <title>{{ if .IsHome }}{{ site.Params.author }}{{ else }}{{ .Title }} — {{ site.Params.author }}{{ end }}</title>
 
-  {{ $retroCSS := resources.Get "css/retro.css" | minify }}
-  <link rel="stylesheet" href="{{ $retroCSS.RelPermalink }}">
+  {{ $style := resources.Get "css/retro.css" | minify }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
   {{ with .OutputFormats.Get "RSS" }}
-    <link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Title }}">
+    <link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Params.author }}">
   {{ end }}
+
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (theme) document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
-  <header class="container">
-    <h1><a href="{{ site.BaseURL }}">{{ site.Title | default "Juan's Tech Site" }}</a></h1>
-    <nav>
-      <ul>
-        <li><a href="{{ site.BaseURL }}">Home</a></li>
-        <li><a href="{{ site.BaseURL }}blog/">Blog</a></li>
-        <li><a href="{{ site.BaseURL }}about/">About</a></li>
-      </ul>
-    </nav>
+  <header class="site-header">
+    <div class="container">
+      <div class="site-title"><a href="{{ site.BaseURL }}">{{ site.Params.author }}</a></div>
+      <nav class="site-nav">
+        <a href="{{ site.BaseURL }}">home</a>
+        <a href="{{ site.BaseURL }}blog/">blog</a>
+        <a href="{{ site.BaseURL }}about/">about</a>
+        <button class="theme-toggle" aria-label="Toggle theme">theme</button>
+      </nav>
+    </div>
   </header>
 
   <main class="container">
     {{ block "main" . }}{{ end }}
   </main>
 
-  <footer class="container">
-    <p>&copy; {{ now.Format "2006" }} Juan. All code shared under MIT License unless noted.</p>
+  <footer>
+    <div class="container">
+      <p>&copy; {{ now.Format "2006" }} {{ site.Params.author }}</p>
+    </div>
   </footer>
+
+  <script>
+    document.querySelector('.theme-toggle').addEventListener('click', function() {
+      var root = document.documentElement;
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  </script>
 </body>
 </html>

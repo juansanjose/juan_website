@@ -1,41 +1,16 @@
 {{ define "main" }}
-  {{/* Single page template for blog posts and content pages */}}
 
   <article>
     <header>
       <h1>{{ .Title }}</h1>
-      {{ if .Params.date }}
-        <p class="meta">Posted on {{ .Date.Format "Jan 2, 2006" }}</p>
-      {{ end }}
-      {{ if .Params.categories }}
-        <p class="meta">Categories: {{ delimit .Params.categories ", " }}</p>
+      {{ if .Date }}
+        <p class="post-meta">{{ .Date.Format "Jan 2, 2006" }}</p>
       {{ end }}
     </header>
 
-    <div class="content">
-      {{ .Content }}
-    </div>
-
-    {{ if .Params.tags }}
-    <footer class="article-footer mt-lg">
-      <p>Tags: {{ delimit .Params.tags ", " }}</p>
-    </footer>
-    {{ end }}
+    {{ .Content }}
   </article>
 
-  {{/* Navigation */}}
-  <nav class="article-nav mt-lg">
-    {{ with .PrevInSection }}
-      <a href="{{ .RelPermalink }}" class="btn">&larr; Previous: {{ .Title }}</a>
-    {{ end }}
-    {{ with .NextInSection }}
-      <a href="{{ .RelPermalink }}" class="btn">Next: {{ .Title }} &rarr;</a>
-    {{ end }}
-  </nav>
-
-  {{/* Back link */}}
-  <p class="text-center mt-lg">
-    <a href="{{ if .IsPage }}{{ if eq .Section "blog" }}{{ site.BaseURL }}blog/{{ else }}{{ site.BaseURL }}{{ end }}{{ else }}{{ site.BaseURL }}{{ end }}" class="btn">Back to {{ if eq .Section "blog" }}Blog{{ else if .IsPage }}Home{{ else }}All Posts{{ end }}</a>
-  </p>
+  <a class="back-link" href="{{ site.BaseURL }}blog/">← all posts</a>
 
 {{ end }}

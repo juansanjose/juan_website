@@ -1,4 +1,5 @@
 +++
 title = "Home"
-date = 2026-06-20
 +++
+
+<p>Personal blog. Notes on code, systems, and whatever else is worth writing down.</p>

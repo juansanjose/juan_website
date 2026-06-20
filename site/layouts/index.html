@@ -1,45 +1,20 @@
 {{ define "main" }}
-  {{/* Home page content */}}
 
-  {{/* Hero section */}}
-  <section class="hero">
-    <h2>Technical Writings & Code</h2>
-    <p class="subtitle">A clean, professional space for technical exploration with a navy blue and white aesthetic.</p>
-  </section>
+  {{ .Content }}
 
-  {{/* Featured Blog Posts */}}
-  <section class="blog-preview mt-lg">
-    <h3>Latest Blog Posts</h3>
-    <p>Explorations in code, systems, and technical concepts.</p>
-
-    {{ $pages := where site.RegularPages "Section" "blog" }}
-    {{ $sorted := sort $pages "Date" "desc" | first 3 }}
-    {{ range $sorted }}
-    <article>
-      <header>
-        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-        <p class="meta">Posted on {{ if .Date }}{{ .Date.Format "Jan 2, 2006" }}{{ else }}No date{{ end }} {{ if .Params.categories }}in {{ delimit .Params.categories ", " }}{{ end }}</p>
-      </header>
-      <div class="content">
-        {{ .Summary | default .Content | truncate 300 }}
-        {{ if .Truncated }}
-          <p><a href="{{ .RelPermalink }}" class="btn">Read More</a></p>
-        {{ end }}
-      </div>
-    </article>
-    {{ end }}
-
-    {{ $blog := where site.RegularPages "Section" "blog" }}
-    {{ if gt (len $blog) 3 }}
-    <p class="text-center mt-lg"><a href="{{ site.BaseURL }}blog/" class="btn">All Blog Posts &rarr;</a></p>
-    {{ end }}
-  </section>
-
-  {{/* About Teaser */}}
-  <section class="about-teaser mt-lg">
-    <h3>About This Site</h3>
-    <p>This is a simple, clean personal site for sharing technical knowledge and code, featuring a professional navy blue and white theme.</p>
-    <p class="mt-lg text-center"><a href="{{ site.BaseURL }}about/" class="btn">Learn More</a></p>
-  </section>
+  {{ $posts := where site.RegularPages "Section" "blog" }}
+  {{ if $posts }}
+    <h2>Posts</h2>
+    <ul class="post-list">
+      {{ range sort $posts "Date" "desc" }}
+      <li>
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </li>
+      {{ end }}
+    </ul>
+  {{ else }}
+    <p>No posts yet.</p>
+  {{ end }}
 
 {{ end }}
