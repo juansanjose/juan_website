@@ -18,8 +18,8 @@
   --link: #ffffff;
   --link-hover: #8de7ff;
   --border: #70c9ff;
-  --page-pattern: url("/media/blue-alien.jpg");
-  --pattern-size: max(50vw, 66.667vh) auto;
+  --page-pattern: url("/media/blue-alien-cropped.png");
+  --pattern-size: clamp(10rem, 22vw, 22rem) auto;
 }
 
 * {
@@ -35,6 +35,7 @@ html {
   background-repeat: repeat;
   background-size: var(--pattern-size);
   background-attachment: fixed;
+  background-position: center top;
 }
 
 body {
