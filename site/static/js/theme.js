@@ -3,6 +3,7 @@
 
   var root = document.documentElement;
   var themeToggle = document.querySelector('.theme-toggle');
+  var soundToggle = document.querySelector('.sound-toggle');
   var roach = document.querySelector('.blue-roach');
   var song = document.querySelector('.blue-song');
   var partyTimer;
@@ -20,21 +21,32 @@
     );
   }
 
-  function stopParty() {
+  function updateSoundToggle() {
+    var playing = !song.paused && !song.ended;
+    soundToggle.textContent = playing ? '🔊' : '🔇';
+    soundToggle.title = playing ? 'Mute the Blue song' : 'Play the full Blue song';
+    soundToggle.setAttribute('aria-label', soundToggle.title);
+  }
+
+  function hideRoach() {
     window.clearTimeout(partyTimer);
     roach.hidden = true;
     roach.pause();
     roach.currentTime = 0;
+  }
+
+  function stopAll() {
+    hideRoach();
     song.pause();
     song.currentTime = 0;
+    updateSoundToggle();
   }
 
   function startParty() {
-    stopParty();
+    stopAll();
     roach.hidden = false;
     roach.play().catch(function () {});
-    song.play().catch(function () {});
-    partyTimer = window.setTimeout(stopParty, 30000);
+    partyTimer = window.setTimeout(hideRoach, 30000);
   }
 
   try {
@@ -46,6 +58,21 @@
   }
 
   updateThemeToggle();
+  updateSoundToggle();
+
+  soundToggle.addEventListener('click', function () {
+    if (!song.paused && !song.ended) {
+      song.pause();
+      song.currentTime = 0;
+      updateSoundToggle();
+      return;
+    }
+
+    song.currentTime = 0;
+    song.play().then(updateSoundToggle).catch(updateSoundToggle);
+  });
+
+  song.addEventListener('ended', updateSoundToggle);
 
   themeToggle.addEventListener('click', function () {
     var next = isBlue() ? 'light' : 'dark';
@@ -61,7 +88,7 @@
     if (next === 'dark') {
       startParty();
     } else {
-      stopParty();
+      stopAll();
     }
   });
 })();
