@@ -8,6 +8,7 @@
 
   {{ $style := resources.Get "css/retro.css" | minify }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  <link rel="prefetch" href="{{ site.BaseURL }}media/blue-alien-cropped.webp" as="image" type="image/webp">
 
   {{ with .OutputFormats.Get "RSS" }}
     <link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Params.author }}">

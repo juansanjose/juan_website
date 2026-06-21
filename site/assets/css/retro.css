@@ -31,7 +31,7 @@
   --chrome-shadow: #001743;
   --chrome-text: #06101f;
   --accent: #ff6800;
-  --page-pattern: url("/media/blue-alien-cropped.png");
+  --page-pattern: url("/media/blue-alien-cropped.webp");
   --pattern-size: clamp(10rem, 22vw, 22rem) auto;
 }
 
@@ -238,13 +238,13 @@ a:hover {
 .site-nav a,
 .sound-toggle {
   appearance: none;
-  min-height: 1.2rem;
-  padding: 0.1rem 0.3rem;
+  min-height: 1.35rem;
+  padding: 0.15rem 0.42rem;
   border: 2px outset var(--chrome-light);
   background: var(--button-face);
   box-shadow: inset 3px 0 0 var(--accent), inset 0 0 0 1px var(--chrome-shadow), 1px 1px 0 var(--chrome-shadow);
   color: var(--button-text);
-  font: bold 0.56rem Verdana, Arial, sans-serif;
+  font: bold 0.63rem Verdana, Arial, sans-serif;
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
