@@ -17,7 +17,7 @@
     green:  { bg: '#16823b', button: '#d735a8', buttonHover: '#eb62c4', buttonText: '#ffffff', mascot: 'hue-rotate(108deg) saturate(1.3) brightness(0.82)' },
     blue:   { bg: '#003cff', button: '#ff6800', buttonHover: '#ff8b3d', buttonText: '#111111', mascot: 'hue-rotate(194deg) saturate(1.45) brightness(0.88)' },
     purple: { bg: '#6b35a8', button: '#8dcc35', buttonHover: '#a8df5e', buttonText: '#111111', mascot: 'hue-rotate(244deg) saturate(1.25) brightness(0.86)' },
-    black:  { bg: '#111111', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'hue-rotate(78deg) saturate(3.5) brightness(1.45) contrast(1.2)' }
+    black:  { bg: '#111111', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'hue-rotate(78deg) saturate(1.8) brightness(1.15) contrast(1.05)' }
   };
 
   function hexToRgb(hex) {
@@ -93,7 +93,7 @@
     root.style.setProperty(
       '--mascot-glow',
       name === 'black'
-        ? 'drop-shadow(0 0 2px #d7ff00) drop-shadow(0 0 7px #39ff14)'
+        ? 'drop-shadow(0 0 1px rgb(160 255 175 / 80%)) drop-shadow(0 0 3px rgb(120 255 145 / 35%))'
         : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'
     );
 
