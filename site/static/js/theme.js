@@ -22,8 +22,9 @@
 
   function updateSoundToggle() {
     var playing = !song.paused && !song.ended;
-    soundToggle.textContent = playing ? '🔊' : '🔇';
-    soundToggle.title = playing ? 'Mute the Blue song' : 'Play the full Blue song';
+    soundToggle.textContent = playing ? '■ MUTE' : '⚠ SOUND';
+    soundToggle.classList.toggle('is-playing', playing);
+    soundToggle.title = playing ? 'Mute the Blue song' : 'Alert: click to play the full Blue song';
     soundToggle.setAttribute('aria-label', soundToggle.title);
   }
 

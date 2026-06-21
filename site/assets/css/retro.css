@@ -166,12 +166,6 @@ a:hover {
   font: bold 1.15rem Verdana, Arial, sans-serif;
 }
 
-.mascot-label {
-  color: var(--muted);
-  font: bold 0.55rem "Courier New", monospace;
-  letter-spacing: 0.08em;
-}
-
 .site-nav {
   display: flex;
   align-items: baseline;
@@ -203,7 +197,14 @@ a:hover {
 }
 
 .sound-toggle {
-  display: none;
+  display: inline-block;
+  width: 6rem;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.theme-toggle {
+  width: 3.8rem;
 }
 
 .site-nav a:active,
@@ -222,7 +223,22 @@ a:hover {
 }
 
 [data-theme="dark"] .sound-toggle {
-  display: inline-block;
+  visibility: visible;
+  pointer-events: auto;
+  background: var(--accent);
+  animation: sound-alert 0.8s steps(2, end) infinite;
+}
+
+[data-theme="dark"] .sound-toggle.is-playing {
+  background: var(--chrome-face);
+  animation: none;
+}
+
+@keyframes sound-alert {
+  50% {
+    color: #ffffff;
+    background: #b90000;
+  }
 }
 
 .blue-roach {
@@ -376,6 +392,10 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   .blue-roach {
+    animation: none;
+  }
+
+  [data-theme="dark"] .sound-toggle {
     animation: none;
   }
 }
