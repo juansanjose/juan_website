@@ -18,7 +18,13 @@
 <body>
   <header class="site-header">
     <div class="container">
-      <div class="site-title"><a href="{{ site.BaseURL }}">{{ site.Params.author }}</a></div>
+      <a class="site-brand" href="{{ site.BaseURL }}">
+        <img class="site-mascot" src="{{ site.BaseURL }}media/django-mascot.png" alt="Django, the reptile site mascot" width="48" height="48">
+        <span class="site-identity">
+          <span class="site-title">{{ site.Params.author }}</span>
+          <span class="mascot-label">DJANGO // SITE MASCOT</span>
+        </span>
+      </a>
       <nav class="site-nav">
         <a href="{{ site.BaseURL }}">home</a>
         <a href="{{ site.BaseURL }}blog/">blog</a>

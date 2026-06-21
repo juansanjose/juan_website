@@ -6,6 +6,11 @@
   --link: #0000cc;
   --link-hover: #000066;
   --border: #aaaaaa;
+  --chrome-face: #b9b9b9;
+  --chrome-light: #f4f4f4;
+  --chrome-shadow: #3f3f3f;
+  --chrome-text: #171717;
+  --accent: #ff5a00;
   --page-pattern: url("/bg-circuit.svg");
   --pattern-size: 180px auto;
 }
@@ -18,6 +23,11 @@
   --link: #ffffff;
   --link-hover: #8de7ff;
   --border: #70c9ff;
+  --chrome-face: #65758a;
+  --chrome-light: #dff4ff;
+  --chrome-shadow: #001743;
+  --chrome-text: #06101f;
+  --accent: #ff6800;
   --page-pattern: url("/media/blue-alien-cropped.png");
   --pattern-size: clamp(10rem, 22vw, 22rem) auto;
 }
@@ -36,6 +46,40 @@ html {
   background-size: var(--pattern-size);
   background-attachment: fixed;
   background-position: center top;
+  scrollbar-color: var(--accent) var(--chrome-face);
+  scrollbar-width: auto;
+}
+
+::-webkit-scrollbar {
+  width: 17px;
+  height: 17px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--chrome-face);
+  border: 2px inset var(--chrome-light);
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 30px;
+  background: var(--chrome-face);
+  border: 2px outset var(--chrome-light);
+  box-shadow: inset 0 0 0 1px var(--chrome-shadow);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+::-webkit-scrollbar-button {
+  width: 17px;
+  height: 17px;
+  background: var(--chrome-face);
+  border: 2px outset var(--chrome-light);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--chrome-shadow);
 }
 
 body {
@@ -91,18 +135,41 @@ a:hover {
 
 .site-header .container {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.site-mascot {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 2px 0 var(--chrome-shadow));
+}
+
+.site-identity {
+  display: grid;
+  gap: 0.1rem;
 }
 
 .site-title {
   font: bold 1.15rem Verdana, Arial, sans-serif;
 }
 
-.site-title a {
-  color: var(--fg);
-  text-decoration: none;
+.mascot-label {
+  color: var(--muted);
+  font: bold 0.55rem "Courier New", monospace;
+  letter-spacing: 0.08em;
 }
 
 .site-nav {
@@ -111,38 +178,47 @@ a:hover {
   gap: 0.85rem;
 }
 
-.site-nav a {
-  color: var(--muted);
-  font: 0.8rem Verdana, Arial, sans-serif;
-}
-
-.site-nav a:hover {
-  color: var(--fg);
-}
-
-.theme-toggle {
+.site-nav a,
+.theme-toggle,
+.sound-toggle {
   appearance: none;
-  background: transparent;
-  border: 0;
-  color: var(--link);
-  padding: 0;
-  font: 0.8rem Verdana, Arial, sans-serif;
-  text-decoration: underline;
+  min-height: 1.45rem;
+  padding: 0.18rem 0.4rem;
+  border: 2px outset var(--chrome-light);
+  background: var(--chrome-face);
+  box-shadow: inset 3px 0 0 var(--accent), inset 0 0 0 1px var(--chrome-shadow), 1px 1px 0 var(--chrome-shadow);
+  color: var(--chrome-text);
+  font: bold 0.62rem Verdana, Arial, sans-serif;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
-.theme-toggle:hover {
-  color: var(--link-hover);
+.site-nav a:hover,
+.theme-toggle:hover,
+.sound-toggle:hover {
+  background: var(--accent);
+  color: #111111;
 }
 
 .sound-toggle {
   display: none;
-  appearance: none;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  font-size: 0.8rem;
-  cursor: pointer;
+}
+
+.site-nav a:active,
+.theme-toggle:active,
+.sound-toggle:active {
+  border-style: inset;
+  box-shadow: inset 1px 1px 2px var(--chrome-shadow);
+  transform: translate(1px, 1px);
+}
+
+.site-nav a:focus-visible,
+.theme-toggle:focus-visible,
+.sound-toggle:focus-visible {
+  outline: 1px dotted var(--chrome-text);
+  outline-offset: -4px;
 }
 
 [data-theme="dark"] .sound-toggle {
@@ -173,6 +249,8 @@ a:hover {
 
 main {
   margin-bottom: 1.5rem;
+  border: 2px ridge var(--border);
+  box-shadow: 2px 2px 0 var(--chrome-shadow);
 }
 
 h1, h2, h3 {
@@ -272,17 +350,23 @@ footer {
   color: var(--muted);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 720px) {
   .site-header .container {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
   }
 
+  .site-mascot {
+    width: 40px;
+    height: 40px;
+  }
+
   .site-nav {
     width: 100%;
     justify-content: flex-start;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.45rem;
   }
 
   .blue-roach {
