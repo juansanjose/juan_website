@@ -20,12 +20,21 @@
     <div class="container">
       <div class="site-brand">
         <button class="palette-toggle" type="button" title="Choose the site color palette" aria-label="Choose the site color palette">
-          <img class="site-mascot" src="{{ site.BaseURL }}media/django-mascot.png" alt="Django, an orange cowboy lizard" width="72" height="48">
+          <img class="site-mascot" src="{{ site.BaseURL }}media/django-mascot.png" alt="Django, an orange cowboy chameleon" width="72" height="48">
         </button>
         <a class="site-identity" href="{{ site.BaseURL }}">
           <span class="site-title">{{ site.Params.author }}</span>
         </a>
-        <input class="palette-picker" type="color" value="#ffffff" aria-label="Site color palette">
+        <div class="palette-menu" hidden aria-label="Choose a site palette">
+          <button class="palette-swatch" type="button" data-palette="white" style="--swatch: #ffffff" aria-label="White palette"></button>
+          <button class="palette-swatch" type="button" data-palette="red" style="--swatch: #c62828" aria-label="Red palette"></button>
+          <button class="palette-swatch" type="button" data-palette="orange" style="--swatch: #ef6c00" aria-label="Orange palette"></button>
+          <button class="palette-swatch" type="button" data-palette="yellow" style="--swatch: #f7d038" aria-label="Yellow palette"></button>
+          <button class="palette-swatch" type="button" data-palette="green" style="--swatch: #16823b" aria-label="Green palette"></button>
+          <button class="palette-swatch" type="button" data-palette="blue" style="--swatch: #003cff" aria-label="Blue palette"></button>
+          <button class="palette-swatch" type="button" data-palette="purple" style="--swatch: #6b35a8" aria-label="Purple palette"></button>
+          <button class="palette-swatch" type="button" data-palette="black" style="--swatch: #111111" aria-label="Black palette"></button>
+        </div>
       </div>
       <nav class="site-nav">
         <a href="{{ site.BaseURL }}">home</a>

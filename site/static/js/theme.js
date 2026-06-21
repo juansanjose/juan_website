@@ -3,40 +3,28 @@
 
   var root = document.documentElement;
   var paletteToggle = document.querySelector('.palette-toggle');
-  var palettePicker = document.querySelector('.palette-picker');
+  var paletteMenu = document.querySelector('.palette-menu');
+  var paletteSwatches = Array.prototype.slice.call(document.querySelectorAll('.palette-swatch'));
   var soundToggle = document.querySelector('.sound-toggle');
   var roach = document.querySelector('.blue-roach');
   var song = document.querySelector('.blue-song');
+
+  var palettes = {
+    white:  { bg: '#ffffff', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', hue: 30 },
+    red:    { bg: '#c62828', button: '#28c6c6', buttonHover: '#5adede', buttonText: '#111111', hue: 0 },
+    orange: { bg: '#ef6c00', button: '#0067cc', buttonHover: '#2788e8', buttonText: '#ffffff', hue: 28 },
+    yellow: { bg: '#f7d038', button: '#4930c7', buttonHover: '#6650de', buttonText: '#ffffff', hue: 48 },
+    green:  { bg: '#16823b', button: '#d735a8', buttonHover: '#eb62c4', buttonText: '#ffffff', hue: 140 },
+    blue:   { bg: '#003cff', button: '#ff6800', buttonHover: '#ff8b3d', buttonText: '#111111', hue: 226 },
+    purple: { bg: '#6b35a8', button: '#8dcc35', buttonHover: '#a8df5e', buttonText: '#111111', hue: 272 },
+    black:  { bg: '#111111', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', hue: 30 }
+  };
 
   function hexToRgb(hex) {
     return {
       r: parseInt(hex.slice(1, 3), 16),
       g: parseInt(hex.slice(3, 5), 16),
       b: parseInt(hex.slice(5, 7), 16)
-    };
-  }
-
-  function rgbToHsl(rgb) {
-    var r = rgb.r / 255;
-    var g = rgb.g / 255;
-    var b = rgb.b / 255;
-    var max = Math.max(r, g, b);
-    var min = Math.min(r, g, b);
-    var delta = max - min;
-    var hue = 0;
-
-    if (delta) {
-      if (max === r) hue = ((g - b) / delta) % 6;
-      if (max === g) hue = (b - r) / delta + 2;
-      if (max === b) hue = (r - g) / delta + 4;
-      hue = Math.round(hue * 60);
-      if (hue < 0) hue += 360;
-    }
-
-    return {
-      h: hue,
-      s: delta === 0 ? 0 : delta / (1 - Math.abs(max + min - 1)),
-      l: (max + min) / 2
     };
   }
 
@@ -49,10 +37,6 @@
       channel(rgb.r, target.r) + ' ' +
       channel(rgb.g, target.g) + ' ' +
       channel(rgb.b, target.b) + ')';
-  }
-
-  function isBlue(hsl) {
-    return hsl.h >= 195 && hsl.h <= 255 && hsl.s >= 0.35;
   }
 
   function updateSoundToggle() {
@@ -81,29 +65,43 @@
     roach.play().catch(function () {});
   }
 
-  function applyPalette(color, persist) {
-    var rgb = hexToRgb(color);
-    var hsl = rgbToHsl(rgb);
-    var blue = isBlue(hsl);
-    var dark = hsl.l < 0.48;
+  function setMenuOpen(open) {
+    paletteMenu.hidden = !open;
+    paletteToggle.setAttribute('aria-expanded', String(open));
+  }
+
+  function applyPalette(name, persist) {
+    var palette = palettes[name] || palettes.white;
+    var rgb = hexToRgb(palette.bg);
+    var blue = name === 'blue';
+    var dark = name === 'red' || name === 'orange' || name === 'green' || name === 'blue' || name === 'purple' || name === 'black';
     var priorBlue = root.getAttribute('data-theme') === 'dark';
+    var mascotRotation = name === 'white' || name === 'black' ? 0 : palette.hue - 30;
 
     root.setAttribute('data-theme', blue ? 'dark' : 'light');
-    root.style.setProperty('--bg', color);
+    root.style.setProperty('--bg', palette.bg);
     root.style.setProperty('--bg-shade', mix(rgb, dark ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 }, 0.12));
     root.style.setProperty('--fg', dark ? '#f5f7fa' : '#202020');
     root.style.setProperty('--muted', dark ? '#d2d7df' : '#555555');
     root.style.setProperty('--link', dark ? '#ffffff' : '#0000cc');
-    root.style.setProperty('--link-hover', dark ? '#ffdd9a' : '#000066');
+    root.style.setProperty('--link-hover', dark ? '#fff0b8' : '#000066');
     root.style.setProperty('--border', mix(rgb, dark ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 }, 0.35));
-    root.style.setProperty('--mascot-filter', 'hue-rotate(' + (hsl.h - 30) + 'deg) saturate(1.15)');
-    palettePicker.value = color;
+    root.style.setProperty('--accent', palette.button);
+    root.style.setProperty('--button-face', palette.button);
+    root.style.setProperty('--button-hover', palette.buttonHover);
+    root.style.setProperty('--button-text', palette.buttonText);
+    root.style.setProperty('--mascot-filter', 'hue-rotate(' + mascotRotation + 'deg) saturate(1.1)');
+
+    paletteSwatches.forEach(function (swatch) {
+      swatch.setAttribute('aria-pressed', String(swatch.dataset.palette === name));
+    });
 
     if (priorBlue && !blue) stopAll();
 
     if (persist) {
       try {
-        window.localStorage.setItem('paletteColor', color);
+        window.localStorage.setItem('paletteName', name);
+        window.localStorage.removeItem('paletteColor');
         window.localStorage.removeItem('theme');
       } catch (error) {
         // The palette still works when storage is blocked.
@@ -112,11 +110,26 @@
   }
 
   paletteToggle.addEventListener('click', function () {
-    palettePicker.click();
+    setMenuOpen(paletteMenu.hidden);
   });
 
-  palettePicker.addEventListener('input', function () {
-    applyPalette(palettePicker.value, true);
+  paletteSwatches.forEach(function (swatch) {
+    swatch.addEventListener('click', function () {
+      applyPalette(swatch.dataset.palette, true);
+      setMenuOpen(false);
+      paletteToggle.focus();
+    });
+  });
+
+  document.addEventListener('click', function (event) {
+    if (!paletteMenu.hidden && !event.target.closest('.site-brand')) setMenuOpen(false);
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      setMenuOpen(false);
+      paletteToggle.focus();
+    }
   });
 
   soundToggle.addEventListener('click', function () {
@@ -139,12 +152,13 @@
   });
 
   try {
-    var savedColor = window.localStorage.getItem('paletteColor');
-    if (!savedColor && window.localStorage.getItem('theme') === 'dark') savedColor = '#002bff';
-    applyPalette(savedColor || '#ffffff', false);
+    var savedPalette = window.localStorage.getItem('paletteName');
+    if (!savedPalette && window.localStorage.getItem('theme') === 'dark') savedPalette = 'blue';
+    applyPalette(savedPalette || 'white', false);
   } catch (error) {
-    applyPalette('#ffffff', false);
+    applyPalette('white', false);
   }
 
+  setMenuOpen(false);
   updateSoundToggle();
 })();
