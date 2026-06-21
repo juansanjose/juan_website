@@ -12,7 +12,7 @@
   var palettes = {
     // Button hues sit approximately 180 degrees opposite Django on the color wheel.
     // Neutral palettes use direct light/dark inversion.
-    white:  { bg: '#ffffff', button: '#111111', buttonHover: '#333333', buttonText: '#ffffff', mascot: 'grayscale(1) brightness(0.9) contrast(1.1)' },
+    white:  { bg: '#eeeeee', button: '#999999', buttonHover: '#b8b8b8', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.9) contrast(1.1)' },
     red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'hue-rotate(-32deg) saturate(1.35)' },
     orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'none' },
     yellow: { bg: '#f7d038', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'hue-rotate(24deg) saturate(1.1) brightness(1.08)' },
@@ -96,7 +96,9 @@
       '--mascot-glow',
       name === 'black'
         ? 'drop-shadow(0 0 1px rgb(160 255 175 / 80%)) drop-shadow(0 0 3px rgb(120 255 145 / 35%))'
-        : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'
+        : name === 'white'
+          ? 'drop-shadow(0 0 0 transparent)'
+          : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'
     );
 
     paletteSwatches.forEach(function (swatch) {

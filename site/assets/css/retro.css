@@ -218,17 +218,6 @@ a:hover {
   filter: var(--mascot-filter, hue-rotate(195deg)) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
 
-.site-identity {
-  display: grid;
-  gap: 0.1rem;
-  color: var(--fg);
-  text-decoration: none;
-}
-
-.site-title {
-  font: bold 1.15rem Verdana, Arial, sans-serif;
-}
-
 .site-nav {
   display: flex;
   align-items: baseline;
