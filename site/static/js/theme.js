@@ -10,14 +10,16 @@
   var song = document.querySelector('.blue-song');
 
   var palettes = {
+    // Button hues sit approximately 180 degrees opposite Django on the color wheel.
+    // White is the deliberate exception: gray Django keeps the site's base orange controls.
     white:  { bg: '#ffffff', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.9) contrast(1.1)' },
-    red:    { bg: '#c62828', button: '#28c6c6', buttonHover: '#5adede', buttonText: '#111111', mascot: 'hue-rotate(-32deg) saturate(1.35)' },
-    orange: { bg: '#ef6c00', button: '#0067cc', buttonHover: '#2788e8', buttonText: '#ffffff', mascot: 'none' },
-    yellow: { bg: '#f7d038', button: '#4930c7', buttonHover: '#6650de', buttonText: '#ffffff', mascot: 'hue-rotate(24deg) saturate(1.1) brightness(1.08)' },
-    green:  { bg: '#16823b', button: '#d735a8', buttonHover: '#eb62c4', buttonText: '#ffffff', mascot: 'hue-rotate(108deg) saturate(1.3) brightness(0.82)' },
-    blue:   { bg: '#003cff', button: '#ff6800', buttonHover: '#ff8b3d', buttonText: '#111111', mascot: 'hue-rotate(194deg) saturate(1.45) brightness(0.88)' },
-    purple: { bg: '#6b35a8', button: '#8dcc35', buttonHover: '#a8df5e', buttonText: '#111111', mascot: 'hue-rotate(244deg) saturate(1.25) brightness(0.86)' },
-    black:  { bg: '#111111', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'hue-rotate(78deg) saturate(1.8) brightness(1.15) contrast(1.05)' }
+    red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'hue-rotate(-32deg) saturate(1.35)' },
+    orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'none' },
+    yellow: { bg: '#f7d038', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'hue-rotate(24deg) saturate(1.1) brightness(1.08)' },
+    green:  { bg: '#16823b', button: '#e33fae', buttonHover: '#f06bc4', buttonText: '#111111', mascot: 'hue-rotate(108deg) saturate(1.3) brightness(0.82)' },
+    blue:   { bg: '#003cff', button: '#ffc400', buttonHover: '#ffd54a', buttonText: '#111111', mascot: 'hue-rotate(194deg) saturate(1.45) brightness(0.88)' },
+    purple: { bg: '#6b35a8', button: '#8fd62f', buttonHover: '#a9e45c', buttonText: '#111111', mascot: 'hue-rotate(244deg) saturate(1.25) brightness(0.86)' },
+    black:  { bg: '#111111', button: '#c026d3', buttonHover: '#d855e6', buttonText: '#ffffff', mascot: 'hue-rotate(78deg) saturate(1.8) brightness(1.15) contrast(1.05)' }
   };
 
   function hexToRgb(hex) {
