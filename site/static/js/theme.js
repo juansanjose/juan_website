@@ -10,14 +10,14 @@
   var song = document.querySelector('.blue-song');
 
   var palettes = {
-    white:  { bg: '#ffffff', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'none' },
+    white:  { bg: '#ffffff', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.9) contrast(1.1)' },
     red:    { bg: '#c62828', button: '#28c6c6', buttonHover: '#5adede', buttonText: '#111111', mascot: 'hue-rotate(-32deg) saturate(1.35)' },
     orange: { bg: '#ef6c00', button: '#0067cc', buttonHover: '#2788e8', buttonText: '#ffffff', mascot: 'none' },
     yellow: { bg: '#f7d038', button: '#4930c7', buttonHover: '#6650de', buttonText: '#ffffff', mascot: 'hue-rotate(24deg) saturate(1.1) brightness(1.08)' },
     green:  { bg: '#16823b', button: '#d735a8', buttonHover: '#eb62c4', buttonText: '#ffffff', mascot: 'hue-rotate(108deg) saturate(1.3) brightness(0.82)' },
     blue:   { bg: '#003cff', button: '#ff6800', buttonHover: '#ff8b3d', buttonText: '#111111', mascot: 'hue-rotate(194deg) saturate(1.45) brightness(0.88)' },
     purple: { bg: '#6b35a8', button: '#8dcc35', buttonHover: '#a8df5e', buttonText: '#111111', mascot: 'hue-rotate(244deg) saturate(1.25) brightness(0.86)' },
-    black:  { bg: '#111111', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.42) contrast(1.35)' }
+    black:  { bg: '#111111', button: '#ff5a00', buttonHover: '#ff7a2e', buttonText: '#111111', mascot: 'hue-rotate(78deg) saturate(3.5) brightness(1.45) contrast(1.2)' }
   };
 
   function hexToRgb(hex) {
@@ -90,6 +90,12 @@
     root.style.setProperty('--button-hover', palette.buttonHover);
     root.style.setProperty('--button-text', palette.buttonText);
     root.style.setProperty('--mascot-filter', palette.mascot);
+    root.style.setProperty(
+      '--mascot-glow',
+      name === 'black'
+        ? 'drop-shadow(0 0 2px #d7ff00) drop-shadow(0 0 7px #39ff14)'
+        : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'
+    );
 
     paletteSwatches.forEach(function (swatch) {
       swatch.setAttribute('aria-pressed', String(swatch.dataset.palette === name));

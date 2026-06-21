@@ -211,11 +211,11 @@ a:hover {
   height: 48px;
   object-fit: contain;
   image-rendering: pixelated;
-  filter: var(--mascot-filter, none) drop-shadow(2px 2px 0 var(--chrome-shadow));
+  filter: var(--mascot-filter, none) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
 
 [data-theme="dark"] .site-mascot {
-  filter: var(--mascot-filter, hue-rotate(195deg)) drop-shadow(2px 2px 0 var(--chrome-shadow));
+  filter: var(--mascot-filter, hue-rotate(195deg)) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
 
 .site-identity {
