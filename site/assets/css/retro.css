@@ -210,7 +210,7 @@ a:hover {
   width: 72px;
   height: 48px;
   object-fit: contain;
-  image-rendering: auto;
+  image-rendering: pixelated;
   filter: var(--mascot-filter, none) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
 
