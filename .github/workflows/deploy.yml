@@ -89,8 +89,12 @@ jobs:
           systemctl daemon-reload
           systemctl enable --now juan-visitor-counter.service
           systemctl restart juan-visitor-counter.service
-          curl --fail --silent --show-error --retry 5 --retry-delay 1 \
-            http://127.0.0.1:8787/health > /dev/null
+          if ! curl --fail --silent --show-error --retry 10 --retry-delay 1 --retry-all-errors \
+            http://127.0.0.1:8787/health > /dev/null; then
+            systemctl status --no-pager juan-visitor-counter.service || true
+            journalctl --no-pager -u juan-visitor-counter.service -n 50 || true
+            exit 1
+          fi
 
       - name: Deploy and validate Caddy site fragment
         run: |
