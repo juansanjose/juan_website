@@ -67,3 +67,18 @@ One-time GitHub setup:
    ```
 
 The comments widget is intentionally rendered only for individual pages in the `blog` section. GitHub handles authentication, moderation, and comment traffic; no credentials or comment data are stored in this repository or on the web server.
+
+## Visitor counter
+
+The footer counter uses a random anonymous ID stored in the visitor's browser.
+Reloads and navigation therefore do not increase the total, while different
+browsers behind the same NAT address remain distinct. The server stores only a
+keyed hash of that ID. A keyed daily IP hash is used solely to cap obviously
+automated creation of new IDs at 500 per address; raw IP addresses are never
+written to disk.
+
+The counter service listens only on `127.0.0.1` and Caddy exposes its single
+`POST /api/visitor` endpoint. Its state lives in
+`/var/lib/juan-visitor-counter`, outside normal site deployments and rollbacks.
+The deployment workflow creates its HMAC secret in
+`/etc/juan-visitor-counter.env` on first deployment.

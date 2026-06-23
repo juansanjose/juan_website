@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'visitor-counter/**'
       - 'Caddyfile'
       - '.github/workflows/deploy.yml'
       - 'Makefile'
@@ -26,6 +27,10 @@ jobs:
         with:
           hugo-version: '0.159.2'
           extended: true
+
+      - name: Test visitor counter
+        working-directory: visitor-counter
+        run: python3 -m unittest
 
       - name: Build site
         run: make build
@@ -68,6 +73,24 @@ jobs:
           cp -a "$DEPLOY_PATH" "${DEPLOY_PATH}-previous"
           rsync -av --delete public/ "$DEPLOY_PATH/"
           chown -R www-data:www-data "$DEPLOY_PATH" "${DEPLOY_PATH}-previous"
+
+      - name: Deploy visitor counter service
+        run: |
+          set -euo pipefail
+          command -v python3 >/dev/null || { echo "python3 is required on the VPS"; exit 1; }
+          install -d -m 0755 /opt/juan-visitor-counter
+          install -d -o www-data -g www-data -m 0750 /var/lib/juan-visitor-counter
+          install -m 0755 visitor-counter/server.py /opt/juan-visitor-counter/server.py
+          install -m 0644 visitor-counter/juan-visitor-counter.service /etc/systemd/system/juan-visitor-counter.service
+          if ! test -f /etc/juan-visitor-counter.env; then
+            umask 077
+            printf 'VISITOR_HMAC_SECRET=%s\n' "$(python3 -c 'import secrets; print(secrets.token_hex(32))')" > /etc/juan-visitor-counter.env
+          fi
+          systemctl daemon-reload
+          systemctl enable --now juan-visitor-counter.service
+          systemctl restart juan-visitor-counter.service
+          curl --fail --silent --show-error --retry 5 --retry-delay 1 \
+            http://127.0.0.1:8787/health > /dev/null
 
       - name: Deploy and validate Caddy site fragment
         run: |

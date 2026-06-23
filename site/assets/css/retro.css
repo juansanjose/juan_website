@@ -442,6 +442,11 @@ footer {
   color: var(--muted);
 }
 
+.visitor-total {
+  float: right;
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 720px) {
   .site-header .container {
     gap: 0.4rem;

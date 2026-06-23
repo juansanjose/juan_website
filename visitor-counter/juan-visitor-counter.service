@@ -1,0 +1,20 @@
+[Unit]
+Description=Juan website visitor counter
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+EnvironmentFile=/etc/juan-visitor-counter.env
+ExecStart=/usr/bin/python3 /opt/juan-visitor-counter/server.py --host 127.0.0.1 --port 8787 --state-file /var/lib/juan-visitor-counter/state.json
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/juan-visitor-counter
+
+[Install]
+WantedBy=multi-user.target

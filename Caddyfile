@@ -12,8 +12,14 @@ __DOMAIN__ {
         Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src https://utteranc.es; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; script-src 'self' https://utteranc.es; font-src 'self';"
     }
 
-    try_files {path} {path}/ =404
-    file_server
+    handle /api/visitor {
+        reverse_proxy 127.0.0.1:8787
+    }
+
+    handle {
+        try_files {path} {path}/ =404
+        file_server
+    }
 
     handle_errors {
         rewrite * /404.html
