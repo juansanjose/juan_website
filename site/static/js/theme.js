@@ -98,11 +98,17 @@
       'drop-shadow(1px 0 0 ' + palette.mascotShadow + ') ' +
       'drop-shadow(0 -1px 0 ' + palette.mascotShadow + ') ' +
       'drop-shadow(0 1px 0 ' + palette.mascotShadow + ')';
+    var mascotEdge =
+      name === 'yellow' || name === 'orange'
+        ? pixelOutline
+        : name === 'white'
+          ? 'drop-shadow(0 1px 0 rgb(104 104 104 / 35%))'
+          : 'drop-shadow(0 0 0 transparent)';
     root.style.setProperty(
       '--mascot-glow',
       name === 'black'
         ? pixelOutline + ' drop-shadow(0 0 1px rgb(225 255 154 / 95%)) drop-shadow(0 0 4px rgb(200 255 98 / 75%)) drop-shadow(0 0 9px rgb(133 255 38 / 45%))'
-        : pixelOutline
+        : mascotEdge
     );
 
     paletteSwatches.forEach(function (swatch) {

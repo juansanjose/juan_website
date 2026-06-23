@@ -22,7 +22,12 @@
     <div class="container">
       <div class="site-brand">
         <button class="palette-toggle" type="button" title="Choose the site color palette" aria-label="Choose the site color palette">
-          <img class="site-mascot" src="{{ site.BaseURL }}media/green-block-mascot.svg" alt="Green pixel mascot" width="48" height="48">
+          <span class="site-mascot-frame">
+            <img class="site-mascot" src="{{ site.BaseURL }}media/green-block-mascot.svg" alt="Pixel chameleon mascot" width="48" height="48">
+            <svg class="site-mascot-eye" viewBox="0 0 24 24" aria-hidden="true" shape-rendering="crispEdges">
+              <path d="M16 5h3v1h-3zM15 6h2v3h-2zM19 6h1v4h-1zM16 9h3v1h-3z"/>
+            </svg>
+          </span>
         </button>
         <span class="visitor-counter" aria-label="Unique visitors">
           <span class="visitor-counter__label" aria-hidden="true">VISITORS</span>

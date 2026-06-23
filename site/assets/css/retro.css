@@ -206,12 +206,30 @@ a:hover {
   border-style: inset;
 }
 
-.site-mascot {
+.site-mascot-frame {
+  position: relative;
+  display: block;
   width: 48px;
   height: 48px;
+}
+
+.site-mascot,
+.site-mascot-eye {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.site-mascot {
   object-fit: contain;
   image-rendering: pixelated;
   filter: var(--mascot-filter, none) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
+}
+
+.site-mascot-eye {
+  fill: #ffffff;
+  pointer-events: none;
 }
 
 .visitor-counter {
@@ -472,7 +490,7 @@ footer {
     gap: 0.4rem;
   }
 
-  .site-mascot {
+  .site-mascot-frame {
     width: 36px;
     height: 36px;
   }
