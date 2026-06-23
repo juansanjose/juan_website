@@ -99,9 +99,9 @@
       'drop-shadow(0 -1px 0 ' + palette.mascotShadow + ') ' +
       'drop-shadow(0 1px 0 ' + palette.mascotShadow + ')';
     var mascotEdge =
-      name === 'yellow' || name === 'orange'
+      name === 'yellow'
         ? pixelOutline
-        : name === 'red' || name === 'purple'
+        : name === 'red' || name === 'orange' || name === 'purple'
           ? 'drop-shadow(0 1px 0 ' + palette.mascotShadow + ')'
         : name === 'white'
           ? 'drop-shadow(0 1px 0 rgb(104 104 104 / 35%))'
