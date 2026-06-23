@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 96 44"
+     viewBox="0 0 52 24"
      role="img"
      aria-labelledby="title description"
      shape-rendering="crispEdges">
   <title id="title">Django the chameleon</title>
-  <desc id="description">A simplified orange retro pixel-art chameleon with a curled tail</desc>
-  <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAsBAMAAABoLKAcAAAAGFBMVEUTEgs7DgIZGAYbGhT70irLOwH5bAHw5plADeXEAAAABHRSTlMA/mw+BOABQAAAAjRJREFUSMe9lcFu2zAMhq0Wu4uYpHO7NzHAqGcBpe4CrH/nAsXy+gNlJbYzu1vWYUQQ2zI/iT9JycPwP42I7vL/xixPdy3ADHuHv2FgAQwR0Ye4cVgAIsfMPH4kysUFIOb2BOZj5AB45aOIZg8FnolxtYn3l5gVAGkYaFr56ypfjwMCymCmiK1F2gWIggLGX2NhvtzZTwMPFAvzqIDPc3ZamvoF4y3huKhoAopknXKdJf0bf0mpi/omoKj/VnUj7OcAB7j48hYR4DP4Nq06MD5tF4CLI83AdOMuGRNQVoB5hQYzh+QRUWXlT+Qlx43sBch7gMguUMKcVq9zUlalHDG18oSTZmLpcxeLEu1HGYWZSZpS9W9Jq3m9NXrfaWtMlBFaS+fei3MJay//TATtmmZQx6QvuXdUYpAAKfQE278C2vmg5rjMsWm7vf/gOMVRH0W8tHHqXWjw/nI+n89vFFBFaqKAgu+tXgLSCX1GYkbo2W16p8gMmk+jgDIvap9BRsQanxwqRpRLLXpUg5GksnRvN3sGrBc7GIqSpewAOAZoBVwtZKuVSdd2DrCPodjBFAIhbABDA1WanfqIbfcGxbiCcAs4phaKidX2w0p73j4GFBMKSi75j4CHC4CtBnMSNHnuMuxOWq/BV7LGay+HmtZAagocx9Il+ETnomVq1dUWSNu9Tfr2RJDrPA6rdKHWm/NJp6KUZQG0BN2+VECGHYCQls21+moZAdKwZ0dftt998/6Z/QTjCj0cAvYeHgAAAABJRU5ErkJggg=="
-         width="96"
-         height="44"
+  <desc id="description">A chunky orange block-pixel chameleon with a curled tail</desc>
+  <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAAYBAMAAABHOMOVAAAAD1BMVEUaGQY0GQT4dgH8qB/FRAFwcBiLAAAAAXRSTlMAQObYZgAAANpJREFUKM+FkoGNwyAMRe0N+G4GOP9mgca3ABH7z3QySUmqCp0lUMID+3+DyH+hmBJj6RvwtcWYCJgjI4nyQcBEOZP0O9NcKSch/Z4OIDuJiMx5HfIIoyVIuvW6p3CPx4vGOPI9t5FyoQdetHjXeo5jc5TyEMadtzgMdOUgd66dtsZGeqrUiIgt182NdNLafjrAIyJ+29Iq04UvDQ24+o3+6wDWimyZDnOyVBFzEV1rFXX45ZtFtOuynwXqNkV0Gyi/LBHo7QMps/ZBCvrVjvbjHHJcsmL6jHr8AamMKjl28Q/rAAAAAElFTkSuQmCC"
+         width="52"
+         height="24"
          image-rendering="pixelated"
          preserveAspectRatio="xMidYMid meet"/>
 </svg>
