@@ -15,11 +15,11 @@
     white:  { bg: '#eeeeee', button: '#999999', buttonHover: '#b8b8b8', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.82) contrast(1.2)' },
     red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'hue-rotate(-140deg) saturate(1.3) brightness(1.12) contrast(1.08)' },
     orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'hue-rotate(-112deg) saturate(1.35) brightness(1.12) contrast(1.08)' },
-    yellow: { bg: '#f7d038', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'hue-rotate(-92deg) saturate(1.2) brightness(1.05) contrast(1.1)' },
+    yellow: { bg: '#ffe100', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'hue-rotate(-92deg) saturate(1.45) brightness(1.08) contrast(1.1)' },
     green:  { bg: '#16823b', button: '#e33fae', buttonHover: '#f06bc4', buttonText: '#111111', mascot: 'saturate(1.05) brightness(1.18) contrast(1.12)' },
     blue:   { bg: '#003cff', button: '#ffc400', buttonHover: '#ffd54a', buttonText: '#111111', mascot: 'hue-rotate(92deg) saturate(1.4) brightness(1.18) contrast(1.08)' },
     purple: { bg: '#6b35a8', button: '#8fd62f', buttonHover: '#a9e45c', buttonText: '#111111', mascot: 'hue-rotate(130deg) saturate(1.3) brightness(1.18) contrast(1.08)' },
-    black:  { bg: '#111111', button: '#ffffff', buttonHover: '#dddddd', buttonText: '#111111', mascot: 'grayscale(1) brightness(1.55) contrast(1.2)' }
+    black:  { bg: '#111111', button: '#c8ff62', buttonHover: '#e1ff9a', buttonText: '#142000', mascot: 'saturate(2.2) brightness(1.45) contrast(1.05)' }
   };
 
   function hexToRgb(hex) {
@@ -95,7 +95,7 @@
     root.style.setProperty(
       '--mascot-glow',
       name === 'black'
-        ? 'drop-shadow(0 0 1px rgb(255 255 255 / 80%)) drop-shadow(0 0 3px rgb(255 255 255 / 35%))'
+        ? 'drop-shadow(0 0 1px rgb(225 255 154 / 95%)) drop-shadow(0 0 4px rgb(200 255 98 / 75%)) drop-shadow(0 0 9px rgb(133 255 38 / 45%))'
         : name === 'white'
           ? 'drop-shadow(2px 2px 0 rgb(0 0 0 / 35%))'
           : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'

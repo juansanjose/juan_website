@@ -231,7 +231,7 @@ a:hover {
   padding: 0.15rem 0.42rem;
   border: 2px outset var(--chrome-light);
   background: var(--button-face);
-  box-shadow: inset 3px 0 0 var(--accent), inset 0 0 0 1px var(--chrome-shadow), 1px 1px 0 var(--chrome-shadow);
+  box-shadow: inset 0 0 0 1px var(--chrome-shadow), 1px 1px 0 var(--chrome-shadow);
   color: var(--button-text);
   font: bold 0.63rem Verdana, Arial, sans-serif;
   line-height: 1;
