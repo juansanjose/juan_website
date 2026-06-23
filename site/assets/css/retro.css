@@ -215,7 +215,7 @@ a:hover {
 }
 
 [data-theme="dark"] .site-mascot {
-  filter: var(--mascot-filter, hue-rotate(195deg)) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
+  filter: var(--mascot-filter, hue-rotate(92deg) saturate(1.35) brightness(1.15)) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
 
 .site-nav {
