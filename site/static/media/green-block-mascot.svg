@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     role="img"
+     aria-labelledby="title description"
+     shape-rendering="crispEdges">
+  <title id="title">Green pixel mascot</title>
+  <desc id="description">A chunky green block-pixel creature with one oversized eye and a curled body</desc>
+  <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYBAMAAAASWSDLAAAAGFBMVEUAAAApPEEbHBsZTERfo1Y8mGe02rUmalRO9WJkAAAAA3RSTlMA+0xyVPETAAAAhUlEQVQY03XQXQoCMQwE4EKPIHiO6LReoLN4gHTwWRQ9wN4fZFt2t6DmKR/kj4TwHTbkseAfKmE7yuvR0wPgl/exVUY9rw224d6RxGnpoYWAyjpVIjWQpCQtA0ZEalbNuqHNcmZ3nPsWEPB+TBQqThvyXCz7CqWyXgzHjpDl9hsR4zu2+AASKyTWb3O7igAAAABJRU5ErkJggg=="
+         width="24"
+         height="24"
+         image-rendering="pixelated"
+         preserveAspectRatio="xMidYMid meet"/>
+</svg>

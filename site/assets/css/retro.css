@@ -207,7 +207,7 @@ a:hover {
 }
 
 .site-mascot {
-  width: 104px;
+  width: 48px;
   height: 48px;
   object-fit: contain;
   image-rendering: pixelated;
@@ -420,7 +420,7 @@ footer {
   }
 
   .site-mascot {
-    width: 80px;
+    width: 36px;
     height: 36px;
   }
 
