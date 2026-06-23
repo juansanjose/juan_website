@@ -12,14 +12,14 @@
   var palettes = {
     // The mascot follows the selected palette; controls retain the contrary hue.
     // Rotations are calibrated from the mascot's native green artwork.
-    white:  { bg: '#eeeeee', button: '#999999', buttonHover: '#b8b8b8', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.82) contrast(1.2)' },
-    red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'grayscale(1) sepia(1) saturate(14) hue-rotate(318deg) brightness(0.76) contrast(1.25)' },
-    orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(10) hue-rotate(335deg) brightness(1.02) contrast(1.08)' },
-    yellow: { bg: '#ffe100', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(8) hue-rotate(2deg) brightness(1.15) contrast(1.05)' },
-    green:  { bg: '#16823b', button: '#e33fae', buttonHover: '#f06bc4', buttonText: '#111111', mascot: 'saturate(1.05) brightness(1.18) contrast(1.12)' },
-    blue:   { bg: '#003cff', button: '#ffc400', buttonHover: '#ffd54a', buttonText: '#111111', mascot: 'hue-rotate(92deg) saturate(1.4) brightness(1.18) contrast(1.08)' },
-    purple: { bg: '#6b35a8', button: '#8fd62f', buttonHover: '#a9e45c', buttonText: '#111111', mascot: 'hue-rotate(130deg) saturate(1.3) brightness(1.18) contrast(1.08)' },
-    black:  { bg: '#111111', button: '#c8ff62', buttonHover: '#e1ff9a', buttonText: '#142000', mascot: 'saturate(2.2) brightness(1.45) contrast(1.05)' }
+    white:  { bg: '#eeeeee', button: '#999999', buttonHover: '#b8b8b8', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.82) contrast(1.2)', mascotShadow: '#686868' },
+    red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'grayscale(1) sepia(1) saturate(14) hue-rotate(318deg) brightness(0.76) contrast(1.25)', mascotShadow: '#71151b' },
+    orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(10) hue-rotate(335deg) brightness(1.02) contrast(1.08)', mascotShadow: '#8a3500' },
+    yellow: { bg: '#ffe100', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(8) hue-rotate(2deg) brightness(1.15) contrast(1.05)', mascotShadow: '#8c7200' },
+    green:  { bg: '#16823b', button: '#e33fae', buttonHover: '#f06bc4', buttonText: '#111111', mascot: 'saturate(1.05) brightness(1.18) contrast(1.12)', mascotShadow: '#075426' },
+    blue:   { bg: '#003cff', button: '#ffc400', buttonHover: '#ffd54a', buttonText: '#111111', mascot: 'hue-rotate(92deg) saturate(1.4) brightness(1.18) contrast(1.08)', mascotShadow: '#001b85' },
+    purple: { bg: '#6b35a8', button: '#8fd62f', buttonHover: '#a9e45c', buttonText: '#111111', mascot: 'hue-rotate(130deg) saturate(1.3) brightness(1.18) contrast(1.08)', mascotShadow: '#35145c' },
+    black:  { bg: '#111111', button: '#c8ff62', buttonHover: '#e1ff9a', buttonText: '#142000', mascot: 'saturate(2.2) brightness(1.45) contrast(1.05)', mascotShadow: '#52781e' }
   };
 
   function hexToRgb(hex) {
@@ -93,11 +93,16 @@
     root.style.setProperty('--button-hover', palette.buttonHover);
     root.style.setProperty('--button-text', palette.buttonText);
     root.style.setProperty('--mascot-filter', palette.mascot);
+    var pixelOutline =
+      'drop-shadow(-1px 0 0 ' + palette.mascotShadow + ') ' +
+      'drop-shadow(1px 0 0 ' + palette.mascotShadow + ') ' +
+      'drop-shadow(0 -1px 0 ' + palette.mascotShadow + ') ' +
+      'drop-shadow(0 1px 0 ' + palette.mascotShadow + ')';
     root.style.setProperty(
       '--mascot-glow',
       name === 'black'
-        ? 'drop-shadow(2px 2px 0 var(--chrome-shadow)) drop-shadow(0 0 1px rgb(225 255 154 / 95%)) drop-shadow(0 0 4px rgb(200 255 98 / 75%)) drop-shadow(0 0 9px rgb(133 255 38 / 45%))'
-        : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'
+        ? pixelOutline + ' drop-shadow(0 0 1px rgb(225 255 154 / 95%)) drop-shadow(0 0 4px rgb(200 255 98 / 75%)) drop-shadow(0 0 9px rgb(133 255 38 / 45%))'
+        : pixelOutline
     );
 
     paletteSwatches.forEach(function (swatch) {
