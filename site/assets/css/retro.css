@@ -240,6 +240,13 @@ a:hover {
   cursor: pointer;
 }
 
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .site-nav a:hover,
 .sound-toggle:hover {
   background: var(--button-hover);
