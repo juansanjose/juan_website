@@ -401,6 +401,23 @@ pre code {
   margin-bottom: 1.5rem;
 }
 
+.comments {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.comments-notice {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.comments .utterances {
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .back-link {
   display: inline-block;
   margin-top: 2rem;

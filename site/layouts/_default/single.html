@@ -11,6 +11,10 @@
     {{ .Content }}
   </article>
 
+  {{ if eq .Section "blog" }}
+    {{ partial "comments.html" . }}
+  {{ end }}
+
   <a class="back-link" href="{{ site.BaseURL }}blog/">← all posts</a>
 
 {{ end }}

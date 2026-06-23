@@ -50,3 +50,20 @@ make rollback DEPLOY_PATH=/var/www/juan-website
 ```
 
 Direct deployment requires SSH access to `root@moneymachine`. Normal deployment should go through GitHub Actions.
+
+## Blog comments
+
+Individual blog posts use [Utterances](https://utteranc.es/) for flat, GitHub-authenticated comments. Comment data belongs in the public `juansanjose/blog-comments` repository so the website remains static and exposes no write API.
+
+One-time GitHub setup:
+
+1. Create the public `juansanjose/blog-comments` repository with Issues enabled.
+2. Install the [Utterances GitHub App](https://github.com/apps/utterances) for only that repository.
+3. In the comments repository, add `.github/ISSUE_TEMPLATE/config.yml` containing:
+
+   ```yaml
+   blank_issues_enabled: false
+   contact_links: []
+   ```
+
+The comments widget is intentionally rendered only for individual pages in the `blog` section. GitHub handles authentication, moderation, and comment traffic; no credentials or comment data are stored in this repository or on the web server.

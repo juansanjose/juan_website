@@ -8,7 +8,8 @@ __DOMAIN__ {
         X-Content-Type-Options nosniff
         X-Frame-Options DENY
         Referrer-Policy strict-origin-when-cross-origin
-        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; script-src 'self'; font-src 'self';"
+        Permissions-Policy "camera=(), geolocation=(), microphone=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src https://utteranc.es; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; script-src 'self' https://utteranc.es; font-src 'self';"
     }
 
     try_files {path} {path}/ =404
