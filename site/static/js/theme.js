@@ -98,14 +98,7 @@
       'drop-shadow(1px 0 0 ' + palette.mascotShadow + ') ' +
       'drop-shadow(0 -1px 0 ' + palette.mascotShadow + ') ' +
       'drop-shadow(0 1px 0 ' + palette.mascotShadow + ')';
-    var mascotEdge =
-      name === 'yellow'
-        ? pixelOutline
-        : name === 'red' || name === 'orange' || name === 'purple'
-          ? 'drop-shadow(0 1px 0 ' + palette.mascotShadow + ')'
-        : name === 'white'
-          ? 'drop-shadow(0 1px 0 rgb(104 104 104 / 35%))'
-          : 'drop-shadow(0 0 0 transparent)';
+    var mascotEdge = 'drop-shadow(0 1px 0 ' + palette.mascotShadow + ')';
     root.style.setProperty(
       '--mascot-glow',
       name === 'black'
