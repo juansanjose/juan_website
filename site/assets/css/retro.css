@@ -133,20 +133,19 @@ a:hover {
 .site-header {
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  padding: 0.6rem 0 0;
+  padding: 0.6rem 0;
   margin-bottom: 1rem;
   border-bottom: 1px solid var(--border);
 }
 
 .site-header .container {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
 }
 
 .site-brand {
-  grid-column: 2;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -262,10 +261,8 @@ a:hover {
 }
 
 .site-nav {
-  grid-column: 3;
-  justify-self: end;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.4rem;
 }
 
@@ -490,14 +487,7 @@ footer {
 
 @media (max-width: 720px) {
   .site-header .container {
-    grid-template-columns: 1fr;
-    justify-items: center;
     gap: 0.4rem;
-  }
-
-  .site-brand,
-  .site-nav {
-    grid-column: 1;
   }
 
   .site-mascot-frame {
@@ -511,8 +501,7 @@ footer {
   }
 
   .site-nav {
-    justify-self: center;
-    justify-content: center;
+    justify-content: flex-end;
     flex-wrap: wrap;
     gap: 0.3rem;
   }
