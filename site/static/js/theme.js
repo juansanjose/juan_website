@@ -13,7 +13,7 @@
     // The mascot follows the selected palette; controls retain the contrary hue.
     // Rotations are calibrated from the mascot's native green artwork.
     white:  { bg: '#eeeeee', button: '#999999', buttonHover: '#b8b8b8', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.82) contrast(1.2)' },
-    red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'grayscale(1) sepia(1) saturate(12) hue-rotate(310deg) brightness(0.95) contrast(1.12)' },
+    red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'grayscale(1) sepia(1) saturate(14) hue-rotate(318deg) brightness(0.76) contrast(1.25)' },
     orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(10) hue-rotate(335deg) brightness(1.02) contrast(1.08)' },
     yellow: { bg: '#ffe100', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(8) hue-rotate(2deg) brightness(1.15) contrast(1.05)' },
     green:  { bg: '#16823b', button: '#e33fae', buttonHover: '#f06bc4', buttonText: '#111111', mascot: 'saturate(1.05) brightness(1.18) contrast(1.12)' },
@@ -96,10 +96,8 @@
     root.style.setProperty(
       '--mascot-glow',
       name === 'black'
-        ? 'drop-shadow(0 0 1px rgb(225 255 154 / 95%)) drop-shadow(0 0 4px rgb(200 255 98 / 75%)) drop-shadow(0 0 9px rgb(133 255 38 / 45%))'
-        : name === 'white'
-          ? 'drop-shadow(2px 2px 0 rgb(0 0 0 / 35%))'
-          : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'
+        ? 'drop-shadow(2px 2px 0 var(--chrome-shadow)) drop-shadow(0 0 1px rgb(225 255 154 / 95%)) drop-shadow(0 0 4px rgb(200 255 98 / 75%)) drop-shadow(0 0 9px rgb(133 255 38 / 45%))'
+        : 'drop-shadow(2px 2px 0 var(--chrome-shadow))'
     );
 
     paletteSwatches.forEach(function (swatch) {

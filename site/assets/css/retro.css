@@ -214,6 +214,30 @@ a:hover {
   filter: var(--mascot-filter, none) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
 
+.visitor-counter {
+  display: inline-grid;
+  grid-template-columns: auto;
+  min-width: 4.8rem;
+  padding: 0.2rem 0.35rem;
+  border: 2px outset var(--chrome-light);
+  background: var(--button-face);
+  box-shadow: inset 0 0 0 1px var(--chrome-shadow), 2px 2px 0 var(--chrome-shadow);
+  color: var(--button-text);
+  font: bold 0.55rem/1 "Courier New", Courier, monospace;
+  text-align: center;
+  text-shadow: 1px 1px 0 rgb(255 255 255 / 25%);
+}
+
+.visitor-counter__label {
+  letter-spacing: 0.08em;
+}
+
+.visitor-counter__value {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
 [data-theme="dark"] .site-mascot {
   filter: var(--mascot-filter, hue-rotate(92deg) saturate(1.35) brightness(1.15)) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
@@ -247,7 +271,8 @@ a:hover {
   text-align: center;
 }
 
-[data-palette="white"] .site-nav a {
+[data-palette="white"] .site-nav a,
+[data-palette="white"] .visitor-counter {
   border-color: #5a5a5a;
 }
 
@@ -442,11 +467,6 @@ footer {
   color: var(--muted);
 }
 
-.visitor-total {
-  float: right;
-  font-variant-numeric: tabular-nums;
-}
-
 @media (max-width: 720px) {
   .site-header .container {
     gap: 0.4rem;
@@ -455,6 +475,11 @@ footer {
   .site-mascot {
     width: 36px;
     height: 36px;
+  }
+
+  .visitor-counter {
+    min-width: 4.25rem;
+    padding-inline: 0.25rem;
   }
 
   .site-nav {

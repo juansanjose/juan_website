@@ -24,6 +24,10 @@
         <button class="palette-toggle" type="button" title="Choose the site color palette" aria-label="Choose the site color palette">
           <img class="site-mascot" src="{{ site.BaseURL }}media/green-block-mascot.svg" alt="Green pixel mascot" width="48" height="48">
         </button>
+        <span class="visitor-counter" aria-label="Unique visitors">
+          <span class="visitor-counter__label" aria-hidden="true">VISITORS</span>
+          <span class="visitor-counter__value" data-visitor-count aria-live="polite">...</span>
+        </span>
         <div class="palette-menu" hidden aria-label="Choose a site palette">
           <button class="palette-swatch" type="button" data-palette="white" style="--swatch: #eeeeee" aria-label="Light gray palette"></button>
           <button class="palette-swatch" type="button" data-palette="red" style="--swatch: #c62828" aria-label="Red palette"></button>
@@ -49,7 +53,7 @@
 
   <footer>
     <div class="container">
-      <p>&copy; {{ now.Format "2006" }} <span class="visitor-total">VISITORS: <span data-visitor-count>...</span></span></p>
+      <p>&copy; {{ now.Format "2006" }}</p>
     </div>
   </footer>
 
