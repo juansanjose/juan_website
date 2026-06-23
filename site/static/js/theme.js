@@ -13,7 +13,7 @@
     // The mascot follows the selected palette; controls retain the contrary hue.
     // Rotations are calibrated from the mascot's native green artwork.
     white:  { bg: '#eeeeee', button: '#999999', buttonHover: '#b8b8b8', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.82) contrast(1.2)', mascotShadow: '#686868' },
-    red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'hue-rotate(-118deg) saturate(2.4) brightness(0.95) contrast(1.18)', mascotShadow: '#71151b' },
+    red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'grayscale(1) sepia(1) saturate(7) hue-rotate(326deg) brightness(0.82) contrast(1.08)', mascotShadow: '#71151b' },
     orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(10) hue-rotate(335deg) brightness(1.02) contrast(1.08)', mascotShadow: '#8a3500' },
     yellow: { bg: '#ffe100', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(8) hue-rotate(2deg) brightness(1.15) contrast(1.05)', mascotShadow: '#8c7200' },
     green:  { bg: '#16823b', button: '#e33fae', buttonHover: '#f06bc4', buttonText: '#111111', mascot: 'saturate(1.05) brightness(1.18) contrast(1.12)', mascotShadow: '#075426' },
