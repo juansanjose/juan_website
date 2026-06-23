@@ -15,7 +15,7 @@
     white:  { bg: '#eeeeee', button: '#999999', buttonHover: '#b8b8b8', buttonText: '#111111', mascot: 'grayscale(1) brightness(0.82) contrast(1.2)' },
     red:    { bg: '#c62828', button: '#20d9d9', buttonHover: '#55eeee', buttonText: '#111111', mascot: 'hue-rotate(-140deg) saturate(1.3) brightness(1.12) contrast(1.08)' },
     orange: { bg: '#ef6c00', button: '#006cff', buttonHover: '#338aff', buttonText: '#ffffff', mascot: 'hue-rotate(-88deg) saturate(1.5) brightness(1.12) contrast(1.08)' },
-    yellow: { bg: '#ffe100', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'hue-rotate(-58deg) saturate(1.8) brightness(1.12) contrast(1.1)' },
+    yellow: { bg: '#ffe100', button: '#5833d6', buttonHover: '#7657e5', buttonText: '#ffffff', mascot: 'grayscale(1) sepia(1) saturate(8) hue-rotate(2deg) brightness(1.15) contrast(1.05)' },
     green:  { bg: '#16823b', button: '#e33fae', buttonHover: '#f06bc4', buttonText: '#111111', mascot: 'saturate(1.05) brightness(1.18) contrast(1.12)' },
     blue:   { bg: '#003cff', button: '#ffc400', buttonHover: '#ffd54a', buttonText: '#111111', mascot: 'hue-rotate(92deg) saturate(1.4) brightness(1.18) contrast(1.08)' },
     purple: { bg: '#6b35a8', button: '#8fd62f', buttonHover: '#a9e45c', buttonText: '#111111', mascot: 'hue-rotate(130deg) saturate(1.3) brightness(1.18) contrast(1.08)' },
@@ -80,6 +80,7 @@
     var priorBlue = root.getAttribute('data-theme') === 'dark';
 
     root.setAttribute('data-theme', blue ? 'dark' : 'light');
+    root.setAttribute('data-palette', name);
     root.style.setProperty('--bg', palette.bg);
     root.style.setProperty('--bg-shade', mix(rgb, dark ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 }, 0.12));
     root.style.setProperty('--fg', dark ? '#f5f7fa' : '#202020');
@@ -91,7 +92,6 @@
     root.style.setProperty('--button-face', palette.button);
     root.style.setProperty('--button-hover', palette.buttonHover);
     root.style.setProperty('--button-text', palette.buttonText);
-    root.style.setProperty('--button-top-edge', name === 'white' ? '#5a5a5a' : 'var(--chrome-light)');
     root.style.setProperty('--mascot-filter', palette.mascot);
     root.style.setProperty(
       '--mascot-glow',
