@@ -34,9 +34,13 @@ Pushes to `main` trigger GitHub Actions:
 
 ```bash
 sudo PERSONAL_DEPLOY_PATH=/var/www/juan-website scripts/vps-setup.sh
+sudo scripts/anubis-setup.sh
 ```
 
 The setup script preserves the current Caddy configuration, creates a backup, and adds support for independently deployed site fragments.
+The Anubis setup installs the pinned, checksum-verified native package, enables
+the aggressive upstream bot policy, and binds both Anubis and its metrics
+endpoint to loopback only.
 
 5. Replace `https://example.com/` in `site/hugo.toml` with the production URL.
 6. Push `main`, or start the `Build and Deploy` workflow manually.
@@ -82,3 +86,20 @@ The counter service listens only on `127.0.0.1` and Caddy exposes its single
 `/var/lib/juan-visitor-counter`, outside normal site deployments and rollbacks.
 The deployment workflow creates its HMAC secret in
 `/etc/juan-visitor-counter.env` on first deployment.
+
+## Bot protection
+
+[Anubis](https://anubis.techaro.lol/) sits between the public Caddy listener
+and a loopback-only static-file origin. Its default aggressive policy denies
+known pathological and AI-training crawlers, allows reputable search engines,
+and gives browser-like clients a proof-of-work challenge. The visitor counter
+API bypasses the challenge so existing visitors can still be counted after the
+page loads.
+
+The native service is `anubis@juan-website.service`. Useful checks are:
+
+```bash
+systemctl status anubis@juan-website.service
+curl http://127.0.0.1:9090/metrics
+journalctl -u anubis@juan-website.service
+```

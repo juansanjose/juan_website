@@ -7,6 +7,7 @@ on:
       - 'site/**'
       - 'visitor-counter/**'
       - 'Caddyfile'
+      - 'scripts/anubis-setup.sh'
       - '.github/workflows/deploy.yml'
       - 'Makefile'
   workflow_dispatch:
@@ -95,6 +96,15 @@ jobs:
             journalctl --no-pager -u juan-visitor-counter.service -n 50 || true
             exit 1
           fi
+
+      - name: Verify Anubis bot protection
+        run: |
+          set -euo pipefail
+          systemctl is-active --quiet anubis@juan-website.service || {
+            echo "Anubis is not ready. Run scripts/anubis-setup.sh on the VPS once."
+            exit 1
+          }
+          curl --fail --silent --show-error http://127.0.0.1:9090/metrics > /dev/null
 
       - name: Deploy and validate Caddy site fragment
         run: |
