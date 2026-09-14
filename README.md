@@ -126,4 +126,8 @@ Excluded entries and reasons are saved locally to `/tmp/links-review.json`
 classification does not verify the contents or availability of every destination.
 AI-related social posts and technical videos are retained. URL normalization
 removes tracking parameters and merges paper versions and video timestamp
-variants. Exact descriptive titles catch additional duplicate resources.
+variants. Normalized descriptive titles catch duplicate papers across publisher and repository
+suffixes. Format aliases (such as PDF versus HTML) are deduplicated, while distinct
+documentation versions and generic page titles are preserved. Career, hiring,
+interview-preparation, and professional certification resources are excluded;
+compute-job scheduling and technical workshops remain in the library.

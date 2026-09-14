@@ -850,11 +850,6 @@
     "topic": "networking"
   },
   {
-    "title": "CCNP Data Center - Cisco",
-    "url": "https://cisco.com/site/us/en/learn/training-certifications/certifications/datacenter/ccnp-data-center/index.html",
-    "topic": "clusters"
-  },
-  {
     "title": "Network Virtualization LISP, OMP, and BGP EVPN Operation and Interaction Toni Pasanen | PDF | Transmission Control Protocol | Port (Computer Networking)",
     "url": "https://scribd.com/document/701015239/Network-Virtualization-LISP-OMP-and-BGP-EVPN-Operation-and-Interaction-Toni-Pasanen?_gl=1%2A17kjx5c%2A_up%2AMQ..%2A_ga%2ANzIyNTA2MTk2LjE3ODg5MDgyMzE.%2A_ga_8KZ8BV0P5W%2AczE3ODg5MDgyMzAkbzEkZzEkdDE3ODg5MDg2NTQkajYwJGwwJGgw%2A_ga_Z4ZC50DED6%2AczE3ODg5MDgyMzEkbzEkZzEkdDE3ODg5MDg2NTUkajYwJGwwJGgw",
     "topic": "networking"
@@ -880,28 +875,13 @@
     "topic": "networking"
   },
   {
-    "title": "Advanced Scaling BGP | PDF | Denial Of Service Attack | Cisco Certifications",
-    "url": "https://scribd.com/document/334963541/Advanced-Scaling-BGP?_gl=1%2Av88yv9%2A_up%2AMQ..%2A_ga%2ANzIyNTA2MTk2LjE3ODg5MDgyMzE.%2A_ga_Z4ZC50DED6%2AczE3ODg5MDgyMzEkbzEkZzEkdDE3ODg5MDg3MTAkajUkbDAkaDA.%2A_ga_8KZ8BV0P5W%2AczE3ODg5MDgyMzAkbzEkZzEkdDE3ODg5MDg3MTAkajQkbDAkaDA.",
-    "topic": "networking"
-  },
-  {
     "title": "BGP Tutorial | PDF | Routing | Router (Computing)",
     "url": "https://scribd.com/document/22732510/BGP-Tutorial?_gl=1%2A13xkzib%2A_up%2AMQ..%2A_ga%2ANzIyNTA2MTk2LjE3ODg5MDgyMzE.%2A_ga_Z4ZC50DED6%2AczE3ODg5MDgyMzEkbzEkZzEkdDE3ODg5MDg3MTAkajUkbDAkaDA.%2A_ga_8KZ8BV0P5W%2AczE3ODg5MDgyMzAkbzEkZzEkdDE3ODg5MDg3MTAkajQkbDAkaDA.",
     "topic": "networking"
   },
   {
-    "title": "CCNP SP Studyguide | PDF | Virtual Private Network | Multiprotocol Label Switching",
-    "url": "https://scribd.com/document/347634891/CCNP-SP-Studyguide?_gl=1%2A13xkzib%2A_up%2AMQ..%2A_ga%2ANzIyNTA2MTk2LjE3ODg5MDgyMzE.%2A_ga_Z4ZC50DED6%2AczE3ODg5MDgyMzEkbzEkZzEkdDE3ODg5MDg3MTAkajUkbDAkaDA.%2A_ga_8KZ8BV0P5W%2AczE3ODg5MDgyMzAkbzEkZzEkdDE3ODg5MDg3MTAkajQkbDAkaDA.",
-    "topic": "networking"
-  },
-  {
     "title": "Advanced BGP - Philip Smith | PDF | Router (Computing) | Routing",
     "url": "https://scribd.com/document/211445392/Advanced-BGP-Philip-Smith?_gl=1%2A1g2z8sg%2A_up%2AMQ..%2A_ga%2ANzIyNTA2MTk2LjE3ODg5MDgyMzE.%2A_ga_Z4ZC50DED6%2AczE3ODg5MDgyMzEkbzEkZzEkdDE3ODg5MDg3MTAkajUkbDAkaDA.%2A_ga_8KZ8BV0P5W%2AczE3ODg5MDgyMzAkbzEkZzEkdDE3ODg5MDg3MTAkajQkbDAkaDA.",
-    "topic": "networking"
-  },
-  {
-    "title": "BGP Interview Questions and Answers | PDF | Router (Computing) | Routing",
-    "url": "https://scribd.com/document/575969581/bgp-interview-question?_gl=1%2Aghlnc4%2A_up%2AMQ..%2A_ga%2ANzIyNTA2MTk2LjE3ODg5MDgyMzE.%2A_ga_Z4ZC50DED6%2AczE3ODg5MDgyMzEkbzEkZzEkdDE3ODg5MDkyNDQkajYwJGwwJGgw%2A_ga_8KZ8BV0P5W%2AczE3ODg5MDgyMzAkbzEkZzEkdDE3ODg5MDkyNDUkajYwJGwwJGgw",
     "topic": "networking"
   },
   {
@@ -937,11 +917,6 @@
   {
     "title": "CMG - Computer Measurement Group",
     "url": "https://cmg.org?s2member_file_download=%2Fproceedings%2F2002%2F2176.pdf",
-    "topic": "networking"
-  },
-  {
-    "title": "CCNP DCCORE 350-601 OSPF & BGP Overview | PDF | Routing | Multicast",
-    "url": "https://scribd.com/document/963321660/CCNP-DCCORE-350",
     "topic": "networking"
   },
   {
@@ -983,11 +958,6 @@
     "title": "Build a MAAS and LXD environment in 30 minutes with Multipass on Ubuntu - Tutorials - Canonical MAAS | Discourse",
     "url": "https://discourse.maas.io/t/build-a-maas-and-lxd-environment-in-30-minutes-with-multipass-on-ubuntu/5360",
     "topic": "networking"
-  },
-  {
-    "title": "3498 NVIDIA Interview Questions & Answers (2026) | Glassdoor",
-    "url": "https://glassdoor.ca/Interview/NVIDIA-Interview-Questions-E7633_P8.htm",
-    "topic": "hardware"
   },
   {
     "title": "NVIDIA/k8s-test-infra: Simulate NVIDIA infrastructure (e.g. GPU) on CPU nodes in Kubernetes :coffee:️",
@@ -1223,11 +1193,6 @@
     "title": "18. ENA Poll Mode Driver — Data Plane Development Kit 23.11.7 documentation",
     "url": "https://doc.dpdk.org/guides-23.11/nics/ena.html",
     "topic": "networking"
-  },
-  {
-    "title": "Gauri Gupta on X: \"LLM Optimization Interview Notes: Training and Inference \" / X",
-    "url": "https://x.com/gauri__gupta/status/2051882947758993815",
-    "topic": "training"
   },
   {
     "title": "How To Scale Your Model",
@@ -2890,11 +2855,6 @@
     "topic": "networking"
   },
   {
-    "title": "Improving Network Availability with Protective ReRoute | Proceedings of the ACM SIGCOMM 2023 Conference",
-    "url": "https://dl.acm.org/doi/10.1145/3603269.3604867",
-    "topic": "networking"
-  },
-  {
     "title": "Maglev: A Fast and Reliable Software Network Load Balancer",
     "url": "https://research.google/pubs/maglev-a-fast-and-reliable-software-network-load-balancer?hl=es",
     "topic": "networking"
@@ -2968,11 +2928,6 @@
     "title": "Architecture - NERSC Documentation",
     "url": "https://docs.nersc.gov/systems/perlmutter/architecture",
     "topic": "clusters"
-  },
-  {
-    "title": "Technology-Driven, Highly-Scalable Dragonfly Topology | ACM SIGARCH Computer Architecture News",
-    "url": "https://dl.acm.org/doi/10.1145/1394608.1382129",
-    "topic": "hardware"
   },
   {
     "title": "Looking under the hood of the IBM blue gene/Q network | Proceedings of the International Conference on High Performance Computing, Networking, Storage and Analysis",
@@ -3540,21 +3495,6 @@
     "topic": "foundations"
   },
   {
-    "title": "NCP-AIN Exam - Free Actual Q&As, Page 1 | ExamTopics",
-    "url": "https://examtopics.com/exams/nvidia/ncp-ain/view",
-    "topic": "hardware"
-  },
-  {
-    "title": "Professional AI Networking Certification | NVIDIA",
-    "url": "https://nvidia.com/en-us/learn/certification/ai-networking-professional",
-    "topic": "hardware"
-  },
-  {
-    "title": "NVIDIA-Certified Professional: AI Networking Exam Study Guide | NVIDIA",
-    "url": "https://dam-cdn.nvd.orangelogic.com/AssetLink/32ljugfxg1hs1sd42371npw1xmcuo1yo.pdf",
-    "topic": "hardware"
-  },
-  {
     "title": "KV-Aware Routing on Kubernetes | NVIDIA Dynamo Documentation",
     "url": "https://docs.nvidia.com/dynamo/kubernetes/kv-aware-routing/overview",
     "topic": "inference"
@@ -3650,11 +3590,6 @@
     "topic": "training"
   },
   {
-    "title": "1. Overview — GPUDirect RDMA 13.3 documentation",
-    "url": "https://docs.nvidia.com/cuda/gpudirect-rdma",
-    "topic": "hardware"
-  },
-  {
     "title": "NVIDIA MMS4A00 1600Gbps, 2xDR4, Twin-port OSFP, 2xMPO, 1310nm Single Mode Transceiver (up to 500m) | NVIDIA MMS4A00 1600Gbps, 2xDR4, Twin-port OSFP, 2xMPO, 1310nm Single Mode Transceiver (up to 500m)",
     "url": "https://networking-docs.nvidia.com/9iahx00xmosfptcvr1600",
     "topic": "hardware"
@@ -3733,11 +3668,6 @@
     "title": "Known Limitations — Optimizing VM Configuration for Performant AI Inference",
     "url": "https://docs.nvidia.com/ai-enterprise/planning-resource/optimizing-vm-configuration-ai-inference/latest/known-limitations.html",
     "topic": "inference"
-  },
-  {
-    "title": "NVIDIA Fabric Manager — NVIDIA Fabric Manager",
-    "url": "https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide",
-    "topic": "hardware"
   },
   {
     "title": "Nicolai M. Josuttis: C++23 - The Complete Guide",
@@ -3878,11 +3808,6 @@
     "title": "Evaluation of new CYPHONIC: Overlay network protocol based on Go language | IEEE Conference Publication | IEEE Xplore",
     "url": "https://ieeexplore.ieee.org/document/9730323",
     "topic": "networking"
-  },
-  {
-    "title": "Enabling HPC workloads on Cloud Infrastructure Using Kubernetes Container Orchestration Mechanisms",
-    "url": "https://sc19.supercomputing.org/proceedings/workshops/workshop_pages/ws_canopie107.html",
-    "topic": "clusters"
   },
   {
     "title": "Building an AI factory on Kubernetes | CNCF",
@@ -4030,16 +3955,6 @@
     "topic": "hardware"
   },
   {
-    "title": "NCP-AII Training & Practice Lab — Free NVIDIA Certification Exam Prep | DC Lab Sim",
-    "url": "https://dclabsim.com",
-    "topic": "training"
-  },
-  {
-    "title": "Seanbo5386/dc-lab-sim: Browser-based datacenter lab simulator for NCP-AII certification exam prep — 20 command simulators, 32 guided scenarios, and a full learning progression system.",
-    "url": "https://github.com/Seanbo5386/dc-lab-sim",
-    "topic": "clusters"
-  },
-  {
     "title": "NVIDIA Enterprise Support Portal | HowTo Configure IB Routers",
     "url": "https://enterprise-support.nvidia.com/s/article/howto-configure-ib-routers",
     "topic": "hardware"
@@ -4132,11 +4047,6 @@
   {
     "title": "Scheduling ML and HPC Jobs with Shoc Platform over Kubernetes | Physics of Particles and Nuclei | Springer Nature Link",
     "url": "https://link.springer.com/article/10.1134/S106377962570090X?fromPaywallRec=true",
-    "topic": "clusters"
-  },
-  {
-    "title": "Scheduling ML and HPC Jobs with Shoc Platform over Kubernetes | Semantic Scholar",
-    "url": "https://semanticscholar.org/paper/Scheduling-ML-and-HPC-Jobs-with-Shoc-Platform-over-Petrosyan/fea03589c2af79f65f9eefd0bd2de65743ae886a",
     "topic": "clusters"
   },
   {
@@ -4850,11 +4760,6 @@
     "topic": "networking"
   },
   {
-    "title": "Revisiting Network Support for RDMA | alphaXiv",
-    "url": "https://alphaxiv.org/abs/1806.08159",
-    "topic": "networking"
-  },
-  {
     "title": "TPU Inference Externalization Full Steam Ahead - InferenceX",
     "url": "https://newsletter.semianalysis.com/p/tpu-inferencex-full-steam",
     "topic": "inference"
@@ -4980,19 +4885,9 @@
     "topic": "kernels"
   },
   {
-    "title": "[1806.08159] Revisiting Network Support for RDMA",
-    "url": "https://arxiv.org/abs/1806.08159",
-    "topic": "networking"
-  },
-  {
     "title": "Issues · NVIDIA/nccl",
     "url": "https://github.com/NVIDIA/nccl/issues",
     "topic": "training"
-  },
-  {
-    "title": "mgonzalezo/NCA-AIIO-Preparation: Preparation Anki Deck and Labs for NCA-AIIO Exam (NVIDIA-Certified Associate AI Infrastructure and Operations)",
-    "url": "https://github.com/mgonzalezo/NCA-AIIO-Preparation",
-    "topic": "hardware"
   },
   {
     "title": "dgx-spark-cluster/docs/04-gpu-direct-rdma.md at main · ArgentAIOS/dgx-spark-cluster",
@@ -5100,34 +4995,9 @@
     "topic": "networking"
   },
   {
-    "title": "Top 20 xAI (Grok) Interview Questions: [2026] | TechInterview",
-    "url": "https://techinterview.net/questions/xai-interview-questions",
-    "topic": "foundations"
-  },
-  {
-    "title": "Top 32 Distributed Training Interview Questions (2026)",
-    "url": "https://datainterview.com/blog/distributed-training-interview-questions",
-    "topic": "training"
-  },
-  {
-    "title": "Machine Learning Engineer (MLE) Bootcamp",
-    "url": "https://datainterview.com/bootcamp/mle",
-    "topic": "foundations"
-  },
-  {
-    "title": "PyTorch-Interview-Preparation/PyTorch Interview Questions at main · rohanmistry231/PyTorch-Interview-Preparation",
-    "url": "https://github.com/rohanmistry231/PyTorch-Interview-Preparation/tree/main/PyTorch%20Interview%20Questions",
-    "topic": "foundations"
-  },
-  {
     "title": "InfiniBand, RoCE, and all that",
     "url": "https://fergusfinn.com/blog/infiniband-roce-rdma",
     "topic": "networking"
-  },
-  {
-    "title": "SadServers: Linux, DevOps & SRE Labs | Interview & Hiring Assessment",
-    "url": "https://sadservers.com",
-    "topic": "clusters"
   },
   {
     "title": "Issues · nvidia/k8s-device-plugin",
@@ -5155,18 +5025,8 @@
     "topic": "clusters"
   },
   {
-    "title": "Interviews Chat | AI Interview Copilot & Interview Prep",
-    "url": "https://interviews.chat",
-    "topic": "foundations"
-  },
-  {
     "title": "LearnKube",
     "url": "https://kubex.ai/wp-content/uploads/Kubex-eBook-Right-Sizing-GPUs-in-Kubernetes.pdf",
-    "topic": "hardware"
-  },
-  {
-    "title": "SRE Interview Experience With Nvidia | by Rohith M N | Medium",
-    "url": "https://medium.com/%40rohithmn01/sre-interview-experience-with-nvidia-3e29e6531afe",
     "topic": "hardware"
   },
   {
@@ -5175,18 +5035,8 @@
     "topic": "hardware"
   },
   {
-    "title": "NVIDIA Certified Professional: AI Operations NCP-AIO Tests",
-    "url": "https://udemy.com/course/ncp-aiol",
-    "topic": "hardware"
-  },
-  {
     "title": "Paper page - From Detection to Recovery: Operational Analysis on LLM Pre-training with 504 GPUs",
     "url": "https://huggingface.co/papers/2605.09370",
-    "topic": "training"
-  },
-  {
-    "title": "[2402.15627] MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs",
-    "url": "https://arxiv.org/abs/2402.15627",
     "topic": "training"
   },
   {
@@ -5203,21 +5053,6 @@
     "title": "NVIDIA Requirements for AI Clouds | NVIDIA DSX Documentation",
     "url": "https://docs.nvidia.com/dsx/ncp/nvidia-requirements-for-ai-clouds/home",
     "topic": "hardware"
-  },
-  {
-    "title": "NVIDIA site reliability engineer interview (questions, process, prep) - IGotAnOffer",
-    "url": "https://igotanoffer.com/en/advice/nvidia-site-reliability-engineer-interview",
-    "topic": "hardware"
-  },
-  {
-    "title": "Networking Interview Questions and Answers - GeeksforGeeks",
-    "url": "https://geeksforgeeks.org/blogs/networking-interview-questions",
-    "topic": "networking"
-  },
-  {
-    "title": "Operating System Interview Questions - GeeksforGeeks",
-    "url": "https://geeksforgeeks.org/operating-systems/operating-systems-interview-questions",
-    "topic": "storage"
   },
   {
     "title": "NeuroPrefetcher: Storage-Aware Sparse LLM Inference via Delta Prefetching",
@@ -5243,11 +5078,6 @@
     "title": "How Go Handles Networking - Go Optimization Guide",
     "url": "https://goperf.dev/02-networking/networking-internals",
     "topic": "networking"
-  },
-  {
-    "title": "[2609.04105] Hardware-Aware FP4 FlashAttention-4",
-    "url": "https://arxiv.org/abs/2609.04105",
-    "topic": "foundations"
   },
   {
     "title": "Steps for Writing a Speed-of-Light GEMM kernel: Part 1 · Luke D. Huang",
@@ -5495,11 +5325,6 @@
     "topic": "networking"
   },
   {
-    "title": "Revisiting network support for RDMA | Proceedings of the 2018 Conference of the ACM Special Interest Group on Data Communication",
-    "url": "https://dl.acm.org/doi/10.1145/3230543.3230557",
-    "topic": "networking"
-  },
-  {
     "title": "RDMA/mlx5: Support OOO RX WQE consumption - linux-rng - Development tree for the kernel CSPRNG",
     "url": "https://git.zx2c4.com/linux-rng/commit?id=8b36f7c3c6618dc97697a6a20a13b29651f68ab6",
     "topic": "kernels"
@@ -5575,11 +5400,6 @@
     "topic": "hardware"
   },
   {
-    "title": "NVIDIA Fabric Manager — NVIDIA Fabric Manager",
-    "url": "https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide/index.html",
-    "topic": "hardware"
-  },
-  {
     "title": "Master AI Infrastructure At Scale: A DevOps Playbook S81422 | GTC San Jose 2026 | NVIDIA On-Demand",
     "url": "https://nvidia.com/en-us/on-demand/session/gtc26-s81422",
     "topic": "hardware"
@@ -5590,29 +5410,9 @@
     "topic": "networking"
   },
   {
-    "title": "NCP-AIO Exam Prep — Lab Scenario Trainer",
-    "url": "https://martin-kaufmann.github.io/ncp-aio-prep",
-    "topic": "training"
-  },
-  {
-    "title": "manjulsolanke/NVIDIA-Certified-Professional-AI-Operations: Collection of study materials, hands-on guides, and reference notes for preparing NCP-AIO",
-    "url": "https://github.com/manjulsolanke/NVIDIA-Certified-Professional-AI-Operations",
-    "topic": "hardware"
-  },
-  {
     "title": "Kyle-Law/bcm-simulator: Browser-based simulator of NVIDIA Base Command Manager's cmsh shell for hands-on training",
     "url": "https://github.com/Kyle-Law/bcm-simulator",
     "topic": "training"
-  },
-  {
-    "title": "NCP-AIN Practice Tests + Hands-On Labs 2026 | NVIDIA-Certified Professional: AI Networking",
-    "url": "https://preporato.com/certificates/ai-networking-professional",
-    "topic": "hardware"
-  },
-  {
-    "title": "NVIDIA-Certified Professional AI Rack and Interconnect Certification Exam",
-    "url": "https://nvidia.com/en-us/learn/certification/ai-rack-and-interconnect-professional",
-    "topic": "hardware"
   },
   {
     "title": "NVLink Switch Planning and Design — NVIDIA Mission Control North-South Network GB200/GB300 NVL72 Deployment Guide",
@@ -5710,6 +5510,11 @@
     "topic": "hardware"
   },
   {
+    "title": "NVLink Partition Management — NVIDIA Mission Control Software Administration Guide",
+    "url": "https://docs.nvidia.com/mission-control/docs/systems-administration-guide/2.3.1/nvlink-partition-management.html",
+    "topic": "hardware"
+  },
+  {
     "title": "Fault-tolerant training: How we build reliable clusters for distributed AI workloads",
     "url": "https://nebius.com/blog/posts/how-we-build-reliable-clusters",
     "topic": "training"
@@ -5778,11 +5583,6 @@
     "title": "ubicloud/rhizome/host/lib/vm_setup.rb at main · ubicloud/ubicloud",
     "url": "https://github.com/ubicloud/ubicloud/blob/main/rhizome/host/lib/vm_setup.rb",
     "topic": "clusters"
-  },
-  {
-    "title": "NVIDIA Fabric Manager — NVIDIA Fabric Manager",
-    "url": "https://docs.nvidia.com/hgx-platforms/fabric-manager-user-guide/index.html",
-    "topic": "hardware"
   },
   {
     "title": "Downgrade or Reinstall NVIDIA Drivers on Vultr GPU Instances | Vultr Docs",

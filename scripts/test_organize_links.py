@@ -1,5 +1,5 @@
 import unittest
-from organize_links import canonical, organize
+from organize_links import canonical, organize, resource_key
 
 class CleanupTests(unittest.TestCase):
     def test_paper_versions(self):
@@ -37,6 +37,41 @@ class CleanupTests(unittest.TestCase):
 
     def test_tracking_removed(self):
         self.assertEqual(canonical('https://example.org/article?poc_token=private&utm_source=feed'), 'https://example.org/article')
+
+class CareerAndDuplicateTests(unittest.TestCase):
+    def test_career_filter_preserves_compute_jobs(self):
+        kept, removed = organize([
+            {'title': 'NVIDIA interview preparation', 'url': 'https://example.org/interview'},
+            {'title': 'AI Networking Certification', 'url': 'https://example.org/certification'},
+            {'title': 'Slurm job scheduling', 'url': 'https://example.org/slurm'},
+            {'title': 'Multi-GPU programming bootcamp', 'url': 'https://example.org/gpu'},
+        ])
+        self.assertEqual(len(kept), 2)
+        self.assertTrue(all(x['reason'] == 'Career, interview, or certification resource' for x in removed))
+
+    def test_publisher_suffix_duplicates(self):
+        kept, removed = organize([
+            {'title': 'Revisiting network support for RDMA | Proceedings of a conference', 'url': 'https://example.org/paper'},
+            {'title': '[1806.08159] Revisiting Network Support for RDMA', 'url': 'https://arxiv.org/abs/1806.08159'},
+        ])
+        self.assertEqual(len(kept), 1)
+        self.assertEqual(removed[0]['reason'], 'Duplicate title')
+
+    def test_format_aliases(self):
+        self.assertEqual(resource_key('https://dl.acm.org/doi/epdf/10.1/abc'), resource_key('https://dl.acm.org/doi/10.1/abc'))
+        self.assertEqual(resource_key('https://docs.nvidia.com/cuda/gpudirect-rdma/index.html'), resource_key('https://docs.nvidia.com/cuda/gpudirect-rdma/'))
+        self.assertEqual(resource_key('https://alphaxiv.org/abs/2402.15627'), resource_key('https://arxiv.org/abs/2402.15627'))
+
+    def test_generic_titles_and_versions_are_distinct(self):
+        source = [
+            {'title': 'NVIDIA Enterprise Support Portal | RDMA routing', 'url': 'https://enterprise-support.nvidia.com/routing'},
+            {'title': 'NVIDIA Enterprise Support Portal | RDMA headers', 'url': 'https://enterprise-support.nvidia.com/headers'},
+            {'title': 'NVLink Partition Management — NVIDIA Documentation', 'url': 'https://docs.nvidia.com/2.1/nvlink'},
+            {'title': 'NVLink Partition Management — NVIDIA Documentation', 'url': 'https://docs.nvidia.com/2.2/nvlink'},
+        ]
+        kept, removed = organize(source)
+        self.assertEqual(len(kept), 4)
+        self.assertEqual(removed, [])
 
 if __name__ == '__main__':
     unittest.main()

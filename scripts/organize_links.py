@@ -27,10 +27,51 @@ def canonical(url):
         path = re.sub(r'/(photo|video)/\d+$', '', path)
     return urlunsplit((p.scheme.lower(), host + (':' + str(p.port) if p.port and p.port not in {80, 443} else ''), path, urlencode(sorted(query)), ''))
 
+def resource_key(url):
+    """Identify format aliases without merging distinct documentation versions."""
+    p = urlsplit(canonical(url))
+    host = p.netloc
+    path = re.sub(r'/index\.html$', '', p.path).rstrip('/')
+    if host == 'dl.acm.org':
+        path = re.sub(r'^/doi/(?:pdf|epdf|abs|full)/', '/doi/', path)
+    if host in {'arxiv.org', 'alphaxiv.org'}:
+        host = 'arxiv.org'
+        path = re.sub(r'^/(?:pdf|html)/', '/abs/', path)
+        path = re.sub(r'(?:v\d+)?(?:\.pdf)?$', '', path)
+    if host == 'docs.nvidia.com' and path in {
+        '/datacenter/tesla/pdf/fabric-manager-user-guide.pdf',
+        '/datacenter/tesla/fabric-manager-user-guide',
+        '/hgx-platforms/fabric-manager-user-guide',
+    }:
+        path = '/hgx-platforms/fabric-manager-user-guide'
+    return urlunsplit(('https', host, path, p.query, ''))
+
+
+def title_key(title):
+    title = html.unescape(title).casefold()
+    title = re.sub(r'^\[\d{4}\.\d+(?:v\d+)?\]\s*', '', title)
+    title = re.sub(r'^paper page\s*-\s*', '', title)
+    title = re.split(r'\s+[|—]\s+', title)[0]
+    return re.sub(r'\s+', ' ', title).strip()
+
+
+def career_resource(title, url):
+    # "Jobs" also means compute workloads, so avoid a blanket job-word filter.
+    text = title + ' ' + url
+    return bool(re.search(
+        r'careers?|interviews?|hiring|recruit(?:ment|ing|er)?|glassdoor|'
+        r'igotanoffer|datainterview|techinterview|cover[- ]letter|'
+        r'job[- /](?:openings?|offers?|search|application|details|vacanc)|'
+        r'employment|oportunidades profesionales|'
+        r'certification|certifications|certified[- ]professional|certified[- ]associate|'
+        r'\bexam\b|examtopics|ncp-ai|nca-ai|ccnp', text, re.I))
+
+
 def organize(source):
     tree = json.loads((ROOT / 'site/data/topic_tree.json').read_text())
     topics = [topic for group in tree for topic in group['topics']]
     kept, removed, seen = [], [], {}
+    seen_titles = set()
     # Reuse descriptive titles from other copies of the same URL.
     best = {}
     for item in source:
@@ -67,19 +108,24 @@ def organize(source):
             reason = 'No clear AI or supporting systems topic in bookmark metadata'
         if not reason and host == 'x.com' and '/status/' not in p.path:
             reason = 'Social profile rather than a topic resource'
-        if not reason and url in seen:
+        if career_resource(title, url):
+            reason = 'Career, interview, or certification resource'
+        identity = resource_key(url)
+        if not reason and identity in seen:
             reason = 'Duplicate URL'
-        # Exact meaningful titles also catch the same paper on different repositories.
-        title_key = re.sub(r'^\[\d{4}\.\d+(?:v\d+)?\]\s*', '', title.casefold())
-        title_key = title_key.strip()
-        generic = re.search(r'documentation|user guide|overview|powerpoint|slide|\.pdf$|\.dvi$|^\d|fabric manager', title_key)
-        if not reason and len(title_key) > 35 and not generic and title_key in seen:
+        # Match paper titles across publisher/repository suffixes, but preserve
+        # manuals, generic page headings, and distinct documentation versions.
+        key = title_key(title)
+        generic = re.search(r'support portal|documentation|user guide|manual|overview|powerpoint|slide|\.pdf$|\.dvi$|^\d|fabric manager', key)
+        documentation = re.search(r'://docs\.|documentation|readthedocs', url)
+        if not reason and len(key) > 25 and not generic and not documentation and key in seen_titles:
             reason = 'Duplicate title'
         if reason:
             removed.append({**item, 'reason': reason})
         else:
-            seen[url] = True
-            seen[title_key] = True
+            seen[identity] = True
+            if not generic and not documentation:
+                seen_titles.add(key)
             kept.append({'title': title, 'url': url, 'topic': topic})
     return kept, removed
 
