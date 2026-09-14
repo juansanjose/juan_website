@@ -523,14 +523,14 @@ footer {
 
 /* Topic graph and resource browser share the active site palette. */
 .topic-map { margin: 2rem 0; }
-.map-root { text-align: center; padding: .8rem; border: 2px solid var(--border); font-weight: bold; }
+.map-root { margin: 0; text-align: center; padding: .8rem; border: 2px solid var(--border); font-weight: bold; }
 .map-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 .map-branch { min-width: 0; padding-top: 1.5rem; position: relative; }
 .map-branch::before { content: ""; position: absolute; top: 0; left: 50%; height: 1.5rem; border-left: 2px solid var(--border); }
 .map-branch h3 { padding: .6rem; text-align: center; border: 2px solid var(--border); margin: 0; }
 .map-branch ul { list-style: none; margin: 0 0 0 .8rem; padding: .5rem 0 0 .8rem; border-left: 2px solid var(--border); }
 .map-branch li { position: relative; margin: .7rem 0; }
-.map-branch li::before { content: ""; position: absolute; left: -.8rem; top: .8rem; width: .6rem; border-top: 2px solid var(--border); }
+.map-branch li::before { content: ""; position: absolute; left: -.8rem; top: .8rem; width: .8rem; border-top: 2px solid var(--border); }
 .map-branch a { display: block; overflow-wrap: anywhere; }
 .topic-count { color: var(--muted); font-size: .85em; white-space: nowrap; }
 .library-search { margin: 2rem 0; }
@@ -543,5 +543,7 @@ footer {
 .resource-list small { display: block; color: var(--muted); }
 [hidden] { display: none !important; }
 @media (max-width: 640px) {
-  .map-branches { grid-template-columns: 1fr; }
+  .map-branches { grid-template-columns: 1fr; gap: 0; padding-left: 1rem; border-left: 2px solid var(--border); }
+  .map-branch { padding-top: 1rem; }
+  .map-branch::before { top: 2.5rem; left: calc(-1rem - 2px); width: calc(1rem + 2px); height: 0; border-left: 0; border-top: 2px solid var(--border); }
 }
