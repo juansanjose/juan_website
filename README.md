@@ -103,3 +103,27 @@ systemctl status anubis@juan-website.service
 curl http://127.0.0.1:9090/metrics
 journalctl -u anubis@juan-website.service
 ```
+
+## AI topic library
+
+The `/topics/` page displays a linked topic graph and a searchable resource
+library. The hierarchy is defined in `site/data/topic_tree.json`; a Mermaid
+version is available in `docs/topic-map.mmd`. Links are grouped by their bookmark
+metadata, with supporting GPU, networking, HPC, and systems material included.
+
+To regenerate from a local bookmark export:
+
+```bash
+python3 scripts/organize_links.py links.json
+python3 -m unittest discover -s scripts -p 'test_*.py'
+make build
+```
+
+The raw export stays local and is ignored by Git. The curated output is
+`site/data/links.json`; aggregate cleanup counts are in `docs/link-cleanup.json`.
+Excluded entries and reasons are saved locally to `/tmp/links-review.json`
+(or the path passed with `--review`). Ambiguous metadata is withheld for review;
+classification does not verify the contents or availability of every destination.
+AI-related social posts and technical videos are retained. URL normalization
+removes tracking parameters and merges paper versions and video timestamp
+variants. Exact descriptive titles catch additional duplicate resources.

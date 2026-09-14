@@ -1,0 +1,24 @@
+{
+  "input": 1554,
+  "retained": 1220,
+  "removed": {
+    "No clear AI or supporting systems topic in bookmark metadata": 108,
+    "Personal content or account page": 83,
+    "Duplicate URL": 91,
+    "Local or invalid URL": 24,
+    "Search, login, or unusable bookmark": 16,
+    "Duplicate title": 8,
+    "Social profile rather than a topic resource": 1,
+    "Social post needs content review": 3
+  },
+  "topics": {
+    "networking": 355,
+    "clusters": 178,
+    "kernels": 71,
+    "storage": 35,
+    "training": 117,
+    "inference": 121,
+    "hardware": 290,
+    "foundations": 53
+  }
+}

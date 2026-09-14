@@ -2,6 +2,9 @@
 
   {{ .Content }}
 
+  <h2>AI topic library</h2>
+  <p><a href="{{ "topics/" | relURL }}">Explore the topic map</a> — {{ len hugo.Data.links }} resources on models, GPU computing, and AI infrastructure.</p>
+
   {{ $posts := where site.RegularPages "Section" "blog" }}
   {{ if $posts }}
     <h2>Posts</h2>

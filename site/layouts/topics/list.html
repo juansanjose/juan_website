@@ -1,0 +1,45 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+<section class="topic-map" aria-labelledby="map-title">
+  <h2 id="map-title">Explore the topic map</h2>
+  <p class="map-root">AI learning library · {{ len hugo.Data.links }} resources</p>
+  <div class="map-branches">
+    {{ range hugo.Data.topic_tree }}
+    <div class="map-branch">
+      <h3>{{ .title }}</h3>
+      <ul>
+      {{ range .topics }}
+        {{ $count := len (where hugo.Data.links "topic" .id) }}
+        <li><a href="#{{ .id }}">{{ .title }} <span class="topic-count">{{ $count }}</span></a></li>
+      {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+  </div>
+</section>
+<div class="library-search" hidden>
+  <label for="resource-search">Search titles, topics, or websites</label>
+  <input id="resource-search" type="search" placeholder="e.g. NCCL, inference, RDMA" autocomplete="off">
+  <p id="search-status" role="status" aria-live="polite">{{ len hugo.Data.links }} resources</p>
+</div>
+<div class="topic-library">
+{{ range hugo.Data.topic_tree }}
+<section class="library-group">
+  <h2>{{ .title }}</h2>
+  {{ range .topics }}
+  {{ $links := where hugo.Data.links "topic" .id }}
+  <details class="topic-section" id="{{ .id }}" open>
+    <summary>{{ .title }} <span class="topic-count">{{ len $links }}</span></summary>
+    <ul class="resource-list">
+    {{ range sort $links "title" }}
+      <li><a href="{{ .url }}" rel="noreferrer">{{ .title }}</a><small>{{ (urls.Parse .url).Host }}</small></li>
+    {{ end }}
+    </ul>
+  </details>
+  {{ end }}
+</section>
+{{ end }}
+</div>
+<script src="{{ "js/topics.js" | relURL }}" defer></script>
+{{ end }}

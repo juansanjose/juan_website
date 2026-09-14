@@ -1,0 +1,57 @@
+[
+  {
+    "title": "Models & learning",
+    "topics": [
+      {
+        "id": "foundations",
+        "title": "Foundations & architectures",
+        "pattern": "transformer|attention|deep learning|machine learning|neural|mathematical|tensor logic|deltanet|\\bxAI\\b|reasoning.model|mixture.of.recursions|d2l\\.ai|tinyml|open.models|pytorch|huggingface"
+      },
+      {
+        "id": "training",
+        "title": "Distributed training & reinforcement learning",
+        "pattern": "train|fsdp|megatron|reinforcement|parallelism|all.reduce|collective|nccl|\\bRL\\b|allreduce|all.gather|reduce.scatter|nanotron|torchrun|mvapich|simai|scaling-book"
+      },
+      {
+        "id": "inference",
+        "title": "Inference & model optimization",
+        "pattern": "inferen|serving|vllm|sglang|tensorrt|quantiz|fp4|fp8|kv.cache|moe|mixture.of.expert|llm|distill|dynamo|coding.agents|kimi.k3"
+      }
+    ]
+  },
+  {
+    "title": "GPU computing",
+    "topics": [
+      {
+        "id": "kernels",
+        "title": "Kernels & performance",
+        "pattern": "cuda|cutlass|triton|gemm|matmul|kernel|profil|nsight|performance engineering|compute shader|rocm|oneapi|matrix.multiplication|parallel.programming|software.performance|spin.lock|optimizing.cpp|perf-zine"
+      },
+      {
+        "id": "hardware",
+        "title": "Architecture & interconnects",
+        "pattern": "gpu|nvidia|blackwell|hopper|grace|nvlink|nvswitch|pcie|pci-e|hbm|accelerator|tenstorrent|computer architecture|cpu.cache|tpu|chip|simd|microarchitecture|comp\\. arch\\.|accel.sim|risc.v|ualink|compute.express.link|vlsi|interconnect|out.of.order.execution|co.packaged.optics"
+      }
+    ]
+  },
+  {
+    "title": "AI infrastructure",
+    "topics": [
+      {
+        "id": "networking",
+        "title": "Networks & RDMA",
+        "pattern": "network|rdma|roce|infiniband|ethernet|bgp|routing|congestion|nic|packet|transport|dragonfly|torus|uccl|fabric|\u901a\u4fe1|\u7f51\u7edc|\u7f51\u5361|dpdk|\\bdpu\\b|doca|sigcomm|srd|datagram|evpn|tcp|ipv6|internet.protocol|openflow|netris|suzieq|nautobot|multipath|ofed|psp.arch|internet.peering|software.defined.wan"
+      },
+      {
+        "id": "clusters",
+        "title": "Clusters & orchestration",
+        "pattern": "cluster|kubernetes|slurm|hpc|openstack|container|docker|scheduling|scheduler|bare.metal|warewulf|provision|cloud|datacenter|data.center|supercomput|mlops|devops|sre|high.performance.computing|brightcomputing|openchami|xcat|bluebanquise|metal.stack|metal3|tinkerbell|cray|omnia|openondemand|hypershift|kamaji|k0rdent|nersc|blue.gene|slingshot|redfish|openbmc|mare.nostrum|marenostrum|ai.factories|ai.servers"
+      },
+      {
+        "id": "storage",
+        "title": "Storage & systems",
+        "pattern": "storage|lustre|nvme|ssd|filesystem|file.system|linux|memory|virtual|iommu|vfio|operating.system|c programming|modern c|pointer|system architecture|caches|distributed.system|ceph|glibc|raw.sockets|shell.programming|data.races|namespaces|consistent.hashing|nitro.system|6\\.824"
+      }
+    ]
+  }
+]
