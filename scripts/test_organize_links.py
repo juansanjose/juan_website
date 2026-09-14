@@ -73,5 +73,22 @@ class CareerAndDuplicateTests(unittest.TestCase):
         self.assertEqual(len(kept), 4)
         self.assertEqual(removed, [])
 
+class TopicSeparationTests(unittest.TestCase):
+    def test_storage_os_and_programming_are_separate(self):
+        cases = [
+            ('Lustre filesystem', 'storage'),
+            ('Virtual Memory: Page Tables, TLBs, and Linux Internals', 'systems'),
+            ('An Introduction to IOMMU Infrastructure in the Linux Kernel', 'systems'),
+            ('Modern C - Jens Gustedt', 'programming'),
+            ('Function Pointers and Callbacks in C', 'programming'),
+            ('Mount Mayhem: Scaling Containers on Modern CPUs', 'clusters'),
+            ('Developing a Linux Kernel module using RDMA for GPUDirect', 'kernels'),
+        ]
+        for n, (title, expected) in enumerate(cases):
+            with self.subTest(title=title):
+                kept, removed = organize([{'title': title, 'url': f'https://example.org/resource/{n}'}])
+                self.assertEqual(removed, [])
+                self.assertEqual(kept[0]['topic'], expected)
+
 if __name__ == '__main__':
     unittest.main()

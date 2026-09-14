@@ -30,7 +30,7 @@
       {
         "id": "hardware",
         "title": "Architecture & interconnects",
-        "pattern": "gpu|nvidia|blackwell|hopper|grace|nvlink|nvswitch|pcie|pci-e|hbm|accelerator|tenstorrent|computer architecture|cpu.cache|tpu|chip|simd|microarchitecture|comp\\. arch\\.|accel.sim|risc.v|ualink|compute.express.link|vlsi|interconnect|out.of.order.execution|co.packaged.optics"
+        "pattern": "gpu|nvidia|blackwell|hopper|grace|nvlink|nvswitch|pcie|pci-e|hbm|accelerator|tenstorrent|computer architecture|cpu.cache|tpu|chip|simd|microarchitecture|comp\\. arch\\.|accel.sim|risc.v|ualink|compute.express.link|vlsi|interconnect|out.of.order.execution|co.packaged.optics|memory.bandwidth|caches"
       }
     ]
   },
@@ -49,8 +49,20 @@
       },
       {
         "id": "storage",
-        "title": "Storage & systems",
-        "pattern": "storage|lustre|nvme|ssd|filesystem|file.system|linux|memory|virtual|iommu|vfio|operating.system|c programming|modern c|pointer|system architecture|caches|distributed.system|ceph|glibc|raw.sockets|shell.programming|data.races|namespaces|consistent.hashing|nitro.system|6\\.824"
+        "title": "Storage & filesystems",
+        "pattern": "storage|lustre|nvme|ssd|filesystem|file.system|ceph|minio"
+      },
+      {
+        "id": "systems",
+        "title": "Operating systems & distributed systems",
+        "pattern": "linux|virtual|iommu|vfio|operating.system|system architecture|distributed.system|namespaces|consistent.hashing|nitro.system|6\\.824|cgroups|control.groups",
+        "priority_pattern": "virtual.memory|iommu|vfio|operating.system.settings|linux.internals|linux.kernel|kernel.hacking|namespaces|control.groups|cgroups|distributed.system|consistent.hashing|nitro.system|6\\.5840"
+      },
+      {
+        "id": "programming",
+        "title": "Systems programming",
+        "pattern": "c programming|modern c\\b|pointer|glibc|raw.sockets|shell.programming|data.races|callback|linked.list|spin.lock|software.performance|optimizing.cpp|gen_compile_commands|shellgym",
+        "priority_pattern": "c programming|modern c\\b|pointer|glibc|gnu c library|raw.sockets|shell.programming|data.races|callback|linked.list|spin.lock|software.performance|optimizing.cpp|gen_compile_commands|shellgym"
       }
     ]
   }

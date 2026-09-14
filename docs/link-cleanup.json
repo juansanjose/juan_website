@@ -1,8 +1,8 @@
 {
   "input": 1554,
-  "retained": 1180,
+  "retained": 1181,
   "removed": {
-    "No clear AI or supporting systems topic in bookmark metadata": 105,
+    "No clear AI or supporting systems topic in bookmark metadata": 104,
     "Personal content or account page": 68,
     "Duplicate URL": 94,
     "Local or invalid URL": 21,
@@ -15,11 +15,13 @@
   "topics": {
     "networking": 346,
     "clusters": 173,
-    "kernels": 71,
-    "storage": 34,
-    "training": 112,
+    "systems": 20,
+    "training": 111,
     "inference": 121,
     "hardware": 275,
-    "foundations": 48
+    "kernels": 61,
+    "foundations": 48,
+    "storage": 7,
+    "programming": 19
   }
 }

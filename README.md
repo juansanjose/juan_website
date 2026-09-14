@@ -110,6 +110,9 @@ The `/topics/` page displays a linked topic graph and a searchable resource
 library. The hierarchy is defined in `site/data/topic_tree.json`; a Mermaid
 version is available in `docs/topic-map.mmd`. Links are grouped by their bookmark
 metadata, with supporting GPU, networking, HPC, and systems material included.
+Storage & filesystems, Operating systems & distributed systems, and Systems
+programming have separate sections. Specific OS and programming titles take
+precedence over broad kernel and vendor keywords.
 
 To regenerate from a local bookmark export:
 

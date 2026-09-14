@@ -17,7 +17,7 @@
   {
     "title": "An Introduction to IOMMU Infrastructure in the Linux Kernel",
     "url": "https://lenovopress.lenovo.com/lp1467.pdf",
-    "topic": "kernels"
+    "topic": "systems"
   },
   {
     "title": "The feedback loops behind Kubernetes — PlanetScale",
@@ -32,7 +32,7 @@
   {
     "title": "Virtual Memory: Page Tables, TLBs, and Linux Internals",
     "url": "https://blog.codingconfessions.com/p/virtual-memory",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "GPU-Initiated Networking for NCCL",
@@ -397,12 +397,12 @@
   {
     "title": "Virtualization | CS 168 Textbook",
     "url": "https://textbook.cs168.io/datacenter/virtualization.html",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "l25_vms.pdf | Computer System Architecture | Electrical Engineering and Computer Science | MIT OpenCourseWare",
     "url": "https://ocw.mit.edu/courses/6-823-computer-system-architecture-fall-2005/resources/l25_vms",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "CS 152/252A | (Graduate) Computer Architecture and Engineering",
@@ -1007,17 +1007,17 @@
   {
     "title": "The GNU C Library",
     "url": "https://sourceware.org/glibc/manual/2.44/html_mono/libc.html",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "Function Pointers and Callbacks in C - An Odyssey",
     "url": "https://opensourceforu.com/2012/02/function-pointers-and-callbacks-in-c-an-odyssey",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "20.1 — Function Pointers – Learn C++",
     "url": "https://learncpp.com/cpp-tutorial/function-pointers",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "How SONiC Operates Just The Way A Restaurant Does - Open Source For You",
@@ -1037,7 +1037,7 @@
   {
     "title": "More Shell Programming Secrets Nobody Talks About",
     "url": "https://opensourceforu.com/2022/12/more-shell-programming-secrets-nobody-talks-about",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "Exploring Network Statistics with ‘netstat’",
@@ -1052,17 +1052,22 @@
   {
     "title": "A Guide to Using Raw Sockets - open source for you",
     "url": "https://opensourceforu.com/2015/03/a-guide-to-using-raw-sockets",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "www.lynxbee.com",
     "url": "https://lynxbee.com/c-function-pointers",
-    "topic": "storage"
+    "topic": "programming"
+  },
+  {
+    "title": "Callbacks - TSM_AdvEmbSof : Advanced Embedded Software",
+    "url": "https://advembsof.isc.heia-fr.ch/programming/callbacks",
+    "topic": "programming"
   },
   {
     "title": "Callbacks and Function Pointers - C Programming Mastery",
     "url": "https://libreuni.org/lessons/c/callbacks.html",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "A Complete Deep Dive of NVIDIA DWDM Co-Packaged Optics for Scaling beyond 200Gbps",
@@ -1102,7 +1107,7 @@
   {
     "title": "Optimizing a Spin-Lock | David Álvarez Rosa",
     "url": "https://david.alvarezrosa.com/posts/optimizing-a-spin-lock",
-    "topic": "kernels"
+    "topic": "programming"
   },
   {
     "title": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression | alphaXiv",
@@ -1112,7 +1117,7 @@
   {
     "title": "optimizing_cpp.pdf",
     "url": "https://agner.org/optimize/optimizing_cpp.pdf",
-    "topic": "kernels"
+    "topic": "programming"
   },
   {
     "title": "immanuwell/pktz: pktz - eBPF-powered network traffic monitor - per process, per connection, live",
@@ -1207,7 +1212,7 @@
   {
     "title": "6.5840 Home Page: Spring 2026",
     "url": "https://pdos.csail.mit.edu/6.824",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "Path C: Full Deployment - Omnia: Everything at once!",
@@ -1312,12 +1317,12 @@
   {
     "title": "Mini-Kafka | Building Distributed Systems",
     "url": "https://builddistributedsystem.com/projects/mini-kafka",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "Data races and the limits of ThreadSanitizer in C and Go - The Consensus",
     "url": "https://theconsensus.dev/p/2026/09/06/data-races-and-the-limits-of-threadsanitizer-in-c-and-go.html",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "4.x · openhpc/ohpc Wiki",
@@ -1837,7 +1842,7 @@
   {
     "title": "Dear Junos, Tunnels Are Not Virtual Links « ipSpace.net blog",
     "url": "https://blog.ipspace.net/2026/08/junos-ospfv3-tunnels",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "EVPN Designs: EBGP Everywhere « ipSpace.net blog",
@@ -1997,12 +2002,12 @@
   {
     "title": "cr.pdf",
     "url": "http://mnis.fr/fr/services/virtualisation/pdf/cr.pdf",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "Namespaces in operation, part 1: namespaces overview [LWN.net]",
     "url": "https://lwn.net/Articles/531114",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "Behind the Scenes of Distributed Training and Why Your GPU Wiring Matters as Much as Your Strategy | Towards Data Science",
@@ -2297,12 +2302,12 @@
   {
     "title": "32. Shared Virtual Addressing (SVA) with ENQCMD — The Linux Kernel documentation",
     "url": "https://kernel.org/doc/html/latest/arch/x86/sva.html",
-    "topic": "kernels"
+    "topic": "systems"
   },
   {
     "title": "16. x86 IOMMU Support — The Linux Kernel documentation",
     "url": "https://kernel.org/doc/html/latest/arch/x86/iommu.html",
-    "topic": "kernels"
+    "topic": "systems"
   },
   {
     "title": "GPU troubleshooting — NCCL 2.31.2 documentation",
@@ -2907,7 +2912,7 @@
   {
     "title": "The components of the Nitro System - The Security Design of the AWS Nitro System",
     "url": "https://docs.aws.amazon.com/whitepapers/latest/security-design-of-aws-nitro-system/the-components-of-the-nitro-system.html",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "SOAP, Muon, and Beyond: Pushing LLM Pretraining Scales",
@@ -3652,7 +3657,7 @@
   {
     "title": "Operating System Settings — NVIDIA Grace Performance Tuning Guide",
     "url": "https://docs.nvidia.com/dccpu/grace-perf-tuning-guide/os-settings.html",
-    "topic": "hardware"
+    "topic": "systems"
   },
   {
     "title": "k0rdent/kcm",
@@ -4527,7 +4532,7 @@
   {
     "title": "Doubly linked list",
     "url": "https://0xax.dev/books/linux-inside/linux-datastructures-1",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "Lost Bytes At The Crossroads Between User-  And Kernel-Level Memory Management",
@@ -4667,7 +4672,7 @@
   {
     "title": "Unreliable Guide To Hacking The Linux Kernel — The Linux Kernel documentation",
     "url": "https://docs.kernel.org/kernel-hacking/hacking.html",
-    "topic": "kernels"
+    "topic": "systems"
   },
   {
     "title": "HPCC: High Precision Congestion Control",
@@ -4847,7 +4852,7 @@
   {
     "title": "Memory Bandwidth - Algorithmica",
     "url": "https://en.algorithmica.org/hpc/cpu-cache/bandwidth",
-    "topic": "storage"
+    "topic": "hardware"
   },
   {
     "title": "VXLAN EVPN - Software for Open Networking in the Cloud (SONiC) - Cisco DevNet",
@@ -5127,7 +5132,7 @@
   {
     "title": "linux-kernel-upstream-release-notes-v6-13.13.pdf",
     "url": "https://docs.nvidia.com/networking/display/linux-kernel-upstream-release-notes-v6-13.13.pdf",
-    "topic": "kernels"
+    "topic": "systems"
   },
   {
     "title": "RFC 5046 - Internet Small Computer System Interface (iSCSI) Extensions for Remote Direct Memory Access (RDMA)",
@@ -5382,7 +5387,7 @@
   {
     "title": "VFIO - “Virtual Function I/O” — The Linux Kernel documentation",
     "url": "https://docs.kernel.org/driver-api/vfio.html",
-    "topic": "kernels"
+    "topic": "systems"
   },
   {
     "title": "Concepts — NVIDIA Multi-Instance GPU User Guide",
@@ -5552,7 +5557,7 @@
   {
     "title": "Consistent hashing - Wikipedia",
     "url": "https://en.wikipedia.org/wiki/Consistent_hashing",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "boweiliu/nccl: Optimized primitives for collective multi-GPU communication",
@@ -5592,42 +5597,42 @@
   {
     "title": "JRickey/BattleShip: A smashin' port for PC, Mac, and Linux!",
     "url": "https://github.com/JRickey/BattleShip",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "Function pointer - Wikipedia",
     "url": "https://en.wikipedia.org/wiki/Function_pointer",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "Modern C - Jens Gustedt",
     "url": "https://manning.com/books/modern-c",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "CSCI 2021 Function Pointers Tutorial",
     "url": "https://www-users.cse.umn.edu/~kauffman/2021/function-pointers.html",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "Beej's Guide to C Programming",
     "url": "https://beej.us/guide/bgc/html/index.html",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "linux/scripts/clang-tools/gen_compile_commands.py at master · torvalds/linux",
     "url": "https://github.com/torvalds/linux/blob/master/scripts/clang-tools/gen_compile_commands.py",
-    "topic": "storage"
+    "topic": "programming"
   },
   {
     "title": "github.com",
     "url": "https://github.com/torvalds/linux/blob/master/include/linux/tracepoint.h",
-    "topic": "storage"
+    "topic": "systems"
   },
   {
     "title": "linux/kernel/extable.c at master · torvalds/linux",
     "url": "https://github.com/torvalds/linux/blob/master/kernel/extable.c",
-    "topic": "kernels"
+    "topic": "systems"
   },
   {
     "title": "HPC Centers: Carpenter Lustre Guide",
@@ -5637,7 +5642,7 @@
   {
     "title": "iximiuz/shellgym: Shell Gym - an Interactive Linux Command-Line Trainer",
     "url": "https://github.com/iximiuz/shellgym",
-    "topic": "training"
+    "topic": "programming"
   },
   {
     "title": "Kubernetes for GPU Orchestration | Introl Blog",
@@ -5742,7 +5747,7 @@
   {
     "title": "Reflections on software performance - Made of Bugs",
     "url": "https://blog.nelhage.com/post/reflections-on-performance",
-    "topic": "kernels"
+    "topic": "programming"
   },
   {
     "title": "triton-lang/triton: Development repository for the Triton language and compiler",

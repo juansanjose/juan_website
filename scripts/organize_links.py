@@ -93,7 +93,13 @@ def organize(source):
             reason = 'Personal content or account page'
         elif re.search(r'Buscar con Google|Google Search|^\(?\d*\)?\s*YouTube$|log in|sign in|not found|error 404|access denied|just a moment|attention required|captcha', title, re.I) or (host == 'google.com' and p.path == '/search'):
             reason = 'Search, login, or unusable bookmark'
-        topic = next((t['id'] for t in topics if re.search(t['pattern'], title, re.I)), None)
+        # Specific OS/programming titles take precedence over broad vendor and
+        # kernel keywords. GPU/RDMA-specific material keeps its specialist topic.
+        specialist = re.search(r'cuda|gpu|rdma|roce|nccl|infiniband', title.split(' | ')[0], re.I)
+        topic = next((t['id'] for t in topics if t.get('priority_pattern') and
+                      re.search(t['priority_pattern'], title, re.I)), None) if not specialist else None
+        if not topic:
+            topic = next((t['id'] for t in topics if re.search(t['pattern'], title, re.I)), None)
         if not topic:
             topic = next((t['id'] for t in topics if re.search(t['pattern'], url, re.I)), None)
         if not topic and re.search(r'\bAI\b', title):
