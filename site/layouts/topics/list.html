@@ -33,7 +33,7 @@
     <summary>{{ .title }} <span class="topic-count">{{ len $links }}</span></summary>
     <ul class="resource-list">
     {{ range sort $links "title" }}
-      <li><a href="{{ .url }}" rel="noreferrer">{{ .title }}</a><small>{{ (urls.Parse .url).Host }}</small></li>
+      <li><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .title }}</a><small>{{ (urls.Parse .url).Host }}</small></li>
     {{ end }}
     </ul>
   </details>
