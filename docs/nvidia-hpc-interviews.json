@@ -1,0 +1,115 @@
+{
+  "company": "NVIDIA",
+  "role": "HPC Engineer",
+  "source": "User-provided interview review excerpts; original URLs not provided.",
+  "answer_provenance": "Assistant-written suggested answers, not answers from the original reviewers or claims of personal experience.",
+  "parsing_notes": [
+    "Missing metadata is null. Review dates and interview dates are separate.",
+    "The first excerpt's combined question is split into two topics; question wording is normalized.",
+    "Interface text such as Helpful, Share, and Answer question is omitted. The second review indicates one existing answer but does not include its text."
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "review_date": null,
+      "interview_date": null,
+      "location": null,
+      "candidate": null,
+      "offer_status": null,
+      "experience": null,
+      "difficulty": null,
+      "application_method": null,
+      "process_duration_weeks": null,
+      "process": {
+        "summary": "Five one-on-one interviews: one with the group director, one with the manager, and three with peers. Technical questions covered CUDA, GPUs, and coding optimizations; experience questions covered parallel computing and scientific computation.",
+        "round_count": 5,
+        "rounds": [
+          {"interviewer": "Group director", "count": 1},
+          {"interviewer": "Manager", "count": 1},
+          {"interviewer": "Peers", "count": 3}
+        ]
+      },
+      "questions": [
+        {
+          "original_question_number": 1,
+          "original_text": "1. Memory Prefetching 2. Grid/Block size deterimation",
+          "topic": "Memory prefetching",
+          "question": "What is memory prefetching, and how would you use it in CUDA?",
+          "suggested_answer": "Prefetching moves data closer to the processor before it is needed, reducing demand stalls. In CUDA Unified Memory, cudaMemPrefetchAsync can request migration toward the GPU before a kernel, or toward the CPU before host access. It is stream ordered: use the same stream for dependent GPU work or establish an event dependency between streams, and synchronize before the CPU consumes results. It does not guarantee a speedup; unnecessary migration, limited device memory, or CPU/GPU ping-pong can hurt performance. For explicit host/device buffers, asynchronous copies with pinned host memory and chunked processing can overlap transfer and computation when hardware and dependencies permit. I would measure transfer time, page faults, and end-to-end runtime before and after the change.",
+          "sources": [
+            "https://docs.nvidia.com/cuda/cuda-programming-guide/04-special-topics/unified-memory.html",
+            "https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/"
+          ]
+        },
+        {
+          "original_question_number": 1,
+          "topic": "Grid and block size determination",
+          "question": "How do you choose CUDA grid and block sizes?",
+          "suggested_answer": "For a simple one-dimensional kernel, I would start with 128 or 256 threads per block and compute grid size as (N + block_size - 1) / block_size, with a bounds check for the final block. For N = 0, skip the launch. Use warp-size multiples, usually 32 threads, and check device and kernel limits. Tune for coalesced accesses, register usage, shared memory, and enough blocks to occupy the GPU. For multidimensional workloads, align block geometry with the data layout. Occupancy APIs provide a starting point, but maximum occupancy does not necessarily mean best performance. Benchmark representative inputs and compare kernel timings and Nsight Compute metrics. Grid-stride loops allow a bounded grid to process larger inputs.",
+          "sources": [
+            "https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/",
+            "https://docs.nvidia.com/nsight-compute/ProfilingGuide/"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "review_date": "2025-11-22",
+      "interview_date": null,
+      "location": "Zurich",
+      "candidate": "Anonymous interview candidate",
+      "offer_status": "No offer",
+      "experience": "Positive experience",
+      "difficulty": "Average interview",
+      "application_method": null,
+      "process_duration_weeks": null,
+      "process": {
+        "summary": "Initial phone screening followed by a technical interview on HPC concepts, Linux administration, and performance optimization. The reviewer described clear communication and professional interviewers.",
+        "stages": ["Initial phone screening", "Technical interview"]
+      },
+      "questions": [
+        {
+          "original_question_number": 1,
+          "question": "What performance tools or methods do you use to diagnose bottlenecks on an HPC cluster?",
+          "suggested_answer": "I would establish a reproducible baseline and compare single-node and multi-node scaling to identify where efficiency drops. I would check CPU utilization, memory pressure, I/O wait, and process placement with tools such as top, vmstat, iostat, and pidstat, then use perf for CPU hotspots and hardware counters. For GPU jobs, I would use Nsight Systems to correlate CPU work, CUDA kernels, transfers, and MPI communication, then Nsight Compute to inspect expensive kernels for memory throughput, occupancy, and compute limits. Across ranks, I would look for imbalance, synchronization delays, and poor communication/computation overlap. I would also check NUMA affinity, GPU/NIC topology, storage throughput, and network errors. Finally, I would change one suspected cause at a time, verify numerical correctness, and compare end-to-end runtime rather than relying on utilization alone.",
+          "sources": [
+            "https://docs.nvidia.com/nsight-systems/UserGuide/",
+            "https://docs.nvidia.com/nsight-compute/ProfilingGuide/",
+            "https://docs.nvidia.com/dccpu/grace-perf-tuning-guide/measuring-performance.html"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "review_date": "2024-08-01",
+      "interview_date": "2024-03",
+      "location": null,
+      "candidate": "Anonymous interview candidate",
+      "offer_status": "No offer",
+      "experience": "Positive experience",
+      "difficulty": "Difficult interview",
+      "application_method": "Online",
+      "process_duration_weeks": 3,
+      "process": {
+        "summary": "One-hour Zoom interview with the team lead, mainly covering Linux and previous experience. Included connecting remotely to a cloud instance and running Linux commands to complete tasks.",
+        "round_count": 1,
+        "interviewer": "Team lead",
+        "interview_duration_minutes": 60,
+        "format": "Zoom with hands-on remote terminal tasks"
+      },
+      "questions": [
+        {
+          "original_question_number": 1,
+          "question": "What do the three load-average numbers in top mean?",
+          "suggested_answer": "They represent system load averaged over approximately 1, 5, and 15 minutes. On Linux, load includes runnable tasks, both running and waiting for CPU time, plus tasks in uninterruptible sleep, commonly waiting for I/O. These values are not CPU usage percentages. For a CPU-bound workload on a machine with 8 available logical CPUs, a sustained load near 8 suggests roughly full CPU capacity; a higher load suggests queued work. However, blocked I/O can raise load even when CPUs are idle, and affinity or container CPU limits can complicate that comparison. If the 1-minute value exceeds the 5- and 15-minute values, load has recently increased. I would inspect CPU utilization, I/O wait, and task states to determine the cause.",
+          "sources": [
+            "https://www.man7.org/linux/man-pages/man5/proc_loadavg.5.html",
+            "https://www.man7.org/linux/man-pages/man1/top.1.html"
+          ]
+        }
+      ]
+    }
+  ]
+}
