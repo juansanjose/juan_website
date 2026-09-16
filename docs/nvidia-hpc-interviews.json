@@ -24,9 +24,18 @@
         "summary": "Five one-on-one interviews: one with the group director, one with the manager, and three with peers. Technical questions covered CUDA, GPUs, and coding optimizations; experience questions covered parallel computing and scientific computation.",
         "round_count": 5,
         "rounds": [
-          {"interviewer": "Group director", "count": 1},
-          {"interviewer": "Manager", "count": 1},
-          {"interviewer": "Peers", "count": 3}
+          {
+            "interviewer": "Group director",
+            "count": 1
+          },
+          {
+            "interviewer": "Manager",
+            "count": 1
+          },
+          {
+            "interviewer": "Peers",
+            "count": 3
+          }
         ]
       },
       "questions": [
@@ -66,7 +75,10 @@
       "process_duration_weeks": null,
       "process": {
         "summary": "Initial phone screening followed by a technical interview on HPC concepts, Linux administration, and performance optimization. The reviewer described clear communication and professional interviewers.",
-        "stages": ["Initial phone screening", "Technical interview"]
+        "stages": [
+          "Initial phone screening",
+          "Technical interview"
+        ]
       },
       "questions": [
         {
@@ -110,6 +122,69 @@
           ]
         }
       ]
+    },
+    {
+      "id": 4,
+      "review_date": null,
+      "interview_date": null,
+      "location": null,
+      "company_confirmed_in_excerpt": false,
+      "role_confirmed_in_excerpt": false,
+      "process": {
+        "summary": "Both technical rounds focused heavily on C fundamentals.",
+        "technical_round_count": 2,
+        "total_round_count": null,
+        "topics": [
+          "In-depth pointers",
+          "Finding errors and bugs in code snippets",
+          "Competitive programming style problems",
+          "Conceptual and design questions"
+        ]
+      },
+      "questions": [
+        {
+          "question": "How would you implement sizeof() yourself?",
+          "suggested_answer": "First clarify whether the task means implementing a compiler operator or approximating it in ordinary C. sizeof is an operator, not a function, and a portable ordinary function cannot reproduce all its semantics. In a compiler, inspect the operand type without normally evaluating the expression and obtain its size from the target data layout. Use target-specific sizes for scalar and pointer types; multiply element size by the bound for arrays; lay out structures with member alignment and padding; and size unions for their largest member with the required alignment. Variable-length arrays require runtime size information. Return a size_t result measured in C bytes, where sizeof(char) is 1, and diagnose invalid operands such as incomplete types, function types, and bit-fields. A void pointer carries no portable allocation-size metadata. Pointer-arithmetic interview tricks are not full replacements: they cannot accept arbitrary type operands, preserve all unevaluated-expression behavior, or supply the same constant-expression semantics. Avoid tricks involving arithmetic on null pointers.",
+          "sources": [
+            "https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf"
+          ],
+          "source_sections": [
+            "6.5.3.4",
+            "6.2.6.1",
+            "6.7.2.1"
+          ]
+        }
+      ],
+      "preparation_notes": [
+        "No specific pointer question, buggy snippet, or competitive programming problem was supplied; these are reported topic areas, not reconstructed questions.",
+        "For pointers, prepare object lifetime, ownership, pointer arithmetic bounds, arrays versus pointers, const qualification, aliasing, alignment, and function pointers.",
+        "For bug finding, check initialization, bounds, allocation failure, use-after-free, double-free, integer overflow, format specifiers, and undefined behavior. Explain the defect and a correction.",
+        "For programming problems, clarify constraints, state an invariant, analyze complexity, and cover empty input and boundary cases."
+      ]
+    }
+  ],
+  "additional_questions": [
+    {
+      "source": "Separate user message; not assigned to a specific review.",
+      "question": "How would you identify and optimize a performance bottleneck in a GPU application?",
+      "suggested_answer": "Establish a representative, warmed-up baseline and time asynchronous GPU work with CUDA events or appropriate synchronization. Use Nsight Systems to locate CPU delays, GPU idle gaps, transfers, and synchronization costs. Inspect expensive kernels with Nsight Compute for memory throughput, compute utilization, register pressure, occupancy, and stalls. Optimize the measured cause: coalesce and reuse data for memory bottlenecks, reduce unnecessary computation, keep data resident and overlap transfers, or reduce launch overhead with fusion or CUDA Graphs. Change one factor at a time, verify numerical correctness, and compare end-to-end runtime.",
+      "sources": [
+        "https://docs.nvidia.com/nsight-systems/UserGuide/",
+        "https://docs.nvidia.com/nsight-compute/ProfilingGuide/",
+        "https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/"
+      ]
+    },
+    {
+      "source": "Separate user message; not assigned to a specific review.",
+      "question": "Copy a linked list with a random pointer in O(n) time.",
+      "assumptions": [
+        "The next chain is acyclic.",
+        "Each random pointer is null or points into the list.",
+        "Temporary mutation is permitted and there are no concurrent readers."
+      ],
+      "suggested_answer": "Use three passes. First insert a newly allocated copy immediately after each original node. Next set each copy random pointer to original.random.next, or null when original.random is null. Finally detach the copies while restoring the original next pointers. Since the copy of every original is adjacent to it during the second pass, random targets are resolved in constant time. In C, handle allocation failure by removing and freeing copies already inserted and restoring the original chain before returning failure. If mutation is forbidden, use an original-to-copy hash map, with O(n) auxiliary space and expected O(n) time.",
+      "time_complexity": "O(n) for the interleaving algorithm under the usual allocation-cost model.",
+      "auxiliary_space_complexity": "O(1), excluding output nodes."
     }
   ]
 }
