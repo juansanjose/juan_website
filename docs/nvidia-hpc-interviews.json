@@ -161,6 +161,95 @@
         "For bug finding, check initialization, bounds, allocation failure, use-after-free, double-free, integer overflow, format specifiers, and undefined behavior. Explain the defect and a correction.",
         "For programming problems, clarify constraints, state an invariant, analyze complexity, and cover empty input and boundary cases."
       ]
+    },
+    {
+      "id": 5,
+      "review_date": null,
+      "interview_date": null,
+      "company_confirmed_in_excerpt": false,
+      "role_confirmed_in_excerpt": false,
+      "process": {
+        "summary": "Questions on CUDA kernels and optimizing models under constraints, with extensive follow-up discussions probing techniques such as kernel fusion and launch overhead.",
+        "round_count": null
+      },
+      "questions": [
+        {
+          "original_question_number": 1,
+          "question": "Implement MoE and show the dimensions.",
+          "suggested_answer": "Assume a token-routed top-K sparse mixture-of-experts feed-forward layer. Flatten tokens, compute router logits, select K experts per token, normalize the selected logits with softmax, dispatch tokens to their experts, and sum expert outputs weighted by the routing probabilities. This example uses two-layer GELU experts without biases, capacity limits, or dropped tokens. It normalizes across selected experts; other architectures can use different routing conventions.",
+          "symbols": {
+            "B": "Batch size",
+            "S": "Sequence length",
+            "T": "B*S tokens",
+            "D": "Model dimension",
+            "E": "Number of experts",
+            "K": "Selected experts per token, 1 <= K <= E",
+            "H": "Expert hidden dimension",
+            "N_e": "Number of token assignments routed to expert e; sum over experts is T*K"
+          },
+          "dimensions": {
+            "input": "[B,S,D]",
+            "flattened_input": "[T,D]",
+            "router_weights": "[D,E]",
+            "router_logits": "[T,E]",
+            "selected_expert_indices_and_weights": "[T,K]",
+            "expert_first_layer_weights": "[E,D,H]",
+            "expert_second_layer_weights": "[E,H,D]",
+            "expert_input": "[N_e,D]",
+            "expert_hidden": "[N_e,H]",
+            "expert_output": "[N_e,D]",
+            "combined_output": "[T,D] -> [B,S,D]"
+          },
+          "implementation_language": "Python / PyTorch",
+          "implementation": "import torch\nimport torch.nn.functional as F\n\ndef moe(x, router, w1, w2, k):\n    # x: [B,S,D]; router: [D,E]; w1: [E,D,H]; w2: [E,H,D]\n    B, S, D = x.shape\n    E = router.shape[1]\n    if not 1 <= k <= E:\n        raise ValueError(\"k must be between 1 and E\")\n    tokens = x.reshape(B * S, D)                 # [T,D]\n    logits = tokens @ router                   # [T,E]\n    values, experts = logits.topk(k, dim=-1)    # both [T,K]\n    weights = values.float().softmax(-1).to(x.dtype)  # [T,K]\n    output = torch.zeros_like(tokens)          # [T,D]\n    for e in range(E):\n        rows, slots = torch.where(experts == e) # each [N_e]\n        expert_input = tokens[rows]            # [N_e,D]\n        hidden = F.gelu(expert_input @ w1[e])   # [N_e,H]\n        result = hidden @ w2[e]                # [N_e,D]\n        weighted = result * weights[rows, slots, None]\n        output.index_add_(0, rows, weighted)   # accumulate K routes per token\n    return output.reshape(B, S, D)\n",
+          "implementation_notes": [
+            "Weights use explicit matrix-multiplication layout, not nn.Linear storage layout.",
+            "This is a readable reference implementation, not an optimized CUDA kernel. Per-expert loops and dynamic index extraction add overhead.",
+            "Training needs an appropriate load-balancing strategy; distributed deployment also needs token dispatch and combination across devices."
+          ],
+          "sources": [
+            "https://developer.nvidia.com/blog/applying-mixture-of-experts-in-llm-architectures/",
+            "https://docs.nvidia.com/megatron-core/developer-guide/latest/apidocs/core/core.transformer.moe.router.html"
+          ]
+        }
+      ],
+      "suggested_follow_up_answers": [
+        {
+          "topic": "Optimization under constraints",
+          "answer": "Clarify training versus inference, latency versus throughput targets, batch and sequence sizes, memory budget, hardware, and acceptable accuracy loss. Profile the workload before choosing an optimization. For MoE, examine expert imbalance, small expert matrix multiplications, dispatch overhead, and inter-device communication. Consider grouping tokens by expert, grouped matrix multiplication, and communication overlap when the profile supports them."
+        },
+        {
+          "topic": "Kernel fusion and launch overhead",
+          "answer": "Fusion can reduce launch count and intermediate global-memory traffic, for example by combining a matrix-multiplication epilogue with an activation. It may increase register pressure, reduce occupancy, or prevent use of a faster specialized kernel. Launch overhead matters most when useful work per launch is small; distinguish CPU submission costs from GPU execution time. CUDA Graphs can reduce repeated submission overhead for suitable workloads without requiring every operation to be fused. Measure end-to-end performance and correctness."
+        }
+      ],
+      "follow_up_sources": [
+        "https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/",
+        "https://docs.nvidia.com/deeplearning/cudnn/v1.23.0/operations/MoeGroupedMatmul.html"
+      ]
+    },
+    {
+      "id": 6,
+      "review_date": null,
+      "interview_date": null,
+      "company_confirmed_in_excerpt": false,
+      "role_confirmed_in_excerpt": false,
+      "process": {
+        "summary": "Medium LeetCode-style exercise involving ASCII letter manipulation."
+      },
+      "questions": [],
+      "reported_exercise": {
+        "description": "Medium Leetcode exercise about ASCII letters manipulation",
+        "difficulty": "Medium",
+        "exact_problem_statement": null,
+        "suggested_answer": null,
+        "note": "The excerpt does not specify the required transformation, inputs, or outputs, so a concrete solution cannot be determined."
+      },
+      "preparation_notes": [
+        "Clarify whether input includes uppercase, lowercase, nonletters, and whether the operation wraps or preserves case.",
+        "For an ASCII letter rotation by shift s, map the letter to 0..25, normalize s into 0..25, apply modulo 26, then restore the uppercase or lowercase base. This is a practice example, not the reported question.",
+        "Check empty strings, repeated letters, alphabet boundaries, and negative shifts when applicable. A single-pass character transformation is usually O(n) time; actual complexity depends on the missing problem statement."
+      ]
     }
   ],
   "additional_questions": [
