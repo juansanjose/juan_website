@@ -15,11 +15,10 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 .gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
 .gpu-article .post-toolbar{display:flex;align-items:center;margin:0 0 .4rem}
 .gpu-article .reading-time{font:bold .72rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.gpu-article .toc{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:0 0 1.5rem;padding:.6rem .7rem;border:2px inset var(--chrome-light);background:var(--bg-shade)}
-.gpu-article .toc-title{font:bold .68rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-right:.35rem}
-.gpu-article .toc a{font:bold .7rem Verdana,Arial,sans-serif;padding:.18rem .5rem;border:2px outset var(--chrome-light);background:var(--button-face);color:var(--button-text);text-decoration:none;box-shadow:inset 0 0 0 1px var(--chrome-shadow),1px 1px 0 var(--chrome-shadow)}
-.gpu-article .toc a:hover{background:var(--button-hover);color:var(--button-text)}
-.gpu-article .toc a:active{border-style:inset;box-shadow:inset 1px 1px 2px var(--chrome-shadow);transform:translate(1px,1px)}
+.gpu-article .toc{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:0 0 1.6rem;padding:.55rem .6rem;border:1px solid var(--border);border-radius:10px;background:var(--bg-shade)}
+.gpu-article .toc-title{font:bold .66rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-right:.4rem}
+.gpu-article .toc a{font:.72rem Verdana,Arial,sans-serif;padding:.22rem .62rem;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--fg);text-decoration:none;transition:background .15s,border-color .15s,color .15s}
+.gpu-article .toc a:hover{background:var(--accent);border-color:var(--accent);color:var(--button-text)}
 </style>
 
 <section id="timeslicing"><h2>Time-slicing</h2>
@@ -240,14 +239,14 @@ spec:
 <p>I was able to find these interesting blogs about GPU partitioning. They essentially state that these modes should not be used as actual security boundaries, because there are many resources that stay shared between clients: the shared PCIe function, the DMA path, the power envelope, the firmware-defined control paths. Give them a read, it is worth it.<a href="#source-4">[4]</a> <a href="#source-5">[5]</a></p></section>
 <section id="conclusions"><h2>Conclusions</h2><p>The most interesting part of this experiment for me was DRA, the ability to dynamically set these resources was pretty cool. I think the project is not quite ready yet, as many of the features are in alpha, and even I found that things like using MPS with MIG is not possible, but I think it is the right way to approach GPU handling overall.</p><p>I find it hard to justify cases of inference in MIG instances or MPS, as there isn't much security in these methods and the performance is pretty bad. CERN uses this for their experiment teams, who tend to underutilize the resources assigned to them in GPUs (link presentation). And either way, if you want to inference at maximum, you probably want to use bare-metal nodes for maximum performance.</p><p>Thank you for reading my blog, this is my first time! Hehe.</p></section>
 <section id="sources"><h2>Sources</h2><ol class="small">
-<li id="source-1"><a href="https://docs.nvidia.com/deploy/pdf/CUDA_Multi_Process_Service_Overview.pdf">NVIDIA Multi-Process Service guide</a>, active-thread-percentage provisioning. The saved guide is Release 615; these tests used driver 580, not its newer features. <a href="/gpu-sharing/NVIDIA-CUDA-MPS-Guide.pdf">Saved PDF</a>.</li>
-<li id="source-2"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/">DRA Driver for NVIDIA GPUs: GPU sharing with Multi-Process Service</a>. The per-claim setup this article describes, <code>EXCLUSIVE_PROCESS</code>, the <code>mps-control-daemon-&lt;id&gt;</code> deployment, the injected pipe directories, and the note that MPS and time-slicing cannot be active on the same physical GPU.</li>
-<li id="source-3"><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/">Kubernetes: Dynamic Resource Allocation</a>. ResourceSlice, DeviceClass, ResourceClaim and the per-workload device-configuration benefit quoted in the DRA section.</li>
-<li id="source-4"><a href="https://www.linkedin.com/pulse/mig-complete-security-boundary-hardware-partitioning-shared-daula-slbac/">MIG Is Not a Complete Security Boundary</a>, Kavitha Daula. Quoted on what MIG partitions, what stays shared, and why the Kubernetes resource model hides the difference.</li>
-<li id="source-5"><a href="https://www.linkedin.com/pulse/gpus-security-boundary-its-architectural-gaps-run-all-kavitha-daula-3zvoe/">GPUs Are Not a Security Boundary and Its Architectural Gaps Run All the Way Down</a>, Kavitha Daula (March 2026). Quoted on memory residue, IOMMU/IOTLB contention, DMA containment and firmware trust.</li>
-<li id="source-6"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/gpu-allocation/time-slicing/">DRA Driver for NVIDIA GPUs: Time-slicing</a>. The interval values (<code>Default</code>, <code>Short</code>, <code>Medium</code>, <code>Long</code>) and the limitations quoted here: no memory isolation, no throughput guarantees.</li>
-<li id="source-7"><a href="https://github.com/NVIDIA/k8s-device-plugin/blob/main/README.md#shared-access-to-gpus">NVIDIA device plugin for Kubernetes: Shared Access to GPUs</a>. The plugin’s sharing options (time-slicing or MPS replicas) and the node-wide limitation described in the DRA section.</li>
-<li id="source-8"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html">NVIDIA Multi-Instance GPU (MIG) User Guide</a>. Table 3, the CUDA concurrency-mechanisms comparison (Streams, MPS, MIG), and the MPS sharing limits quoted in the MIG section.</li>
+<li id="source-1"><a href="https://docs.nvidia.com/deploy/pdf/CUDA_Multi_Process_Service_Overview.pdf">NVIDIA Multi-Process Service guide</a> <a href="/gpu-sharing/NVIDIA-CUDA-MPS-Guide.pdf">Saved PDF</a></li>
+<li id="source-2"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/">DRA Driver for NVIDIA GPUs: GPU sharing with Multi-Process Service</a></li>
+<li id="source-3"><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/">Kubernetes: Dynamic Resource Allocation</a></li>
+<li id="source-4"><a href="https://www.linkedin.com/pulse/mig-complete-security-boundary-hardware-partitioning-shared-daula-slbac/">MIG Is Not a Complete Security Boundary</a></li>
+<li id="source-5"><a href="https://www.linkedin.com/pulse/gpus-security-boundary-its-architectural-gaps-run-all-kavitha-daula-3zvoe/">GPUs Are Not a Security Boundary and Its Architectural Gaps Run All the Way Down</a></li>
+<li id="source-6"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/gpu-allocation/time-slicing/">DRA Driver for NVIDIA GPUs: Time-slicing</a></li>
+<li id="source-7"><a href="https://github.com/NVIDIA/k8s-device-plugin/blob/main/README.md#shared-access-to-gpus">NVIDIA device plugin for Kubernetes: Shared Access to GPUs</a></li>
+<li id="source-8"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html">NVIDIA Multi-Instance GPU (MIG) User Guide</a></li>
 <li id="source-9"><a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">NVIDIA: Using MIG Strategies in Kubernetes</a></li>
 </ol></section>
 </div>

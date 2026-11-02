@@ -236,14 +236,13 @@ a:hover {
   display: inline-grid;
   grid-template-columns: auto;
   min-width: 4.8rem;
-  padding: 0.2rem 0.35rem;
-  border: 2px outset var(--chrome-light);
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
   background: var(--button-face);
-  box-shadow: inset 0 0 0 1px var(--chrome-shadow), 2px 2px 0 var(--chrome-shadow);
   color: var(--button-text);
   font: bold 0.55rem/1 "Courier New", Courier, monospace;
   text-align: center;
-  text-shadow: 1px 1px 0 rgb(255 255 255 / 25%);
 }
 
 .visitor-counter__label {
@@ -269,13 +268,13 @@ a:hover {
 .site-nav a,
 .sound-toggle {
   appearance: none;
-  min-height: 1.35rem;
-  padding: 0.15rem 0.42rem;
-  border: 2px outset var(--chrome-light);
+  min-height: 1.5rem;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
   background: var(--button-face);
-  box-shadow: inset 0 0 0 1px var(--chrome-shadow), 1px 1px 0 var(--chrome-shadow);
   color: var(--button-text);
-  font: bold 0.63rem Verdana, Arial, sans-serif;
+  font: 600 0.65rem Verdana, Arial, sans-serif;
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
@@ -313,9 +312,7 @@ a:hover {
 
 .site-nav a:active,
 .sound-toggle:active {
-  border-style: inset;
-  box-shadow: inset 1px 1px 2px var(--chrome-shadow);
-  transform: translate(1px, 1px);
+  filter: brightness(0.92);
 }
 
 .site-nav a:focus-visible,
@@ -367,8 +364,6 @@ a:hover {
 
 main {
   margin-bottom: 1.5rem;
-  border: 2px ridge var(--border);
-  box-shadow: 2px 2px 0 var(--chrome-shadow);
 }
 
 h1, h2, h3 {
