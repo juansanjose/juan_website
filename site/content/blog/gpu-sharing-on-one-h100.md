@@ -18,7 +18,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 .gpu-article .toc{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:0 0 1.6rem;padding:.55rem .6rem;border:1px solid var(--border);border-radius:10px;background:var(--bg-shade)}
 .gpu-article .toc-title{font:bold .66rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-right:.4rem}
 .gpu-article .toc a{font:.72rem Verdana,Arial,sans-serif;padding:.24rem .66rem;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--fg);text-decoration:none;box-shadow:1px 1px 0 var(--chrome-shadow);transition:background .15s,border-color .15s,color .15s,box-shadow .15s}
-.gpu-article .toc a:hover{background:var(--accent);border-color:var(--accent);color:var(--button-text);box-shadow:none;transform:translate(1px,1px)}
+.gpu-article .toc a:hover{background:var(--button-face);border-color:var(--button-face);color:var(--button-text);box-shadow:none;transform:translate(1px,1px)}
 </style>
 
 <section id="timeslicing"><h2>Time-slicing</h2>
@@ -229,7 +229,7 @@ spec:
 <iframe class="performance-chart" title="All H100 sharing settings and model alone, with family visibility toggles" src="/gpu-sharing/combined.html" loading="lazy"></iframe>
 <p class="small"><a href="/gpu-sharing/combined.html">Full-screen graph</a></p></section>
 <section id="interpretation"><div id="gpu-captures"><h3>What the GPU reported</h3><div>Here you can check the SMI output that each method gives for the GPU.</div><div class="gpu-modes" role="group" aria-label="GPU capture mode"></div><p role="status"></p><pre tabindex="0" aria-label="Recorded nvidia-smi output"><code></code></pre><a class="gpu-source small">Raw capture</a></div>
-<style>.gpu-modes{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 8px}.gpu-modes button{font:inherit;font-size:14px;background:var(--bg);color:var(--link);border:1px solid var(--border);border-radius:6px;padding:9px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--chrome-shadow)}.gpu-modes button[aria-pressed=true]{background:var(--accent);color:var(--button-text)}.gpu-modes button:focus-visible{outline:3px solid #e8a317}#gpu-captures pre{height:440px;overflow:auto}#gpu-captures [role=status]:empty{display:none}</style>
+<style>.gpu-modes{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 8px}.gpu-modes button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:9px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--chrome-shadow)}.gpu-modes button:hover{border-color:var(--button-face)}.gpu-modes button[aria-pressed=true]{background:var(--button-face);color:var(--button-text)}.gpu-modes button:focus-visible{outline:3px solid #e8a317}#gpu-captures pre{height:440px;overflow:auto}#gpu-captures [role=status]:empty{display:none}</style>
 <script src="/js/gpu-captures-bundled.js"></script>
 <p>With MPS, the percentage configured for a client is what changes its resource usage: server A's device probes reported 28 multiprocessors at MPS 25% and 114 at MPS 100%.</p></section>
 
