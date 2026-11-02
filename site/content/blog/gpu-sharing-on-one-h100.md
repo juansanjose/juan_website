@@ -5,7 +5,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 +++
 
 <div class="gpu-article">
-<p>I wanted to write about something to show my technical expertise, so this is what I came up with. The initial idea is that GPUs tend to be underutilized, so there are these techniques that let you share a GPU between clients.</p><p>This post was inspired by this NVIDIA blog, where they fit various small models and test the performance: <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">a post about consolidating underutilised GPU workloads</a>.</p><p>I did the same but with an LLM: I chose a small LL model (Nemotron 3 Nano 30B-A3B FP8) and rented an H100 for the tests.</p>
+<p>I wanted to write about something to show my technical expertise, so this is what I came up with. The initial idea was that GPUs tend to be underutilized, so there are these techniques that let you share a GPU between clients.</p><p>This post was inspired by this NVIDIA blog, where they fit various small models and tested the performance: <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">a post about consolidating underutilized GPU workloads</a>.</p><p>I did the same but with an LLM: I chose a small LLM (Nemotron 3 Nano 30B-A3B FP8) and rented an H100 for the tests.</p>
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
 <div class="post-toolbar"><span class="reading-time" title="Estimated reading time">~7 min read</span></div>
@@ -28,14 +28,14 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 </div>
 <div class="workshop-copy" id="timeslicing-story"><p>A uses shared compute while B waits, then they swap.</p></div>
 </figure>
-<p>This is the simplest of the methods: processes take turns on the GPU. They load the memory that stays there, but the SM cores keep changing context between the clients, so there is a big inefficiency there from the context switching.<a href="#source-6">[6]</a></p>
+<p>This is the simplest of the methods: processes take turns on the GPU. Their memory stays loaded, but the SM cores keep switching context between the clients, so there is a big inefficiency from the context switching.<a href="#source-6">[6]</a></p>
 <style>.ts-cmd{margin:10px 0 6px}
 .ts-cmd pre{margin:0;background:#263442;color:#fff;border-radius:8px;padding:10px 13px;overflow:auto;font-size:13.5px;line-height:1.5}
 .ts-cmd pre code{background:none;color:inherit;padding:0;white-space:pre}
 .ts-cmd .note{display:block;margin-top:7px;color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}</style>
 <p>You can change the turn length. The interval is <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-6">[6]</a>, the same switch as this one on the host:</p>
 <div class="ts-cmd"><pre><code>nvidia-smi compute-policy --set-timeslice 3</code></pre><span class="note">0 = DEFAULT · 1 = SHORT · 2 = MEDIUM · 3 = LONG</span></div>
-<p>Short is like 1 ms, Default 3 ms and Long 1 second.</p><p>The problem is that if a process decides to be a greedy goblin it can allocate all the memory for itself, and there is no preemption method to move that memory to others.</p>
+<p>Short is about 1 ms, Default about 3 ms and Long about 1 second.</p><p>The problem is that if a process decides to be a greedy goblin, it can allocate all the memory for itself, and there is no preemption mechanism to reclaim that memory.</p>
 </section>
 <section id="mps"><h2>MPS</h2>
 <figure class="explainer workshop" aria-labelledby="concurrent-label">
@@ -44,7 +44,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 </div>
 
 </figure>
-<p>MPS implements a client-server architecture,&nbsp; there is a server that accepts client CUDA processes. These send the work to the server and the server arbitrates the shared scheduling resources so they run on the GPU at the same time instead of taking turns.&nbsp;</p><p>The SMs and memory stay shared between the clients, and letting them work concurrently is what raises utilization when no single program fills the card alone.&nbsp;</p><p>The CUDA application takes control of the context and submits its work to the GPU directly.<a href="#source-1">[1]</a> You can also partition the SMs between clients with an active-thread limit, which caps how much a client can use.<a href="#source-1">[1]</a></p>
+<p>MPS implements a client-server architecture: there is a server that accepts client CUDA processes. The clients send their work to the server, and the server arbitrates the shared scheduling resources so they run on the GPU at the same time instead of taking turns.</p><p>The SMs and memory stay shared between the clients, and letting them work concurrently is what raises utilization when no single program fills the card alone.</p><p>The CUDA application takes control of the context and submits its work to the GPU directly.<a href="#source-1">[1]</a> You can also partition the SMs between clients with an active-thread limit, which caps how much a client can use.<a href="#source-1">[1]</a></p>
 </section>
 <section id="mig"><h2>MIG</h2>
 <figure class="explainer workshop" aria-labelledby="partition-label">
@@ -54,10 +54,10 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 
 
 </figure>
-<p>MIG essentially divides the GPU into smaller pieces. Each GPU has its own profiles you can divide differently, and not all GPUs support MIG. In my case I divided my H100 into two, one slice for each agent. This way the process inside a slice can't access the SMs and memory of the other slice.</p><p>This is the main difference from the other methods: this is the only one that actually offers the client a way to make sure the resources are not shared inside the GPU.<a href="#source-8">[8]</a></p><p>I found this table to explain the different features offered in each mode.</p><table><caption>Table 3: CUDA Concurrency Mechanisms<a href="#source-8">[8]</a></caption><thead><tr><th></th><th>Streams</th><th>MPS</th><th>MIG</th></tr></thead><tbody><tr><th>Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th>Max Partitions</th><td>Unlimited</td><td>48</td><td>7</td></tr><tr><th>SM Performance Isolation</th><td>No</td><td>Yes (by percentage, not partitioning)</td><td>Yes</td></tr><tr><th>Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th>Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th>Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th>Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th>Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table>
+<p>MIG essentially divides the GPU into smaller pieces. Each GPU has its own set of profiles and can be divided differently, and not all GPUs support MIG. In my case I divided my H100 into two, one slice for each client. This way, the process inside a slice can't access the SMs and memory of the other slice.</p><p>This is the main difference from the other methods: this is the only one that actually offers the client a way to make sure the resources are not shared inside the GPU.<a href="#source-8">[8]</a></p><p>I found this table to explain the different features offered in each mode.</p><table><caption>Table 3: CUDA Concurrency Mechanisms<a href="#source-8">[8]</a></caption><thead><tr><th></th><th>Streams</th><th>MPS</th><th>MIG</th></tr></thead><tbody><tr><th>Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th>Max Partitions</th><td>Unlimited</td><td>48</td><td>7</td></tr><tr><th>SM Performance Isolation</th><td>No</td><td>Yes (by percentage, not partitioning)</td><td>Yes</td></tr><tr><th>Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th>Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th>Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th>Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th>Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table>
 </section>
-<section id="dra"><h2>Deploying the lab in k8s with DRA</h2><p>DRA, dynamic resource allocation, made deploying this lab pretty easy.<a href="#source-3">[3]</a> The old way with the device driver was not that good, you would only get to set a GPU resource inside the pod, whereas with DRA, like with PVCs, you just ask what you want and DRA takes care of everything to set up, find and give you the resources.<a href="#source-7">[7]</a></p>
-<h3>Time-slicing</h3><p>You just specify the resource claim where, in this case, a GPU is shared through time-slicing. You can set the interval in it.<a href="#source-6">[6]</a></p>
+<section id="dra"><h2>Deploying the lab in k8s with DRA</h2><p>DRA, dynamic resource allocation, made deploying this lab pretty easy.<a href="#source-3">[3]</a> The old way with the device plugin was not that good: you could only set a GPU resource inside the pod, whereas with DRA, like with PVCs, you just ask for what you want, and DRA takes care of setting everything up, finding and giving you the resources.<a href="#source-7">[7]</a></p>
+<h3>Time-slicing</h3><p>You just specify the resource claim for a GPU shared through time-slicing, and you can set the interval in it.<a href="#source-6">[6]</a></p>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -120,7 +120,7 @@ spec:
             mpsConfig:
               defaultActiveThreadPercentage: 50
               defaultPinnedDeviceMemoryLimit: 10Gi</code></pre><p>The pinned-memory limit in <code>mpsConfig</code> is only a number you give the MPS server: it says how much memory a client may use, not how much it gets to itself. There are no hard throughput guarantees.<a href="#source-2">[2]</a></p>
-<p>Also important: you want the pods to reference the same MPS server, not create various MPS servers. You need to use a ResourceClaim, not a ResourceClaimTemplate, since that creates a different ResourceClaim for each pod.</p>
+<p>Also important: you want the pods to reference the same MPS server, not create multiple MPS servers. You need to use a ResourceClaim, not a ResourceClaimTemplate, since that creates a different ResourceClaim for each pod.</p>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -215,14 +215,14 @@ spec:
       claims:
       - name: device</code></pre>
 
-<p>At first I decided to create the MIG partition manually, because the DRA plugin for MPS and DynamicMIG can't work together, so I had to specifically set the MPS feature off to then have DynamicMIG.</p><p>I also found how it was done with the device plugin: <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes</a></p><p>As you can see, you needed to define the MIG partitions yourself. With this you don't need to worry about partitions or anything else.</p>
+<p>At first I decided to create the MIG partition manually, because the DRA plugin for MPS and DynamicMIG can't work together, so I had to turn the MPS feature off to enable DynamicMIG.</p><p>I also found how it was done with the device plugin: <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes</a></p><p>As you can see, you needed to define the MIG partitions yourself. With DRA you don't need to worry about partitions or anything else.</p>
 
 
 
 
 </section>
 <section id="original"><h2>Inference performance</h2>
-<p>I used the InferenceX repo for this test and put tokens/s and TTFT. I think the graph doesn't say much because everything is close together, except time-slicing Short and Long, which for some reason decided to use much less power than the other methods. The winners are MPS at 100 and 50, just barely over MIG.</p>
+<p>I used the InferenceX repo for this test and measured tokens/s and TTFT. I think the graph doesn't say much because everything is close together, except time-slicing Short and Long, which for some reason got much lower throughput than the other methods. The winners are MPS at 100% and 50%, just barely over MIG.</p>
 <div class="table-wrap"><table><caption>1,024 input / 1,024 output tokens. Medians of three repeats at five requests per server.</caption><thead><tr><th>Sharing setting</th><th>Total output (tokens/s)</th><th>p95 first-token wait (ms)</th></tr></thead><tbody><tr><th>Time-slicing Default</th><td>498</td><td>471</td></tr><tr><th>Time-slicing Short</th><td>385</td><td>1,387</td></tr><tr><th>Time-slicing Long</th><td>413</td><td>1,400</td></tr><tr><th>MPS 25%</th><td>513</td><td>516</td></tr><tr><th>MPS 50%</th><td>611</td><td>392</td></tr><tr><th>MPS 100%</th><td>626</td><td>376</td></tr><tr><th>MIG: two 3g.40gb slices</th><td>594</td><td>394</td></tr></tbody></table></div>
 
 
@@ -235,8 +235,8 @@ spec:
 
 
 <section id="security"><h2>Security considerations</h2>
-<p>I was able to find these interesting blogs about GPU partitioning. They essentially state that these modes should not be used as actual security boundaries, because there are many resources that stay shared between clients: the shared PCIe function, the DMA path, the power envelope, the firmware-defined control paths. Give them a read, it is worth it.<a href="#source-4">[4]</a> <a href="#source-5">[5]</a></p></section>
-<section id="conclusions"><h2>Conclusions</h2><p>The most interesting part of this experiment for me was DRA, the ability to dynamically set these resources was pretty cool. I think the project is not quite ready yet, as many of the features are in alpha, and even I found that things like using MPS with MIG is not possible, but I think it is the right way to approach GPU handling overall.</p><p>I find it hard to justify cases of inference in MIG instances or MPS, as there isn't much security in these methods and the performance is pretty bad. CERN uses this for their experiment teams, who tend to underutilize the resources assigned to them in GPUs.<a href="#source-10">[10]</a> And either way, if you want to inference at maximum, you probably want to use bare-metal nodes for maximum performance.</p><p>Thank you for reading my blog, this is my first time! Hehe.</p></section>
+<p>I was able to find these interesting blogs about GPU partitioning. They essentially state that these modes should not be used as actual security boundaries, because there are many resources that stay shared between clients: the shared PCIe function, the DMA path, the power envelope, the firmware-defined control paths. Give them a read; it is worth it.<a href="#source-4">[4]</a> <a href="#source-5">[5]</a></p></section>
+<section id="conclusions"><h2>Conclusions</h2><p>The most interesting part of this experiment for me was DRA: the ability to set these resources dynamically was pretty cool. I think the project is not quite ready yet, as many of the features are in alpha, and I even found that things like using MPS with MIG are not possible, but I think it is the right way to approach GPU handling overall.</p><p>I find it hard to justify running inference on MIG instances or MPS, as there isn't much security in these methods and the performance is pretty bad. CERN uses this for their experiment teams, who tend to underutilize the resources assigned to them on GPUs.<a href="#source-10">[10]</a> And either way, if you want maximum inference performance, you probably want bare-metal nodes.</p><p>Thank you for reading my blog. This is my first time! Hehe.</p></section>
 <section id="sources"><h2>Sources</h2><ol class="small">
 <li id="source-1"><a href="https://docs.nvidia.com/deploy/pdf/CUDA_Multi_Process_Service_Overview.pdf">NVIDIA Multi-Process Service guide</a> <a href="/gpu-sharing/NVIDIA-CUDA-MPS-Guide.pdf">Saved PDF</a></li>
 <li id="source-2"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/">DRA Driver for NVIDIA GPUs: GPU sharing with Multi-Process Service</a></li>
