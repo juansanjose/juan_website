@@ -104,8 +104,11 @@ body {
   background-image: none;
 }
 
+main.container {
+  background: var(--bg);
+}
+
 [data-theme="dark"] .site-header,
-[data-theme="dark"] main.container,
 [data-theme="dark"] footer {
   background: var(--bg);
 }
@@ -240,6 +243,7 @@ a:hover {
   border: 1px solid var(--border);
   border-radius: 5px;
   background: var(--button-face);
+  box-shadow: 2px 2px 0 var(--chrome-shadow);
   color: var(--button-text);
   font: bold 0.55rem/1 "Courier New", Courier, monospace;
   text-align: center;
@@ -273,6 +277,7 @@ a:hover {
   border: 1px solid var(--border);
   border-radius: 5px;
   background: var(--button-face);
+  box-shadow: 2px 2px 0 var(--chrome-shadow);
   color: var(--button-text);
   font: 600 0.65rem Verdana, Arial, sans-serif;
   line-height: 1;
@@ -312,7 +317,8 @@ a:hover {
 
 .site-nav a:active,
 .sound-toggle:active {
-  filter: brightness(0.92);
+  box-shadow: none;
+  transform: translate(2px, 2px);
 }
 
 .site-nav a:focus-visible,
