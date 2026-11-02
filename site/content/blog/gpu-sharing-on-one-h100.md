@@ -29,8 +29,8 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <div class="workshop-copy" id="timeslicing-story"><p>A uses shared compute while B waits, then they swap.</p></div>
 </figure>
 <p>This is the simplest of the methods: processes take turns on the GPU. Their memory stays loaded, but the SM cores keep switching context between the clients, so there is a big inefficiency from the context switching.<a href="#source-6">[6]</a></p>
-<style>.ts-cmd{margin:10px 0 6px}
-.ts-cmd pre{margin:0;background:#263442;color:#fff;border-radius:8px;padding:10px 13px;overflow:auto;font-size:13.5px;line-height:1.5}
+<style>.ts-cmd{margin:16px 0}
+.ts-cmd pre{margin:0;background:#263442;color:#fff;border-radius:8px;padding:14px 16px;overflow:auto;font-size:13.5px;line-height:1.5}
 .ts-cmd pre code{background:none;color:inherit;padding:0;white-space:pre}
 .ts-cmd .note{display:block;margin-top:7px;color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}</style>
 <p>You can change the turn length. The interval is <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-6">[6]</a>, the same switch as this one on the host:</p>
@@ -253,24 +253,24 @@ spec:
 
 <style>
 .gpu-article{--ink:var(--fg);--muted:var(--muted);--line:var(--border);--accent:var(--link);color:var(--fg);background:transparent;font:18px/1.6 Georgia,"Times New Roman",serif}
-.gpu-article h2{font-size:1.3rem}
-.gpu-article section{margin:40px 0}
+.gpu-article h2{font-size:1.3rem;margin:0 0 1.25rem}
+.gpu-article section{margin:2.5rem 0}
 .gpu-article a{color:var(--accent)}
 .gpu-article .small{font-size:14px;color:var(--muted)}
 .gpu-article .table-wrap{overflow:auto}
-.gpu-article table{border-collapse:collapse;width:100%}
+.gpu-article table{border-collapse:collapse;width:100%;margin:1.25rem 0}
 .gpu-article th,.gpu-article td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
 .gpu-article caption{text-align:left;font-size:15px}
 .gpu-article iframe{width:100%;border:0}
 .gpu-article a:focus-visible{outline:3px solid var(--accent)}
 .gpu-article pre{overflow:auto;padding:16px;background:var(--bg-shade);font:13px/1.5 monospace}
-.gpu-article figure{margin:24px 0}
+.gpu-article figure{margin:1.25rem 0}
 .gpu-article figcaption{font-size:14px;color:var(--muted)}
 .gpu-article .mechanism{max-width:841px;margin:24px auto}
 .gpu-article .mechanism img,.gpu-article .capture img{display:block;width:100%;height:auto}
 .gpu-article .performance-chart{height:750px;display:block}
 @media(max-width:600px){.gpu-article .performance-chart{height:800px}}
-pre.claim{margin:10px 0;background:#263442;color:#fff;border-radius:6px;padding:10px 12px;overflow:auto;font-size:13px;line-height:1.5}pre.claim code{background:none;color:inherit;padding:0;white-space:pre}
+pre.claim{margin:16px 0;background:#263442;color:#fff;border-radius:6px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.5}pre.claim code{background:none;color:inherit;padding:0;white-space:pre}
 pre.claim code .y-key{color:#79c0ff}pre.claim code .y-punct{color:#ff7b72}pre.claim code .y-str{color:#a5d6ff}pre.claim code .y-comment{color:#8b949e;font-style:italic}pre.claim code .y-known{color:#ffa657}pre.claim code .y-val{color:#7ee787}pre.claim code .y-num{color:#79b8ff}
 /* Original, static sharing panels. Colors identify clients, not SMs. */
 .explainer{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#f7fafb;margin:24px 0;box-shadow:0 3px 0 #eaf0f2}
