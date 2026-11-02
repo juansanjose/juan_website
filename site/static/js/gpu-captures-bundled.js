@@ -25,7 +25,7 @@ const GPU_CAPTURE_TEXT = {"Default": "Sun Oct 25 18:29:57 2026       \n+--------
     button.addEventListener('click', () => {
       for (const b of controls.children) b.setAttribute('aria-pressed', String(b === button));
       const url = base + path + '/1024-1024-c5-r0-' + active + '/during-nvidia-smi.txt';
-      source.href = url;
+      if (source) source.href = url;
       output.textContent = GPU_CAPTURE_TEXT[name];
       status.textContent = '';
       root.querySelector('pre').scrollLeft = 0;
