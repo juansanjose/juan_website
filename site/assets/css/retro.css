@@ -456,6 +456,13 @@ pre code {
   margin-bottom: 1.5rem;
 }
 
+.post-subtitle {
+  font: 1.1rem/1.45 Georgia, "Times New Roman", serif;
+  color: var(--muted);
+  margin: -0.4rem 0 1.25rem;
+  max-width: 60ch;
+}
+
 .comments {
   margin-top: 2rem;
   padding-top: 1rem;
