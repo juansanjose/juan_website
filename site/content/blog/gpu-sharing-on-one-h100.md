@@ -9,7 +9,18 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
 <div class="post-toolbar"><span class="reading-time" title="Estimated reading time">~7 min read</span></div>
-<nav class="toc" aria-label="On this page"><span class="toc-title">Contents</span><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in k8s with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing</a></li><li><a href="#dra-mps">MPS</a></li><li><a href="#dra-mig">MIG</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
+<nav class="toc" aria-label="On this page">
+<span class="toc-title">On this page</span>
+<ul>
+<li><a href="#timeslicing">Time-slicing</a></li>
+<li><a href="#mps">MPS</a></li>
+<li><a href="#mig">MIG</a></li>
+<li><a href="#dra">Deploying the lab in k8s with DRA</a></li>
+<li><a href="#original">Inference performance</a></li>
+<li><a href="#security">Security considerations</a></li>
+<li><a href="#conclusions">Conclusions</a></li>
+</ul>
+</nav>
 <style>
 .gpu-article .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:40;pointer-events:none}
 .gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
@@ -17,17 +28,6 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 .gpu-article .reading-time{font:bold .72rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .gpu-article .toc{display:block;margin:0 0 1.6rem;padding:.9rem 1.1rem;border:1px solid var(--border);border-radius:10px;background:var(--bg-shade)}
 .gpu-article .toc-title{display:block;font:bold .68rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:0 0 .55rem}
-.gpu-article{counter-reset:sec}
-.gpu-article .toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
-.gpu-article .toc ol ol{margin:.15rem 0 .15rem 1.6rem}
-.gpu-article .toc li{margin:.15rem 0;counter-increment:t}
-.gpu-article .toc li>a::before{content:counters(t,".") ". ";color:var(--accent);font-weight:bold}
-.gpu-article .toc a{font:.85rem Verdana,Arial,sans-serif;color:var(--fg);text-decoration:none}
-.gpu-article section>h2,.gpu-article section>h3,.gpu-article section h3{}
-.gpu-article section[id=timeslicing]>h2,.gpu-article section[id=mps]>h2,.gpu-article section[id=mig]>h2,.gpu-article section[id=dra]>h2,.gpu-article section[id=original]>h2,.gpu-article section[id=security]>h2,.gpu-article section[id=conclusions]>h2,.gpu-article section[id=sources]>h2{counter-increment:sec;counter-reset:sub}
-.gpu-article section[id=timeslicing]>h2::before,.gpu-article section[id=mps]>h2::before,.gpu-article section[id=mig]>h2::before,.gpu-article section[id=dra]>h2::before,.gpu-article section[id=original]>h2::before,.gpu-article section[id=security]>h2::before,.gpu-article section[id=conclusions]>h2::before,.gpu-article section[id=sources]>h2::before{content:counter(sec) ". ";color:var(--accent)}
-.gpu-article section[id=dra] h3{counter-increment:sub}
-.gpu-article section[id=dra] h3::before{content:counter(sec) "." counter(sub) " ";color:var(--accent)}
 .gpu-article .toc a:hover{color:var(--link);text-decoration:underline}
 </style>
 
