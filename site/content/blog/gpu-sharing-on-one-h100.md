@@ -9,24 +9,32 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
 <div class="post-toolbar"><span class="reading-time" title="Estimated reading time">~7 min read</span></div>
-<nav class="toc" aria-label="On this page">
-<span class="toc-title">On this page</span>
-<ul>
-<li><a href="#timeslicing">Time-slicing</a></li>
-<li><a href="#mps">MPS</a></li>
-<li><a href="#mig">MIG</a></li>
-<li><a href="#dra">Deploying the lab in k8s with DRA</a></li>
-<li><a href="#original">Inference performance</a></li>
-<li><a href="#security">Security considerations</a></li>
-<li><a href="#conclusions">Conclusions</a></li>
-</ul>
+<nav class="toc" aria-label="Contents">
+<span class="toc-title">Contents</span>
+<div class="toc-list">
+<h4>Time-slicing</h4>
+<h4>MPS</h4>
+<h4>MIG</h4>
+<h4>Deploying the lab in k8s with DRA</h4>
+<h5>Time-slicing</h5>
+<h5>MPS</h5>
+<h5>MIG</h5>
+<h4>Inference performance</h4>
+<h4>Security considerations</h4>
+<h4>Conclusions</h4>
+<h4>Sources</h4>
+</div>
 </nav>
 <style>
 .gpu-article .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:40;pointer-events:none}
 .gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
 .gpu-article .post-toolbar{display:flex;align-items:center;margin:0 0 .4rem}
 .gpu-article .reading-time{font:bold .72rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.gpu-article .toc{display:block;margin:0 0 1.6rem;padding:.9rem 1.1rem;border:1px solid var(--border);border-radius:10px;background:var(--bg-shade)}
+.gpu-article .toc{display:block;margin:1.6rem 0}
+.gpu-article .toc-title{display:block;font:bold .68rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:0 0 .55rem}
+.gpu-article .toc-list{margin:0;padding:0}
+.gpu-article .toc-list h4{margin:.5rem 0;font:400 14px/1.4 Verdana,Arial,sans-serif}
+.gpu-article .toc-list h5{margin:.3rem 0 .3rem 1rem;font:400 13px/1.4 Verdana,Arial,sans-serif}
 .gpu-article .toc-title{display:block;font:bold .68rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:0 0 .55rem}
 .gpu-article .toc a:hover{color:var(--link);text-decoration:underline}
 </style>
