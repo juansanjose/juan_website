@@ -116,12 +116,16 @@ main.container {
   background: var(--article-bg);
 }
 
-/* White palette: the reading surface gets its own boundary and padding, and
-   the header/footer become matching flat white surfaces. */
+/* Layout is palette-independent: only the colours change with the palette, so
+   switching palettes never shifts the header, the mascot or the article text.
+   The white palette adds its boundary on top of the same box. */
+main.container {
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
 html[data-palette="white"] main.container,
 html:not([data-palette]) main.container {
   border: 1px solid var(--rule);
-  padding: clamp(1rem, 3vw, 2.5rem);
 }
 
 html[data-palette="white"] .site-header,
@@ -132,16 +136,14 @@ html:not([data-palette]) footer {
 }
 
 /* Keep header/footer content aligned with the article's text edge. */
-html[data-palette="white"] .site-header .container,
-html:not([data-palette]) .site-header .container {
+.site-header .container {
   max-width: 64rem;
   margin: 0 auto;
   padding-left: clamp(1rem, 3vw, 2.5rem);
   padding-right: clamp(1rem, 3vw, 2.5rem);
 }
 
-html[data-palette="white"] footer .container,
-html:not([data-palette]) footer .container {
+footer .container {
   padding-left: clamp(1rem, 3vw, 2.5rem);
   padding-right: clamp(1rem, 3vw, 2.5rem);
 }
@@ -149,11 +151,6 @@ html:not([data-palette]) footer .container {
 [data-theme="dark"] .site-header,
 [data-theme="dark"] footer {
   background: var(--bg);
-}
-
-[data-theme="dark"] main.container {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 
 a {
