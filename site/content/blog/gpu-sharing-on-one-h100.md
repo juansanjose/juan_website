@@ -5,16 +5,13 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 +++
 
 <div class="gpu-article">
-<p>I wanted to write about something to show my technical expertise, so this is what I came up with. The initial idea was that GPUs tend to be underutilized, so there are these techniques that let you share a GPU between clients.</p><p>This post was inspired by this NVIDIA blog, where they fit various small models and tested the performance: <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">a post about consolidating underutilized GPU workloads</a>.</p><p>I did the same but with an LLM: I chose a small LLM (Nemotron 3 Nano 30B-A3B FP8) and rented an H100 for the tests.</p>
+<p>GPUs tend to be underutilized, so there are these techniques that let you share a GPU between clients.</p><p>This post was inspired by this NVIDIA blog, where they fit various small models and tested the performance: <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">a post about consolidating underutilized GPU workloads</a>.</p><p>I did the same but with an LLM: I chose a small LLM (Nemotron 3 Nano 30B-A3B FP8) and rented an H100 for the tests.</p>
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
-<div class="post-toolbar"><span class="reading-time" title="Estimated reading time">~7 min read</span></div>
 <nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in k8s with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing</a></li><li><a href="#dra-mps">MPS</a></li><li><a href="#dra-mig">MIG</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
 <style>
 .gpu-article .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:40;pointer-events:none}
 .gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
-.gpu-article .post-toolbar{display:flex;align-items:center;margin:0 0 .4rem}
-.gpu-article .reading-time{font:bold .72rem Verdana,Arial,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 </style>
 
 <section id="timeslicing"><h2>Time-slicing</h2>
