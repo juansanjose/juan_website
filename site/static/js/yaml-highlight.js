@@ -1,4 +1,4 @@
-/* VS Code Dark-style syntax highlighting for the claim YAML blocks. */
+/* Syntax highlighting for the claim YAML blocks; colors follow the site palette. */
 (function () {
   'use strict';
 

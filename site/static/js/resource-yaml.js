@@ -44,7 +44,7 @@
     if (title) {
       const comment = document.createElement('span');
       comment.textContent = '# ' + title + '\n';
-      comment.style.color = '#536575';
+      comment.style.color = 'color-mix(in srgb, var(--muted) 75%, var(--fg))';
       code.append(comment);
     }
     for (const line of lines) {

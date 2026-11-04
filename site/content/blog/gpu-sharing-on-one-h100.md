@@ -58,6 +58,8 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 </section>
 <section id="dra"><h2>Deploying the lab in k8s with DRA</h2><p>DRA (Dynamic Resource Allocation) made deploying this lab pretty easy.<a href="#source-3">[3]</a> With the traditional device plugin, you could request GPU resources in your Pod, but configurations such as time-slicing and MIG had to be managed separately. With DRA, it's more like using PVCs: you create a ResourceClaim describing the GPU and configuration you want, and Kubernetes, together with the DRA driver, takes care of finding, allocating, and preparing the resources for your Pod.<a href="#source-7">[7]</a></p>
 <h3 id="dra-timeslicing">Time-slicing configuration</h3><p>You just need to create a ResourceClaim requesting a GPU shared through time-slicing, where you can also configure the time-slicing interval.<a href="#source-6">[6]</a></p>
+<details class="yaml-example">
+<summary>Time-slicing ResourceClaim</summary>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -80,6 +82,9 @@ spec:
             strategy: TimeSlicing
             timeSlicingConfig:
               interval: Default</code></pre>
+</details>
+<details class="yaml-example">
+<summary>Time-slicing Pod</summary>
 <pre class="claim"><code>apiVersion: v1
 kind: Pod
 metadata:
@@ -95,8 +100,11 @@ spec:
     resources:
       claims:
       - name: device</code></pre>
+</details>
 <h3 id="dra-mps">MPS configuration</h3>
 <p>The MPS configuration is the same block with a different strategy and per-client limits:</p>
+<details class="yaml-example">
+<summary>MPS ResourceClaim</summary>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -119,8 +127,11 @@ spec:
             strategy: MPS
             mpsConfig:
               defaultActiveThreadPercentage: 50
-              defaultPinnedDeviceMemoryLimit: 10Gi</code></pre><p>The pinned-memory limit in <code>mpsConfig</code> is only a number you give the MPS server: it says how much memory a client may use, not how much it gets to itself. There are no hard throughput guarantees.<a href="#source-2">[2]</a></p>
+              defaultPinnedDeviceMemoryLimit: 10Gi</code></pre>
+</details><p>The pinned-memory limit in <code>mpsConfig</code> is only a number you give the MPS server: it says how much memory a client may use, not how much it gets to itself. There are no hard throughput guarantees.<a href="#source-2">[2]</a></p>
 <p>Also important: you want the pods to reference the same MPS server, not create multiple MPS servers. You need to use a ResourceClaim, not a ResourceClaimTemplate, since that creates a different ResourceClaim for each pod.</p>
+<details class="yaml-example">
+<summary>MPS shared claim and Pod</summary>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -161,9 +172,12 @@ spec:
       claims:
       - name: device
 # Both pods name the same claim, so they get the same GPU and the same MPS daemon.</code></pre>
+</details>
 
 <h3 id="dra-mig">MIG configuration</h3>
 <p>The MIG configuration names the MIG device class and picks the profile with a CEL selector:<a href="#source-9">[9]</a></p>
+<details class="yaml-example">
+<summary>MIG ResourceClaim</summary>
 <pre class="claim"><code># Dynamic MIG: the driver creates a matching partition when the pod is prepared
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
@@ -179,7 +193,10 @@ spec:
         selectors:
         - cel:
             expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
+</details>
 <p>For several pods, the template form gives each pod its own claim:</p>
+<details class="yaml-example">
+<summary>MIG claim template and Pod</summary>
 <pre class="claim"><code># Template form: Kubernetes creates one ResourceClaim per pod from it.
 # The same manifest works in static and dynamic MIG mode; the difference is
 # only who created the partition (an administrator, or the driver on demand).
@@ -214,6 +231,7 @@ spec:
     resources:
       claims:
       - name: device</code></pre>
+</details>
 
 <p>At first I created the MIG partitions manually. The NVIDIA DRA driver's <code>MPSSupport</code> and <code>DynamicMIG</code> feature gates are mutually exclusive, so I had to disable <code>MPSSupport</code> to enable <code>DynamicMIG</code>.<a href="#source-2">[2]</a> This is a DRA configuration restriction: NVIDIA supports running MPS inside MIG instances.<a href="#source-14">[14]</a></p><p>I also found how it was done with the device plugin: <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">MIG strategies in Kubernetes</a></p><p>As you can see, you needed to define the MIG partitions yourself. With DynamicMIG, the driver can create a partition matching the requested profile on demand.</p>
 
@@ -267,7 +285,7 @@ spec:
 
 <style>
 .gpu-article .toc{margin:1.25rem 0}.gpu-article .toc ol{margin:0;padding-left:1.6rem}.gpu-article .toc ol ol{list-style:lower-alpha}
-.gpu-article{--ink:var(--fg);--muted:var(--muted);--line:var(--border);--accent:var(--link);color:var(--fg);background:transparent;font:18px/1.6 Georgia,"Times New Roman",serif}
+.gpu-article{--ink:var(--fg);--line:var(--border);--accent:var(--link);color:var(--fg);background:transparent;font:18px/1.6 Georgia,"Times New Roman",serif}
 .gpu-article h2{font-size:1.3rem;margin:0 0 1.25rem}
 .gpu-article section{margin:2.5rem 0}
 .gpu-article a{color:var(--accent)}
@@ -290,8 +308,20 @@ spec:
 .gpu-article .mechanism img,.gpu-article .capture img{display:block;width:100%;height:auto}
 .gpu-article .performance-chart{height:850px;display:block}
 @media(max-width:600px){.gpu-article .performance-chart{height:900px}}
-pre.claim{margin:20px 0;background:#263442;color:#fff;border-radius:6px;padding:18px 20px;overflow:auto;font-size:14px;line-height:1.55}pre.claim code{background:none;color:inherit;padding:0;white-space:pre}
-pre.claim code .y-key{color:#79c0ff}pre.claim code .y-punct{color:#ff7b72}pre.claim code .y-str{color:#a5d6ff}pre.claim code .y-comment{color:#8b949e;font-style:italic}pre.claim code .y-known{color:#ffa657}pre.claim code .y-val{color:#7ee787}pre.claim code .y-num{color:#79b8ff}
+.gpu-article .yaml-example,.yaml-dialog{--yaml-surface:var(--article-bg);--yaml-code-surface:var(--bg-shade)}
+html[data-palette]:not([data-palette="white"]):not([data-palette="yellow"]) .yaml-example,html[data-palette]:not([data-palette="white"]):not([data-palette="yellow"]) .yaml-dialog{--yaml-surface:color-mix(in srgb,var(--bg) 55%,#000);--yaml-code-surface:color-mix(in srgb,var(--bg-shade) 55%,#000)}
+.gpu-article .yaml-example{margin:20px 0;border:1px solid var(--border);border-radius:6px;background:var(--yaml-surface);overflow:hidden}
+.gpu-article .yaml-example summary{padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer;color:var(--fg)}
+.gpu-article .yaml-example summary::marker{color:var(--link)}
+.gpu-article .yaml-example summary:focus-visible{outline:2px solid var(--link);outline-offset:-4px}
+.gpu-article .yaml-example[open] summary{border-bottom:1px solid var(--border)}
+.gpu-article pre.claim{margin:0;background:var(--yaml-code-surface);color:var(--fg);border-radius:0;padding:18px 20px;overflow:auto;font-size:14px;line-height:1.55}
+pre.claim code{background:none;color:inherit;padding:0;white-space:pre}
+pre.claim code .y-key,pre.claim code .y-known{color:var(--link);font-weight:700}
+pre.claim code .y-punct,pre.claim code .y-comment{color:color-mix(in srgb,var(--muted) 75%,var(--fg))}
+pre.claim code .y-comment{font-style:italic}
+pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg)}
+
 /* Original, static sharing panels. Colors identify clients, not SMs. */
 .explainer{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#f7fafb;margin:24px 0;box-shadow:0 3px 0 #eaf0f2}
 .panel-kicker{padding:14px 22px;border-bottom:1px solid #d5e1e5;color:#38616b;font:650 12px/1.5 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;background:#edf4f5}
@@ -324,7 +354,7 @@ pre.claim code .y-key{color:#79c0ff}pre.claim code .y-punct{color:#ff7b72}pre.cl
 .ts-diagram.b-active .ts-slot-b{opacity:1}
 .ts-diagram.b-active .ts-box{fill:#e3efc7;stroke:#8fbd60}
 @media(prefers-reduced-motion:reduce){.ts-box,.ts-slot-a,.ts-slot-b{transition:none}}
-.yaml-dialog{color-scheme:light;background:var(--bg);color:var(--fg);width:min(860px,calc(100% - 24px));max-height:90vh;border:1px solid #b8c9d4;border-radius:12px;padding:20px;font:15px/1.5 system-ui,sans-serif;overflow:auto}.yaml-dialog::backdrop{background:#020617b8}.yaml-dialog header{display:flex;justify-content:space-between;align-items:center;gap:16px}.yaml-dialog h2{font-size:21px;margin:0}.yaml-dialog button,.yaml-dialog select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px}.yaml-dialog button{cursor:pointer}.yaml-selectors{display:flex;gap:16px;margin:16px 0;flex-wrap:wrap}.yaml-selectors label{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px}.yaml-selectors select{width:100%}.yaml-dialog .yaml-origin{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.yaml-dialog pre{max-height:48vh;overflow:auto;padding:14px;background:var(--bg-shade);font:13px/1.5 monospace;text-align:left}.yaml-dialog code{color:var(--fg);font:inherit}.yaml-dialog a{color:var(--link)}.yaml-dialog .yaml-status{color:var(--muted);font-size:13px}.yaml-dialog .yaml-status:empty{display:none}.yaml-setting{font:inherit;font-weight:inherit;background:none;border:0;padding:0;color:var(--link);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px;cursor:pointer;text-align:left}.yaml-setting:hover{text-decoration-style:solid}.yaml-node{cursor:pointer}.yaml-node:hover rect,.yaml-node:focus rect{stroke:#fbbf24;stroke-width:3}.yaml-node:focus{outline:none}.yaml-dialog :focus-visible,.yaml-setting:focus-visible{outline:3px solid #008399;outline-offset:2px}
+.yaml-dialog{background:var(--yaml-surface);color:var(--fg);width:min(860px,calc(100% - 24px));max-height:90vh;border:1px solid var(--border);border-radius:6px;padding:20px;font:15px/1.5 system-ui,sans-serif;overflow:auto}.yaml-dialog::backdrop{background:#020617b8}.yaml-dialog header{display:flex;justify-content:space-between;align-items:center;gap:16px}.yaml-dialog h2{font-size:21px;margin:0}.yaml-dialog button,.yaml-dialog select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px}.yaml-dialog button{cursor:pointer}.yaml-selectors{display:flex;gap:16px;margin:16px 0;flex-wrap:wrap}.yaml-selectors label{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px}.yaml-selectors select{width:100%}.yaml-dialog .yaml-origin{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.yaml-dialog pre{max-height:48vh;overflow:auto;padding:14px;background:var(--yaml-code-surface);font:13px/1.5 monospace;text-align:left}.yaml-dialog code{color:var(--fg);font:inherit}.yaml-dialog a{color:var(--link)}.yaml-dialog .yaml-status{color:var(--muted);font-size:13px}.yaml-dialog .yaml-status:empty{display:none}.yaml-setting{font:inherit;font-weight:inherit;background:none;border:0;padding:0;color:var(--link);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px;cursor:pointer;text-align:left}.yaml-setting:hover{text-decoration-style:solid}.yaml-node{cursor:pointer}.yaml-node:hover rect,.yaml-node:focus rect{stroke:#fbbf24;stroke-width:3}.yaml-node:focus{outline:none}.yaml-dialog :focus-visible,.yaml-setting:focus-visible{outline:3px solid #008399;outline-offset:2px}
 </style>
 
 <script src="/js/yaml-highlight.js"></script>
