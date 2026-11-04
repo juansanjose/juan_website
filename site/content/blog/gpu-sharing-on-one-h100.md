@@ -230,7 +230,7 @@ spec:
 
 
 <iframe class="performance-chart" title="All H100 sharing settings and model alone, with family visibility toggles" src="/gpu-sharing/combined.html" loading="lazy"></iframe></section>
-<section id="interpretation"><div id="gpu-captures"><div>Here you can check the recorded <code>nvidia-smi</code> output for each sharing method.</div><div class="gpu-modes" role="group" aria-label="GPU capture mode"></div><p role="status"></p><pre tabindex="0" aria-label="Recorded nvidia-smi output"><code></code></pre></div>
+<section id="interpretation"><div id="gpu-captures"><div class="gpu-capture-intro">Here you can check the recorded <code>nvidia-smi</code> output for each sharing method.</div><div class="gpu-modes" role="group" aria-label="GPU capture mode"></div><p role="status"></p><pre tabindex="0" aria-label="Recorded nvidia-smi output"><code></code></pre></div>
 <script src="/js/gpu-captures-bundled.js"></script>
 <p>With MPS, the percentage configured for a client is what changes its resource usage: server A's device probes reported 28 multiprocessors at MPS 25% and 114 at MPS 100%. Those counts reflect the execution-resource limit, not ownership of that many exclusive physical SMs.<a href="#source-12">[12]</a></p></section>
 
