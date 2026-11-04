@@ -9,7 +9,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <p>GPUs tend to be underutilized, so there are these techniques that let you share a GPU between clients.</p><p>This post was inspired by this NVIDIA blog, where they fit various small models and tested the performance: <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">a post about consolidating underutilized GPU workloads</a>.</p><p>In this blog, I ran two instances of Nemotron 32B on one H100 and tested their inference performance.</p>
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
-<nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in k8s with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing</a></li><li><a href="#dra-mps">MPS</a></li><li><a href="#dra-mig">MIG</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
+<nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in k8s with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing configuration</a></li><li><a href="#dra-mps">MPS configuration</a></li><li><a href="#dra-mig">MIG configuration</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
 <style>
 .gpu-article .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:40;pointer-events:none}
 .gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
@@ -59,7 +59,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <p>MIG essentially divides the GPU into smaller pieces. Each GPU has its own set of profiles and can be divided differently, and not all GPUs support MIG. In my case I divided my H100 into two, one slice for each client. This way, the process inside a slice can't access the SMs and memory of the other slice.</p><p>This is the main difference from the other methods: MIG provides dedicated SM resources and isolated memory-system paths, including L2 cache banks, memory controllers and DRAM buses. These hardware resource boundaries give it stronger performance and fault isolation than MPS.<a href="#source-8">[8]</a></p><p>This table summarizes the differences relevant to this experiment; the MPS column refers to active-thread percentages, not static SM partitioning.</p><div class="table-wrap"><table class="concurrency-table"><caption>CUDA concurrency mechanisms (adapted for this configuration) <a href="#source-8">[8]</a></caption><thead><tr><th scope="col">Feature</th><th scope="col">Streams</th><th scope="col">MPS</th><th scope="col">MIG</th></tr></thead><tbody><tr><th scope="row">Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th scope="row">Max Partitions</th><td>Unlimited</td><td>Hardware-dependent</td><td>7</td></tr><tr><th scope="row">SM Performance Isolation</th><td>No</td><td>Resource cap; no dedicated SMs</td><td>Yes</td></tr><tr><th scope="row">Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th scope="row">Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th scope="row">Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table></div>
 </section>
 <section id="dra"><h2>Deploying the lab in k8s with DRA</h2><p>DRA, dynamic resource allocation, made deploying this lab pretty easy.<a href="#source-3">[3]</a> The old way with the device plugin was not that good: you could only set a GPU resource inside the pod, whereas with DRA, like with PVCs, you just ask for what you want, and DRA takes care of setting everything up, finding and giving you the resources.<a href="#source-7">[7]</a></p>
-<h3 id="dra-timeslicing">Time-slicing</h3><p>You just specify the resource claim for a GPU shared through time-slicing, and you can set the interval in it.<a href="#source-6">[6]</a></p>
+<h3 id="dra-timeslicing">Time-slicing configuration</h3><p>You just specify the resource claim for a GPU shared through time-slicing, and you can set the interval in it.<a href="#source-6">[6]</a></p>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -97,7 +97,7 @@ spec:
     resources:
       claims:
       - name: device</code></pre>
-<h3 id="dra-mps">MPS</h3>
+<h3 id="dra-mps">MPS configuration</h3>
 <p>The MPS configuration is the same block with a different strategy and per-client limits:</p>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
@@ -164,7 +164,7 @@ spec:
       - name: device
 # Both pods name the same claim, so they get the same GPU and the same MPS daemon.</code></pre>
 
-<h3 id="dra-mig">MIG</h3>
+<h3 id="dra-mig">MIG configuration</h3>
 <p>The MIG configuration names the MIG device class and picks the profile with a CEL selector:<a href="#source-9">[9]</a></p>
 <pre class="claim"><code># Dynamic MIG: the driver creates a matching partition when the pod is prepared
 apiVersion: resource.k8s.io/v1
