@@ -27,8 +27,8 @@
 .gpu-article figcaption{font-size:14px;color:var(--muted)}
 .gpu-article .mechanism{margin:1.5rem 0}
 .gpu-article .mechanism img,.gpu-article .capture img{display:block;width:100%;height:auto}
-.gpu-article .performance-chart{height:777px;display:block}
-@media(max-width:600px){.gpu-article .performance-chart{height:823px}}
+.gpu-article .performance-chart{height:732px;display:block}
+@media(max-width:600px){.gpu-article .performance-chart{height:778px}}
 .gpu-article .yaml-example,.yaml-dialog{--yaml-surface:var(--article-bg);--yaml-code-surface:var(--bg-shade)}
 html[data-palette]:not([data-palette="white"]):not([data-palette="yellow"]) .yaml-example,html[data-palette]:not([data-palette="white"]):not([data-palette="yellow"]) .yaml-dialog{--yaml-surface:color-mix(in srgb,var(--bg) 55%,#000);--yaml-code-surface:color-mix(in srgb,var(--bg-shade) 55%,#000);--fg:#f5f7fa;--muted:#d2d7df;--link:#fff}
 .gpu-article .yaml-example{margin:20px 0;border:1px solid var(--border);border-radius:6px;background:var(--yaml-surface);overflow:hidden}
