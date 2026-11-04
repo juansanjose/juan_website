@@ -247,7 +247,7 @@ spec:
 <li id="source-17"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/concepts/gpu-allocation/">NVIDIA DRA driver: Static and dynamic MIG discovery and allocation</a></li>
 <li id="source-18"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/virtualization.html">NVIDIA MIG: GPU passthrough and MIG-backed vGPUs</a></li>
 <li id="source-19"><a href="https://github.com/NVIDIA/product-security/blob/main/2026/5821/5821.md">NVIDIA security bulletin: GPU display drivers and vGPU software, May 2026</a></li>
-<li id="source-20"><a href="https://static.sched.com/hosted_files/kccncna2024/fd/KCNA24-DRA-Benchmarking.pdf">Which GPU Sharing Strategy Is Right for You? A Benchmark Study Using DRA</a>, Kevin Klues and Yuan Chen, NVIDIA, KubeCon North America 2024. Inference results: slides 63–68; small matrix-multiplication jobs: slides 70, 73–75. <a href="/gpu-sharing/KubeCon-NA-2024-DRA-Benchmarking.pdf">Saved PDF</a> · <a href="https://www.youtube.com/watch?v=jkcEQE9C338">Recording</a>.</li>
+<li id="source-20"><a href="https://static.sched.com/hosted_files/kccncna2024/fd/KCNA24-DRA-Benchmarking.pdf">Which GPU Sharing Strategy Is Right for You? A Benchmark Study Using DRA</a>, Kevin Klues and Yuan Chen, NVIDIA, KubeCon North America 2024. Inference results: slides 63–68; small matrix-multiplication jobs: slides 70, 73–75. <a href="/gpu-sharing/KubeCon-NA-2024-DRA-Benchmarking.pdf">Saved PDF</a> · <a href="https://www.youtube.com/watch?v=nOgxv_R13Dg">Recording</a>.</li>
 </ol></section>
 </div>
 
