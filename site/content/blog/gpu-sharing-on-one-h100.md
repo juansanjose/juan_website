@@ -111,7 +111,7 @@ spec:
 <h3 id="dra-mps">MPS configuration</h3>
 <p>The MPS configuration is shown here:</p>
 <details class="yaml-example">
-<summary>MPS ResourceClaim</summary>
+<summary>MPS ResourceClaim and Pod</summary>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -134,12 +134,9 @@ spec:
             strategy: MPS
             mpsConfig:
               defaultActiveThreadPercentage: 50
-              defaultPinnedDeviceMemoryLimit: 10Gi</code></pre>
-</details>
-<p>It is important to note that if you want multiple pods to share the same GPU through the same MPS server, they should reference the same <code>ResourceClaim</code>. Using a <code>ResourceClaimTemplate</code> creates a separate <code>ResourceClaim</code> for each pod, which does not guarantee that they will share the same GPU or MPS daemon.<a href="#source-2">[2]</a></p>
-<details class="yaml-example">
-<summary>MPS Pod</summary>
-<pre class="claim"><code>apiVersion: v1
+              defaultPinnedDeviceMemoryLimit: 10Gi
+---
+apiVersion: v1
 kind: Pod
 metadata:
   name: server-a
@@ -156,6 +153,8 @@ spec:
       - name: device
 # Both pods name the same claim, so they get the same GPU and the same MPS daemon.</code></pre>
 </details>
+<p>It is important to note that if you want multiple pods to share the same GPU through the same MPS server, they should reference the same <code>ResourceClaim</code>. Using a <code>ResourceClaimTemplate</code> creates a separate <code>ResourceClaim</code> for each pod, which does not guarantee that they will share the same GPU or MPS daemon.<a href="#source-2">[2]</a></p>
+
 
 <h3 id="dra-mig">MIG configuration</h3>
 <p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically creates a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-3">[3]</a></p>
