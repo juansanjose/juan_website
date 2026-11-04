@@ -45,7 +45,7 @@
       } else if (/^\s-$/.test(tok)) {
         out += ' <span class="y-punct">-</span>';
       } else if (tok === ':' || /^\s?:\s?$/.test(tok)) {
-        out += '<span class="y-punct">:</span>';
+        out += esc(tok).replace(':', '<span class="y-punct">:</span>');
       } else {
         // A key (word followed by a colon) or a bare token.
         out += '<span class="y-key">' + esc(tok) + '</span>';
