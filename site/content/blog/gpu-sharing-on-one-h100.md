@@ -138,32 +138,8 @@ spec:
 </details>
 <p>It is important to note that if you want multiple pods to share the same GPU through the same MPS server, they should reference the same <code>ResourceClaim</code>. Using a <code>ResourceClaimTemplate</code> creates a separate <code>ResourceClaim</code> for each pod, which does not guarantee that they will share the same GPU or MPS daemon.<a href="#source-2">[2]</a></p>
 <details class="yaml-example">
-<summary>MPS shared claim and Pod</summary>
-<pre class="claim"><code>apiVersion: resource.k8s.io/v1
-kind: ResourceClaim
-metadata:
-  name: shared-gpu
-  namespace: dra-lab
-spec:
-  devices:
-    requests:
-    - name: gpu
-      exactly:
-        deviceClassName: gpu.nvidia.com
-    config:
-    - requests: ["gpu"]
-      opaque:
-        driver: gpu.nvidia.com
-        parameters:
-          apiVersion: resource.nvidia.com/v1beta1
-          kind: GpuConfig
-          sharing:
-            strategy: MPS
-            mpsConfig:
-              defaultActiveThreadPercentage: 50
-              defaultPinnedDeviceMemoryLimit: 10Gi
----
-apiVersion: v1
+<summary>MPS Pod</summary>
+<pre class="claim"><code>apiVersion: v1
 kind: Pod
 metadata:
   name: server-a
