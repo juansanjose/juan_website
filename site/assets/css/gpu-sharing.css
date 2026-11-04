@@ -88,5 +88,5 @@ pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg
 
 .yaml-dialog button{background:var(--button-face);color:var(--button-text)}
 
-.gpu-article .console-command{width:fit-content;max-width:100%;margin:1.25rem auto;border:1px solid var(--border);border-radius:6px;background:transparent;font:14px/1.6 "Courier New",Courier,monospace;text-align:left}
+.gpu-article .console-command{width:100%;max-width:100%;margin:1.25rem 0;border:1px solid var(--border);border-radius:0;background:transparent;font:14px/1.6 "Courier New",Courier,monospace;text-align:left}
 .gpu-article .console-command code{font:inherit}
