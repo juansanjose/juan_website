@@ -202,25 +202,6 @@ spec:
       claims:
       - name: device</code></pre>
 </details>
-<p>The equivalent standalone claim is:</p>
-<details class="yaml-example">
-<summary>MIG ResourceClaim</summary>
-<pre class="claim" tabindex="0"><code># Dynamic MIG: the driver creates a matching partition when the pod is prepared
-apiVersion: resource.k8s.io/v1
-kind: ResourceClaim
-metadata:
-  name: mig-partition
-  namespace: dra-lab
-spec:
-  devices:
-    requests:
-    - name: mig
-      exactly:
-        deviceClassName: mig.nvidia.com
-        selectors:
-        - cel:
-            expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
-</details>
 <p>Currently, the NVIDIA DRA driver's <code>MPSSupport</code> and <code>DynamicMIG</code> feature gates are mutually exclusive. This means you cannot use MPS to share a dynamically created MIG slice with this DRA configuration, even though NVIDIA supports running multiple MPS clients within the same MIG slice.<a href="#source-2">[2]</a> <a href="#source-13">[13]</a></p>
 <p>You can also compare how MIG was configured with the traditional device plugin: <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">MIG strategies in Kubernetes</a>. As you can see, with the traditional device plugin, you generally had to define the MIG partitions yourself. With <code>DynamicMIG</code>, the DRA driver can create a partition matching the requested profile on demand.</p>
 </section>
