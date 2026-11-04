@@ -1,7 +1,7 @@
 .gpu-article .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:40;pointer-events:none}
 .gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
 
-.gpu-modes{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 8px}.gpu-modes button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:9px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--chrome-shadow)}.gpu-modes button:hover{border-color:var(--button-face)}.gpu-modes button[aria-pressed=true]{background:var(--button-face);color:var(--button-text)}.gpu-modes button:focus-visible{outline:3px solid #e8a317}#gpu-captures pre{height:auto;max-height:none;overflow:auto}#gpu-captures [role=status]:empty{display:none}
+.gpu-modes{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:14px 0 8px}.gpu-modes button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:9px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--chrome-shadow)}.gpu-modes button:hover{border-color:var(--button-face)}.gpu-modes button[aria-pressed=true]{background:var(--button-face);color:var(--button-text)}.gpu-modes button:focus-visible{outline:3px solid #e8a317}#gpu-captures{text-align:center}#gpu-captures pre{width:fit-content;max-width:100%;height:auto;max-height:none;margin:1rem auto;text-align:left;overflow:auto;font:14px/1.5 "Courier New",Courier,monospace}#gpu-captures pre code{font:inherit}#gpu-captures [role=status]:empty{display:none}
 
 .gpu-article .toc{margin:1.25rem 0}.gpu-article .toc ol{margin:0;padding-left:1.6rem}.gpu-article .toc ol ol{list-style:lower-alpha}
 .gpu-article{--ink:var(--fg);--line:var(--border);--accent:var(--link);color:var(--fg);background:transparent;overflow-wrap:anywhere;font:18px/1.6 Georgia,"Times New Roman",serif}
@@ -87,3 +87,6 @@ pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg
 .gpu-article .table-wrap:focus-visible,.sharing-diagram-scroll:focus-visible,.gpu-article pre:focus-visible{outline:2px solid var(--link);outline-offset:2px}
 
 .yaml-dialog button{background:var(--button-face);color:var(--button-text)}
+
+.gpu-article .console-command{width:fit-content;max-width:100%;margin:1.25rem auto;border:1px solid var(--border);border-radius:6px;background:transparent;font:14px/1.6 "Courier New",Courier,monospace;text-align:left}
+.gpu-article .console-command code{font:inherit}

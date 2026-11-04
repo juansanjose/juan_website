@@ -17,8 +17,8 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 
 <p>This is the simplest of the methods: processes take turns on the GPU. Their memory allocations stay resident while the GPU switches between CUDA contexts, which can add overhead.<a href="#source-6">[6]</a></p>
 <p>You can change the turn length. The presets are <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-6">[6]</a>, which correspond to this setting on the host:</p>
-<pre><code>nvidia-smi compute-policy --set-timeslice 3</code></pre>
-<p class="small"><code>0=DEFAULT</code> · <code>1=SHORT</code> · <code>2=MEDIUM</code> · <code>3=LONG</code></p>
+<pre class="console-command" tabindex="0" aria-label="Time-slice command and option values"><code>nvidia-smi compute-policy --set-timeslice 3
+0=DEFAULT · 1=SHORT · 2=MEDIUM · 3=LONG</code></pre>
 <p>The problem is that if a process decides to be a greedy goblin, it can allocate all the memory for itself, and there is no preemption mechanism to reclaim that memory.</p>
 <figure class="explainer mechanism" aria-labelledby="ts-t">
 <div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="Time-slicing diagram; scroll sideways on smaller screens">
