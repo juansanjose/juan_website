@@ -1,10 +1,20 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>H100: all measured sharing settings</title>
-<style>body{margin:0;font:15px/1.5 system-ui,sans-serif;color:#172b3a}fieldset{border:0;margin:8px;padding:8px;display:flex;flex-wrap:wrap;gap:12px}label{cursor:pointer;padding:6px 10px;background:#eef4f6;border-radius:6px}input{accent-color:#005f73}p{margin:8px 18px;font-size:13px}button{font:inherit;cursor:pointer}input:focus-visible,button:focus-visible{outline:3px solid #138797}.chart-scroll{overflow-x:auto;padding:12px 0 20px}#combined-chart{min-width:740px}</style></head><body>
+<style>body{display:flow-root;margin:0;font:15px/1.5 system-ui,sans-serif;color:#172b3a}fieldset{border:0;margin:8px;padding:8px;display:flex;flex-wrap:wrap;gap:12px}label{cursor:pointer;padding:6px 10px;background:#eef4f6;border-radius:6px}input{accent-color:#005f73}p{margin:8px 18px;font-size:13px}button{font:inherit;cursor:pointer}input:focus-visible,button:focus-visible{outline:3px solid #138797}.chart-scroll{overflow-x:auto;padding:12px 0 8px}#combined-chart{min-width:740px}</style></head><body>
 <fieldset aria-label="Visible series"><label><input type="checkbox" data-group="MPS" checked> MPS</label><label><input type="checkbox" data-group="Time-slicing" checked> Time-slicing</label><label><input type="checkbox" data-group="MIG" checked> MIG</label><label><input type="checkbox" data-group="Solo" checked> Solo</label></fieldset><div class="chart-scroll" tabindex="0" role="region" aria-label="Performance chart; scroll horizontally on small screens"><div style="height:690px; min-width:740px;">                        <div id="combined-chart" class="plotly-graph-div" style="height:100%; width:100%;"></div>                    </div></div>
 <script src="/gpu-sharing/js/combined-bundle.js"></script>
 
 
 
 
+<script>
+// Fit the embed to its content, including wrapped controls on narrow screens.
+if (window.frameElement) {
+  const fit = () => {
+    window.frameElement.style.height = Math.ceil(document.body.getBoundingClientRect().height) + 'px';
+  };
+  new ResizeObserver(fit).observe(document.body);
+  fit();
+}
+</script>
 </body></html>
