@@ -109,7 +109,7 @@ spec:
       - name: device</code></pre>
 </details>
 <h3 id="dra-mps">MPS configuration</h3>
-<p>The MPS configuration is the same block with a different strategy and per-client limits:</p>
+<p>The MPS configuration is shown here:</p>
 <details class="yaml-example">
 <summary>MPS ResourceClaim</summary>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
