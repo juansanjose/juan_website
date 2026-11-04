@@ -6,7 +6,8 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 +++
 
 <div class="gpu-article">
-<p>GPUs tend to be underutilized, so there are these techniques that let you share a GPU between clients.</p><p>This post was inspired by this NVIDIA blog, where they fit various small models and tested the performance: <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">a post about consolidating underutilized GPU workloads</a>.</p><p>In this blog, I ran two instances of Nemotron 32B on one H100 and tested their inference performance.</p>
+<p>A model doesn't always keep a GPU busy on its own. Time-slicing, MPS and MIG let multiple workloads share the same GPU, each with different tradeoffs.</p>
+<p>After reading <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">NVIDIA's post on consolidating underutilized GPU workloads</a>, I wanted to try it myself. I ran two instances of Nemotron 32B on one H100 and compared their inference performance with each sharing method.</p>
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
 <nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in k8s with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing configuration</a></li><li><a href="#dra-mps">MPS configuration</a></li><li><a href="#dra-mig">MIG configuration</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
@@ -23,13 +24,10 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <div class="workshop-copy" id="timeslicing-story"><p>A uses shared compute while B waits, then they swap.</p></div>
 </figure>
 <p>This is the simplest of the methods: processes take turns on the GPU. Their memory stays loaded, but the SM cores keep switching context between the clients, which can add context-switching overhead.<a href="#source-6">[6]</a></p>
-<style>.ts-cmd{margin:16px 0}
-.ts-cmd pre{margin:0;background:#263442;color:#fff;border-radius:8px;padding:14px 16px;overflow:auto;font-size:13.5px;line-height:1.5}
-.ts-cmd pre code{background:none;color:inherit;padding:0;white-space:pre}
-.ts-cmd .note{display:block;margin-top:7px;color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}</style>
 <p>You can change the turn length. The interval is <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-6">[6]</a>, the same switch as this one on the host:</p>
-<div class="ts-cmd"><pre><code>nvidia-smi compute-policy --set-timeslice 3</code></pre><span class="note">0 = DEFAULT · 1 = SHORT · 2 = MEDIUM · 3 = LONG</span></div>
-<p>Short is about 1 ms, Default about 3 ms and Long about 1 second.</p><p>The problem is that if a process decides to be a greedy goblin, it can allocate all the memory for itself, and there is no preemption mechanism to reclaim that memory.</p>
+<pre><code>nvidia-smi compute-policy --set-timeslice 3</code></pre>
+<p class="small"><code>0=DEFAULT</code> · <code>1=SHORT</code> · <code>2=MEDIUM</code> · <code>3=LONG</code></p>
+<p>The problem is that if a process decides to be a greedy goblin, it can allocate all the memory for itself, and there is no preemption mechanism to reclaim that memory.</p>
 </section>
 <section id="mps"><h2>MPS</h2>
 <figure class="explainer workshop" aria-labelledby="mps-t">
@@ -39,7 +37,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 
 <figcaption>Clients submit directly through their allocated connections. The server coordinates resources; it does not forward each launch.</figcaption>
 </figure>
-<p>MPS lets kernels from different CUDA processes execute concurrently on the same GPU. This can improve utilization when one process alone doesn't keep the GPU busy.</p>
+<p>MPS lets kernels from different CUDA processes execute concurrently on the same GPU.</p>
 <p>There are three components: the control daemon (<code>nvidia-cuda-mps-control</code>), the server (<code>nvidia-cuda-mps-server</code>), and client support inside the CUDA driver (<code>libcuda.so</code>). The daemon starts and stops servers and coordinates client connections. NVIDIA describes the server as owning the shared GPU scheduling resources; the driver contains the client functionality that uses them.<a href="#source-1">[1]</a></p>
 <p>Each client has its own CUDA context and GPU virtual address space. A context is the application's GPU execution environment: the state and resources it needs to manage memory and launch work.<a href="#source-11">[11]</a></p>
 <p>What are those shared scheduling resources? CUDA uses connections to GPU work queues for compute and copy operations. Under MPS:</p>
