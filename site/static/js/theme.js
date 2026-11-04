@@ -77,16 +77,17 @@
     var rgb = hexToRgb(palette.bg);
     var blue = name === 'blue';
     var dark = name === 'red' || name === 'orange' || name === 'green' || name === 'blue' || name === 'purple' || name === 'black';
+    var lightText = dark && name !== 'orange';
     var priorBlue = root.getAttribute('data-theme') === 'dark';
 
     root.setAttribute('data-theme', blue ? 'dark' : 'light');
     root.setAttribute('data-palette', name);
     root.style.setProperty('--bg', palette.bg);
-    root.style.setProperty('--bg-shade', mix(rgb, dark ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 }, 0.12));
-    root.style.setProperty('--fg', dark ? '#f5f7fa' : '#202020');
-    root.style.setProperty('--muted', dark ? '#d2d7df' : '#555555');
-    root.style.setProperty('--link', dark ? '#ffffff' : '#0000cc');
-    root.style.setProperty('--link-hover', dark ? '#fff0b8' : '#000066');
+    root.style.setProperty('--bg-shade', mix(rgb, name === 'orange' ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 }, 0.12));
+    root.style.setProperty('--fg', lightText ? '#f5f7fa' : '#202020');
+    root.style.setProperty('--muted', lightText ? '#f5f7fa' : name === 'orange' ? '#202020' : '#555555');
+    root.style.setProperty('--link', lightText ? '#ffffff' : name === 'orange' ? '#171717' : '#0000cc');
+    root.style.setProperty('--link-hover', lightText ? '#ffffff' : name === 'orange' ? '#000000' : '#000066');
     root.style.setProperty('--border', mix(rgb, dark ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 }, 0.35));
     root.style.setProperty('--accent', palette.button);
     root.style.setProperty('--button-face', palette.button);

@@ -11,16 +11,12 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <p>After reading <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">NVIDIA's post on consolidating underutilized GPU workloads</a>, I wanted to try it myself. I ran two instances of Nemotron 32B on one H100 and compared their inference performance with each sharing method.</p>
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
-<nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in k8s with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing configuration</a></li><li><a href="#dra-mps">MPS configuration</a></li><li><a href="#dra-mig">MIG configuration</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
-<style>
-.gpu-article .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:40;pointer-events:none}
-.gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
-</style>
+<nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in Kubernetes with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing configuration</a></li><li><a href="#dra-mps">MPS configuration</a></li><li><a href="#dra-mig">MIG configuration</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
 
 <section id="timeslicing"><h2>Time-slicing</h2>
 
-<p>This is the simplest of the methods: processes take turns on the GPU. Their memory stays loaded, but the SM cores keep switching context between the clients, which can add context-switching overhead.<a href="#source-6">[6]</a></p>
-<p>You can change the turn length. The interval is <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-6">[6]</a>, the same switch as this one on the host:</p>
+<p>This is the simplest of the methods: processes take turns on the GPU. Their memory allocations stay resident while the GPU switches between CUDA contexts, which can add overhead.<a href="#source-6">[6]</a></p>
+<p>You can change the turn length. The presets are <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-6">[6]</a>, which correspond to this setting on the host:</p>
 <pre><code>nvidia-smi compute-policy --set-timeslice 3</code></pre>
 <p class="small"><code>0=DEFAULT</code> · <code>1=SHORT</code> · <code>2=MEDIUM</code> · <code>3=LONG</code></p>
 <p>The problem is that if a process decides to be a greedy goblin, it can allocate all the memory for itself, and there is no preemption mechanism to reclaim that memory.</p>
@@ -51,28 +47,31 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 </section>
 <section id="mig"><h2>MIG</h2>
 
-<p>MIG essentially divides the GPU into smaller pieces. Each GPU has its own set of profiles and can be divided differently, and not all GPUs support MIG. In my case I divided my H100 into two, one slice for each client.</p>
+<p>MIG essentially divides the GPU into smaller pieces. The available profiles depend on the GPU model, and not all GPUs support MIG. In my case, I created two MIG instances on my H100, one for each client.</p>
 <figure class="explainer mechanism">
 <div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="MIG diagram; scroll sideways on smaller screens">
 <a href="/gpu-sharing/images/mig-resource-paths.svg"><img class="sharing-diagram" src="/gpu-sharing/images/mig-resource-paths.svg" width="1000" height="655" loading="lazy" alt="Two 3g.40gb GPU instances with separate paths through the system pipe, crossbar ports, 46 SMs, L2 cache, memory controllers and 40 GB HBM."></a>
 </div>
 <figcaption>Resource paths inside the two <code>3g.40gb</code> instances used here. Each row has dedicated SMs and isolated crossbar ports, L2 cache banks, memory controllers and HBM.<a href="#source-14">[14]</a> <span class="sharing-diagram-hint">Scroll sideways for the full diagram.</span></figcaption>
 </figure>
-<p>The main difference from the other methods is that MIG provides dedicated SM resources and isolated memory-system paths, including L2 cache banks, memory controllers, and DRAM buses. This provides a higher degree of isolation between CUDA processes and, as NVIDIA describes it, a defined level of Quality of Service (QoS) for compute and memory bandwidth.<a href="#source-14">[14]</a></p><p>This table I found summarizes the main differences between the sharing methods.</p><div class="table-wrap"><table class="concurrency-table"><caption>CUDA concurrency mechanisms (adapted for this configuration) <a href="#source-8">[8]</a></caption><thead><tr><th scope="col">Feature</th><th scope="col">Streams</th><th scope="col">MPS</th><th scope="col">MIG</th></tr></thead><tbody><tr><th scope="row">Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th scope="row">Max Partitions</th><td>Unlimited</td><td>Hardware-dependent</td><td>7</td></tr><tr><th scope="row">SM Performance Isolation</th><td>No</td><td>Resource cap; no dedicated SMs</td><td>Yes</td></tr><tr><th scope="row">Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th scope="row">Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th scope="row">Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table></div>
+<p>The main difference from the other methods is that MIG provides dedicated SM resources and isolated memory-system paths, including L2 cache banks, memory controllers, and DRAM buses. This provides a higher degree of isolation between CUDA processes and, as NVIDIA describes it, a defined level of quality of service (QoS) for compute and memory bandwidth.<a href="#source-14">[14]</a></p><p>This table from NVIDIA summarizes the main differences between the sharing methods.</p><p class="small table-scroll-hint">Scroll sideways to see all columns.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="CUDA concurrency comparison; scroll horizontally on smaller screens"><table class="concurrency-table"><caption>CUDA concurrency mechanisms (adapted for this configuration) <a href="#source-8">[8]</a></caption><thead><tr><th scope="col">Feature</th><th scope="col">Streams</th><th scope="col">MPS</th><th scope="col">MIG</th></tr></thead><tbody><tr><th scope="row">Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th scope="row">Max Partitions</th><td>Unlimited</td><td>Hardware-dependent</td><td>7</td></tr><tr><th scope="row">SM Performance Isolation</th><td>No</td><td>Resource cap; no dedicated SMs</td><td>Yes</td></tr><tr><th scope="row">Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th scope="row">Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th scope="row">Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table></div>
 
 </section>
-<section id="dra"><h2>Deploying the lab in k8s with DRA</h2><p>DRA (Dynamic Resource Allocation) made deploying this lab pretty easy.<a href="#source-3">[3]</a> With the traditional device plugin, you could request GPU resources in your Pod, but configurations such as time-slicing and MIG had to be managed separately.<a href="#source-7">[7]</a> With DRA, it's more like using PVCs: you create a ResourceClaim describing the GPU and configuration you want, and Kubernetes, together with the DRA driver, takes care of finding, allocating, and preparing the resources for your Pod.<a href="#source-3">[3]</a></p>
-<figure class="explainer mechanism">
+<section id="dra"><h2>Deploying the lab in Kubernetes with DRA</h2><p>DRA (Dynamic Resource Allocation) made deploying this lab pretty easy.<a href="#source-3">[3]</a> With the traditional device plugin, you could request GPU resources in your Pod, but configurations such as time-slicing and MIG had to be managed separately.<a href="#source-7">[7]</a> With DRA, it's more like using PVCs: you create a ResourceClaim describing the GPU and configuration you want, and Kubernetes, together with the DRA driver, takes care of finding, allocating, and preparing the resources for your Pod.<a href="#source-3">[3]</a></p>
+<p>The GPU Operator can install and manage the NVIDIA DRA driver; the driver handles GPU discovery and preparation.<a href="#source-19">[19]</a> The driver advertises devices and their attributes in <code>ResourceSlices</code>. A <code>DeviceClass</code> defines which devices a claim can select. The Kubernetes scheduler matches the <code>ResourceClaim</code> against that inventory and chooses a node. On that node, kubelet asks the DRA driver's plugin to prepare the allocated GPU before the container starts.<a href="#source-3">[3]</a> <a href="#source-18">[18]</a></p>
+<figure class="explainer mechanism dra-flow">
 <div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="DRA user-flow diagram; scroll sideways on smaller screens">
 <a href="/gpu-sharing/images/dra-user-flow.svg"><img class="sharing-diagram" src="/gpu-sharing/images/dra-user-flow.svg" width="1164" height="283" loading="lazy" alt="DRA workflow: install drivers, create DeviceClasses, choose a ResourceClaim for shared devices or a ResourceClaimTemplate for separate devices, attach the claim to a Pod, and deploy the workload."></a>
 </div>
-<figcaption>DRA user flow. Source: Google Cloud.<a href="#source-17">[17]</a> <span class="sharing-diagram-hint">Scroll sideways for the full diagram.</span></figcaption>
+<figcaption>DRA setup and claim workflow. Source: Google Cloud.<a href="#source-17">[17]</a> <span class="sharing-diagram-hint">Scroll sideways for the full diagram.</span></figcaption>
 </figure>
 
-<h3 id="dra-timeslicing">Time-slicing configuration</h3><p>You just need to create a ResourceClaim requesting a GPU shared through time-slicing, where you can also configure the time-slicing interval.<a href="#source-6">[6]</a></p>
+<p>These are minimal allocation examples. Replace <code>&lt;your-image&gt;</code> with your inference server image. The sharing-setting links in the results table open the recorded run manifests.</p>
+<h3 id="dra-timeslicing">Time-slicing configuration</h3><p>Create a <code>ResourceClaim</code> requesting a GPU shared through time-slicing. You can also configure the interval in that claim.<a href="#source-6">[6]</a></p>
 <details class="yaml-example">
 <summary>Time-slicing ResourceClaim</summary>
-<pre class="claim"><code>apiVersion: resource.k8s.io/v1
+<pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
   name: shared-gpu
@@ -97,7 +96,7 @@ spec:
 </details>
 <details class="yaml-example">
 <summary>Time-slicing Pod</summary>
-<pre class="claim"><code>apiVersion: v1
+<pre class="claim" tabindex="0"><code>apiVersion: v1
 kind: Pod
 metadata:
   name: server
@@ -114,11 +113,11 @@ spec:
       - name: device</code></pre>
 </details>
 <h3 id="dra-mps">MPS configuration</h3>
-<p>The MPS configuration is shown here:</p>
+<p>To share one GPU through the same MPS server, both Pods must reference the same <code>ResourceClaim</code>. A <code>ResourceClaimTemplate</code> creates a separate claim for each Pod, so using the same template does not guarantee the same GPU or MPS daemon.<a href="#source-2">[2]</a></p>
 <div class="yaml-pair">
 <details class="yaml-example">
 <summary>MPS ResourceClaim</summary>
-<pre class="claim"><code>apiVersion: resource.k8s.io/v1
+<pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
   name: shared-gpu
@@ -144,7 +143,7 @@ spec:
 </details>
 <details class="yaml-example">
 <summary>MPS Pod</summary>
-<pre class="claim"><code>apiVersion: v1
+<pre class="claim" tabindex="0"><code>apiVersion: v1
 kind: Pod
 metadata:
   name: server-a
@@ -162,15 +161,14 @@ spec:
 # Both pods name the same claim, so they get the same GPU and the same MPS daemon.</code></pre>
 </details>
 </div>
-<p>It is important to note that if you want multiple pods to share the same GPU through the same MPS server, they should reference the same <code>ResourceClaim</code>. Using a <code>ResourceClaimTemplate</code> creates a separate <code>ResourceClaim</code> for each pod, which does not guarantee that they will share the same GPU or MPS daemon.<a href="#source-2">[2]</a></p>
 
 
 <h3 id="dra-mig">MIG configuration</h3>
-<p>DRA supports <code>DynamicMIG</code>, so you don't have to partition the GPU yourself. The DRA driver can create MIG partitions automatically based on the requested profile. If you decide to create the partitions manually, you can still request them through DRA, as the driver discovers existing MIG instances and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.<a href="#source-18">[18]</a></p>
-<p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically creates a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-3">[3]</a></p>
+<p>DRA supports <code>DynamicMIG</code>, so you don't have to partition the GPU yourself. The DRA driver can create MIG partitions automatically based on the requested profile. If you decide to create the partitions manually, you can still request them through DRA, as the driver discovers existing MIG instances at startup and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.<a href="#source-18">[18]</a></p>
+<p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically created a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-3">[3]</a></p>
 <details class="yaml-example">
 <summary>MIG claim template and Pod</summary>
-<pre class="claim"><code># Template form: Kubernetes creates one ResourceClaim per pod from it.
+<pre class="claim" tabindex="0"><code># Template form: Kubernetes creates one ResourceClaim per pod from it.
 # The same manifest works in static and dynamic MIG mode; the difference is
 # only who created the partition (an administrator, or the driver on demand).
 apiVersion: resource.k8s.io/v1
@@ -208,7 +206,7 @@ spec:
 <p>The equivalent standalone claim is:</p>
 <details class="yaml-example">
 <summary>MIG ResourceClaim</summary>
-<pre class="claim"><code># Dynamic MIG: the driver creates a matching partition when the pod is prepared
+<pre class="claim" tabindex="0"><code># Dynamic MIG: the driver creates a matching partition when the pod is prepared
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -229,12 +227,12 @@ spec:
 </section>
 <section id="original"><h2>Inference performance</h2>
 <p>I used the <a href="https://github.com/SemiAnalysisAI/InferenceX">InferenceX repo</a> and measured output tokens/s and time to first token (TTFT). At five requests per server, MPS 100% had the highest measured throughput: 626 tokens/s, about 25.7% above time-slicing Default at 498. MIG reached 594 tokens/s, about 19.3% above Default; MPS 100% was about 5.4% above MIG. MPS 50% was also close at 611 tokens/s.</p><p>Time-slicing Short and Long were slower in these runs and drew less power in the <a href="#gpu-captures">recorded nvidia-smi snapshots</a>: 182 W and 186 W, respectively, versus 338 W for Default. I haven't established why they were slower. These are comparisons for this workload and configuration. The table reports medians without variability, so I can't claim statistical significance. The chart also includes a model-alone run, but that single-server workload isn't a like-for-like dedicated-GPU baseline for these two-server totals.</p>
-<div class="table-wrap"><table><caption>1,024 input / 1,024 output tokens. Medians of three repeats at five requests per server.</caption><thead><tr><th>Sharing setting</th><th>Total output (tokens/s)</th><th>p95 first-token wait (ms)</th></tr></thead><tbody><tr><th>Time-slicing Default</th><td>498</td><td>471</td></tr><tr><th>Time-slicing Short</th><td>385</td><td>1,387</td></tr><tr><th>Time-slicing Long</th><td>413</td><td>1,400</td></tr><tr><th>MPS 25%</th><td>513</td><td>516</td></tr><tr><th>MPS 50%</th><td>611</td><td>392</td></tr><tr><th>MPS 100%</th><td>626</td><td>376</td></tr><tr><th>MIG: two 3g.40gb slices</th><td>594</td><td>394</td></tr></tbody></table></div>
+<p class="small table-scroll-hint">Scroll sideways to see all columns.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Inference results; scroll horizontally on smaller screens"><table class="performance-table"><caption>1,024 input / 1,024 output tokens. Medians of three repeats at five requests per server.</caption><thead><tr><th scope="col">Sharing setting</th><th scope="col">Total output (tokens/s)</th><th scope="col">p95 first-token wait (ms)</th></tr></thead><tbody><tr><th scope="row">Time-slicing Default</th><td>498</td><td>471</td></tr><tr><th scope="row">Time-slicing Short</th><td>385</td><td>1,387</td></tr><tr><th scope="row">Time-slicing Long</th><td>413</td><td>1,400</td></tr><tr><th scope="row">MPS 25%</th><td>513</td><td>516</td></tr><tr><th scope="row">MPS 50%</th><td>611</td><td>392</td></tr><tr><th scope="row">MPS 100%</th><td>626</td><td>376</td></tr><tr><th scope="row">MIG: two 3g.40gb slices</th><td>594</td><td>394</td></tr></tbody></table></div>
 
 
 <iframe class="performance-chart" title="All H100 sharing settings and model alone, with family visibility toggles" src="/gpu-sharing/combined.html" loading="lazy"></iframe></section>
-<section id="interpretation"><div id="gpu-captures"><div>Here you can check the SMI output that each method gives for the GPU.</div><div class="gpu-modes" role="group" aria-label="GPU capture mode"></div><p role="status"></p><pre tabindex="0" aria-label="Recorded nvidia-smi output"><code></code></pre></div>
-<style>.gpu-modes{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 8px}.gpu-modes button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:9px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--chrome-shadow)}.gpu-modes button:hover{border-color:var(--button-face)}.gpu-modes button[aria-pressed=true]{background:var(--button-face);color:var(--button-text)}.gpu-modes button:focus-visible{outline:3px solid #e8a317}#gpu-captures pre{height:auto;max-height:none;overflow:auto}#gpu-captures [role=status]:empty{display:none}</style>
+<section id="interpretation"><div id="gpu-captures"><div>Here you can check the recorded <code>nvidia-smi</code> output for each sharing method.</div><div class="gpu-modes" role="group" aria-label="GPU capture mode"></div><p role="status"></p><pre tabindex="0" aria-label="Recorded nvidia-smi output"><code></code></pre></div>
 <script src="/js/gpu-captures-bundled.js"></script>
 <p>With MPS, the percentage configured for a client is what changes its resource usage: server A's device probes reported 28 multiprocessors at MPS 25% and 114 at MPS 100%. Those counts reflect the execution-resource limit, not ownership of that many exclusive physical SMs.<a href="#source-12">[12]</a></p></section>
 
@@ -267,85 +265,10 @@ spec:
 <li id="source-16"><a href="https://docs.nvidia.com/deploy/mps/latest/mpsv3-memory-partitioning.html">NVIDIA MPS v3: Memory partitioning, hard/soft limits and pressure handling</a></li>
 <li id="source-17"><a href="https://docs.cloud.google.com/static/kubernetes-engine/images/dra-user-flow.svg">Google Cloud: DRA user-flow diagram</a></li>
 <li id="source-18"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/concepts/gpu-allocation/">NVIDIA DRA driver: Static and dynamic MIG discovery and allocation</a></li>
+<li id="source-19"><a href="https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/dra-intro-install.html">NVIDIA GPU Operator: Installing and managing the DRA driver</a></li>
 </ol></section>
 </div>
 
-<style>
-.gpu-article .toc{margin:1.25rem 0}.gpu-article .toc ol{margin:0;padding-left:1.6rem}.gpu-article .toc ol ol{list-style:lower-alpha}
-.gpu-article{--ink:var(--fg);--line:var(--border);--accent:var(--link);color:var(--fg);background:transparent;font:18px/1.6 Georgia,"Times New Roman",serif}
-.gpu-article h2{font-size:1.3rem;margin:0 0 1.25rem}
-.gpu-article section{margin:2.5rem 0}
-.gpu-article a{color:var(--accent)}
-.gpu-article .small{font-size:14px;color:var(--muted)}
-.gpu-article .table-wrap{overflow:auto}
-.gpu-article table{border-collapse:collapse;width:100%;margin:1.25rem 0}
-.gpu-article th,.gpu-article td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
-.gpu-article caption{text-align:left;font-size:15px}
-.gpu-article .concurrency-table{min-width:660px;font-size:16px;line-height:1.5}
-.gpu-article .concurrency-table th,.gpu-article .concurrency-table td{border:1px solid var(--line);padding:12px 16px;vertical-align:top}
-.gpu-article .concurrency-table thead th{background:var(--bg-shade)}
-.gpu-article .concurrency-table th[scope=row]{width:29%}
-.gpu-article .concurrency-table caption{caption-side:bottom;padding:12px 0 0}
-.gpu-article iframe{width:100%;border:0}
-.gpu-article a:focus-visible{outline:3px solid var(--accent)}
-.gpu-article pre{overflow:auto;padding:16px;background:var(--bg-shade);font:13px/1.5 monospace}
-.gpu-article figure{margin:1.25rem 0}
-.gpu-article figcaption{font-size:14px;color:var(--muted)}
-.gpu-article .mechanism{max-width:841px;margin:24px auto}
-.gpu-article .mechanism img,.gpu-article .capture img{display:block;width:100%;height:auto}
-.gpu-article .performance-chart{height:850px;display:block}
-@media(max-width:600px){.gpu-article .performance-chart{height:900px}}
-.gpu-article .yaml-example,.yaml-dialog{--yaml-surface:var(--article-bg);--yaml-code-surface:var(--bg-shade)}
-html[data-palette]:not([data-palette="white"]):not([data-palette="yellow"]) .yaml-example,html[data-palette]:not([data-palette="white"]):not([data-palette="yellow"]) .yaml-dialog{--yaml-surface:color-mix(in srgb,var(--bg) 55%,#000);--yaml-code-surface:color-mix(in srgb,var(--bg-shade) 55%,#000)}
-.gpu-article .yaml-example{margin:20px 0;border:1px solid var(--border);border-radius:6px;background:var(--yaml-surface);overflow:hidden}
-.gpu-article .yaml-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start;margin:20px 0}
-.gpu-article .yaml-pair .yaml-example{margin:0;min-width:0}
-@media(max-width:800px){.gpu-article .yaml-pair{grid-template-columns:1fr}}
-.gpu-article .yaml-example summary{padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer;color:var(--fg)}
-.gpu-article .yaml-example summary::marker{color:var(--link)}
-.gpu-article .yaml-example summary:focus-visible{outline:2px solid var(--link);outline-offset:-4px}
-.gpu-article .yaml-example[open] summary{border-bottom:1px solid var(--border)}
-.gpu-article pre.claim{margin:0;background:var(--yaml-code-surface);color:var(--fg);border-radius:0;padding:18px 20px;overflow:auto;font-size:14px;line-height:1.55}
-pre.claim code{background:none;color:inherit;padding:0;white-space:pre}
-pre.claim code .y-key,pre.claim code .y-known{color:var(--link);font-weight:700}
-pre.claim code .y-punct,pre.claim code .y-comment{color:color-mix(in srgb,var(--muted) 75%,var(--fg))}
-pre.claim code .y-comment{font-style:italic}
-pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg)}
-
-/* Original, static sharing panels. Colors identify clients, not SMs. */
-.explainer{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#f7fafb;margin:24px 0;box-shadow:0 3px 0 #eaf0f2}
-.panel-kicker{padding:14px 22px;border-bottom:1px solid #d5e1e5;color:#38616b;font:650 12px/1.5 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;background:#edf4f5}
-.panel-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:20px;align-items:center;padding:22px 18px}
-.explainer svg{width:100%;height:auto;display:block;overflow:visible;font:16px system-ui,sans-serif;color:#172b3a}
-.explainer svg text{fill:#172b3a}.explainer svg text.on-dark{fill:#fff}.explainer .strong{font-weight:650}.explainer .diagram-label{font-size:17px;font-weight:650}.explainer .diagram-small{font-size:13px;fill:#536575}
-.explainer .job-a{fill:#f5d4de;stroke:#f46b68;stroke-width:1.4}.explainer .job-b{fill:#e3efc7;stroke:#a8d66c;stroke-width:1.4}.explainer .device{fill:#fff;stroke:#a0b6bf;stroke-width:1.4}.explainer .unused{fill:#edf0f2;stroke:#9aaeb8;stroke-dasharray:4 3}.explainer .inner{fill:#ffffffa8;stroke:#ffffff;stroke-width:1}.explainer .wire{fill:none;stroke:#657f8d;stroke-width:1.6}.explainer .dashed{stroke-dasharray:4 4}.explainer .partition{stroke:#647e8d;stroke-width:3}
-.panel-copy h3{font-size:20px;line-height:1.3;margin:0 0 10px}.panel-copy p{font-size:16px;line-height:1.55;margin:0 0 16px}.panel-copy h3:not(:first-child){margin-top:20px}.panel-rule{padding:12px 14px;border-left:3px solid #55848d;background:#eaf1f3;font-size:14px;font-weight:650;line-height:1.6}.panel-rule span{font-weight:400}
-.explainer figcaption{padding:14px 22px;background:#fff;color:#536575;border-top:1px solid #d5e1e5;font-size:13px;line-height:1.55}.explainer figcaption a{margin-left:3px}
-.dra-inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:22px 22px 0}.dra-object{border:1px solid #b7cbd3;border-radius:10px;background:white;padding:15px}.object-role{display:block;font-size:12px;color:#536575;margin-bottom:7px}.dra-object h3{font-size:17px;margin:0 0 6px;overflow-wrap:anywhere}.dra-object p,.claim-map p{font-size:14px;line-height:1.5;margin:0}.flow-arrow{text-align:center;font-size:24px;color:#657f8d;line-height:1.3;margin:7px 0}.dra-match{margin:0 22px;padding:13px 18px;border:1px solid #8cabb5;border-radius:10px;background:#e7f0f2;text-align:center;font-size:16px}.dra-match span{display:block;font-size:14px;margin-top:4px}.dra-outputs{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 22px 22px}.claim-map{text-align:center;border:1px solid #c8d8de;border-radius:10px;padding:14px;background:#fff}.claim-map .object-role{margin-bottom:12px}.pod-pair{display:flex;justify-content:space-around;gap:12px}.pod-a,.pod-b{display:inline-block;border:1px solid #f46b68;background:#f5d4de;padding:5px 20px;border-radius:6px;font-size:15px}.pod-b{border-color:#a8d66c;background:#e3efc7}.claim-arrow{display:block;line-height:1.6;color:#657f8d}.join-line{line-height:1.6;color:#657f8d}.claim-map code{font-size:14px;background:#eef3f5;padding:3px 8px;border-radius:4px}.claim-map p{margin-top:13px}
-@media(max-width:650px){.panel-grid{grid-template-columns:1fr;gap:20px;padding:18px 14px}.explainer svg{max-width:430px;margin:0 auto}.panel-copy{padding:0 5px}.panel-kicker{padding:12px 18px}.explainer figcaption{padding:14px 18px}.dra-inputs{grid-template-columns:1fr;padding:18px 18px 0;gap:10px}.dra-object{padding:13px 15px}.dra-object p{margin:0}.dra-match{margin:0 18px}.dra-outputs{grid-template-columns:1fr;padding:0 18px 18px}.explainer{border-radius:12px}}
-@media(max-width:420px){main{padding-left:16px;padding-right:16px}.explainer .diagram-small{font-size:14px}}
-@media(max-width:600px){#review-toggle{position:static;display:block;margin:0 16px 20px auto;box-shadow:none}}
-.workshop-media{background:#f7fafb;position:relative}
-.workshop-media > svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
-.workshop-copy{padding:16px 22px;background:#fff;color:#172b3a}
-.workshop-copy p{font-size:16px;line-height:1.55;margin:0 0 10px}
-.workshop-copy p:last-child{margin-bottom:0}
-/* Shared diagrams follow the MPS reference palette and typography. */
-.sharing-diagram-scroll{overflow-x:auto;background:#f7fafb}
-.sharing-diagram-hint{display:none}
-@media(max-width:750px){.sharing-diagram-hint{display:block;margin-top:.5em}}
-.gpu-article .sharing-diagram{width:100%;min-width:720px;max-width:none;margin:0;overflow:hidden}
-.ts-box,.ts-slot-a,.ts-slot-b{transition:fill 1.2s ease,stroke 1.2s ease,opacity 1.2s ease}
-.ts-state-b{display:none}
-.ts-slot-b{opacity:.4}
-.ts-diagram.b-active .ts-state-a{display:none}
-.ts-diagram.b-active .ts-state-b{display:inline}
-.ts-diagram.b-active .ts-slot-a{opacity:.4}
-.ts-diagram.b-active .ts-slot-b{opacity:1}
-.ts-diagram.b-active .ts-box{fill:#e3efc7;stroke:#8fbd60}
-@media(prefers-reduced-motion:reduce){.ts-box,.ts-slot-a,.ts-slot-b{transition:none}}
-.yaml-dialog{background:var(--yaml-surface);color:var(--fg);width:min(860px,calc(100% - 24px));max-height:90vh;border:1px solid var(--border);border-radius:6px;padding:20px;font:15px/1.5 system-ui,sans-serif;overflow:auto}.yaml-dialog::backdrop{background:#020617b8}.yaml-dialog header{display:flex;justify-content:space-between;align-items:center;gap:16px}.yaml-dialog h2{font-size:21px;margin:0}.yaml-dialog button,.yaml-dialog select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px}.yaml-dialog button{cursor:pointer}.yaml-selectors{display:flex;gap:16px;margin:16px 0;flex-wrap:wrap}.yaml-selectors label{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px}.yaml-selectors select{width:100%}.yaml-dialog .yaml-origin{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.yaml-dialog pre{max-height:48vh;overflow:auto;padding:14px;background:var(--yaml-code-surface);font:13px/1.5 monospace;text-align:left}.yaml-dialog code{color:var(--fg);font:inherit}.yaml-dialog a{color:var(--link)}.yaml-dialog .yaml-status{color:var(--muted);font-size:13px}.yaml-dialog .yaml-status:empty{display:none}.yaml-setting{font:inherit;font-weight:inherit;background:none;border:0;padding:0;color:var(--link);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px;cursor:pointer;text-align:left}.yaml-setting:hover{text-decoration-style:solid}.yaml-node{cursor:pointer}.yaml-node:hover rect,.yaml-node:focus rect{stroke:#fbbf24;stroke-width:3}.yaml-node:focus{outline:none}.yaml-dialog :focus-visible,.yaml-setting:focus-visible{outline:3px solid #008399;outline-offset:2px}
-</style>
 
 <script src="/js/yaml-highlight.js"></script>
 <script src="/js/workshop-video.js"></script>

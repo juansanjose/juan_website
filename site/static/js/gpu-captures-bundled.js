@@ -14,7 +14,7 @@ const GPU_CAPTURE_TEXT = {"Default": "Sun Oct 25 18:29:57 2026       \n+--------
     ['Solo', 'inference-extension-20261025/inference-solo', 'A']
   ];
   const controls = root.querySelector('.gpu-modes');
-  const output = root.querySelector('code');
+  const output = root.querySelector('pre code');
   const source = root.querySelector('.gpu-source');
   const status = root.querySelector('[role=status]');
 

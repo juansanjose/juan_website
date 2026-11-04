@@ -8,6 +8,10 @@
 
   {{ $style := resources.Get "css/retro.css" | minify }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  {{ if and .File (eq .File.TranslationBaseName "gpu-sharing-on-one-h100") }}
+    {{ $articleStyle := resources.Get "css/gpu-sharing.css" | minify }}
+    <link rel="stylesheet" href="{{ $articleStyle.RelPermalink }}">
+  {{ end }}
   <link rel="prefetch" href="{{ site.BaseURL }}media/blue-alien-cropped.webp" as="image" type="image/webp">
 
   {{ with .OutputFormats.Get "RSS" }}

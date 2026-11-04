@@ -14,8 +14,9 @@
   const dialog = document.createElement('dialog');
   dialog.className = 'yaml-dialog';
   dialog.setAttribute('aria-label', 'Resource YAML');
-  dialog.innerHTML = '<p class="yaml-status" role="status"></p><div class="yaml-content"></div>';
+  dialog.innerHTML = '<header><h2>Resource YAML</h2><button type="button">Close</button></header><p class="yaml-status" role="status"></p><div class="yaml-content"></div>';
   document.body.append(dialog);
+  dialog.querySelector('button').addEventListener('click', () => dialog.close());
   const content = dialog.querySelector('.yaml-content');
   const status = dialog.querySelector('.yaml-status');
 

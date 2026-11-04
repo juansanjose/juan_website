@@ -5,7 +5,8 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const decode = text => text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const article = fs.readFileSync(path.join(root, 'site/content/blog/gpu-sharing-on-one-h100.md'), 'utf8');
-const examples = [...article.matchAll(/<pre class="claim"><code>([\s\S]*?)<\/code><\/pre>/g)].map(match => decode(match[1]));
+const examples = [...article.matchAll(/<pre class="claim"[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)].map(match => decode(match[1]));
+assert.equal(examples.length, 6, 'All six article YAML examples must be tested');
 examples.push('key : value\n  - name: gpu # comment\nquoted: "a: b"\nimage: <your-image>\nlimit: 50\nenabled: true');
 const elements = examples.map(textContent => ({textContent, innerHTML: ''}));
 vm.runInNewContext(fs.readFileSync(path.join(root, 'site/static/js/yaml-highlight.js'), 'utf8'), {

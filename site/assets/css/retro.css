@@ -114,6 +114,7 @@ body {
 
 main.container {
   background: var(--article-bg);
+  border: 1px solid transparent;
 }
 
 /* Layout is palette-independent: only the colours change with the palette, so
@@ -273,7 +274,8 @@ a:hover {
 .visitor-counter {
   display: inline-grid;
   grid-template-columns: auto;
-  min-width: 4.8rem;
+  width: 6rem;
+  flex: 0 0 6rem;
   padding: 0.2rem 0.4rem;
   border: 1px solid var(--border);
   border-radius: 5px;
@@ -498,6 +500,8 @@ pre code {
 }
 
 .comments {
+  /* Reserve the comment widget space while its external iframe loads. */
+  min-height: 25rem;
   margin-top: 2rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
@@ -538,7 +542,7 @@ footer {
   }
 
   .visitor-counter {
-    min-width: 4.25rem;
+    width: 6rem;
     padding-inline: 0.25rem;
   }
 
@@ -551,6 +555,10 @@ footer {
   .blue-roach {
     width: 6rem;
   }
+}
+
+@media (max-width: 360px) {
+  .site-header .container { flex-wrap: wrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
