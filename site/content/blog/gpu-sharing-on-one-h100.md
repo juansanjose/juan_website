@@ -216,9 +216,9 @@ spec:
 
 
 <section id="security"><h2>Security considerations</h2>
-<p>MIG's hardware isolation matters: separate GPU instances get dedicated SM resources and isolated memory-system paths. MPS active-thread limits don't provide those same boundaries.<a href="#source-14">[14]</a> That still leaves the security of the complete deployment: the host, driver, firmware, device access and tenant configuration all matter. Hardware resource isolation alone doesn't establish that the whole system is secure.</p>
-<p>I found these two discussions useful for thinking about the wider deployment risks.<a href="#source-4">[4]</a> <a href="#source-5">[5]</a></p>
-<p>Sharing the GPU is only part of the problem. Two inference servers can also compete for CPU time, host memory bandwidth, PCIe transfers and storage I/O. MIG isolates resources inside the GPU, but it doesn't give each tenant a separate host.<a href="#source-14">[14]</a></p></section>
+<p>With MIG, you don't normally have to worry about one CUDA process directly accessing another process's GPU memory when they run in separate GPU Instances, thanks to hardware-level memory isolation.<a href="#source-14">[14]</a> However, MIG is not a complete security boundary, as some resources remain shared between instances.</p>
+<p>I found these two LinkedIn articles discussing the security limitations of MIG and GPU sharing, and I think they're worth a read.<a href="#source-4">[4]</a> <a href="#source-5">[5]</a> They explain how resources such as the PCIe link, DMA infrastructure, firmware, and parts of the GPU control plane remain shared, potentially introducing side channels and other security risks.</p>
+<p>Another approach is GPU virtualization. With GPU passthrough, an entire physical GPU is typically assigned to a single VM, whereas NVIDIA vGPU allows multiple VMs to share the same physical GPU, including through MIG-backed vGPUs.<a href="#source-18">[18]</a> This adds VM-level isolation, but also introduces additional virtualization components, such as the vGPU manager and hypervisor, which have their own attack surfaces and can be affected by vulnerabilities and CVEs.<a href="#source-19">[19]</a></p></section>
 <section id="conclusions"><h2>Conclusions</h2>
 <p>The most interesting part of this experiment for me was DRA: setting these resources dynamically was pretty cool. Some features I used are still alpha, and the mutually exclusive <code>MPSSupport</code> and <code>DynamicMIG</code> gates were a practical limitation.<a href="#source-2">[2]</a> MPS inside MIG is supported by NVIDIA; that broader capability wasn't what this DRA setup tested.<a href="#source-13">[13]</a></p>
 <p>For these two instances of Nemotron 32B, MPS 100% gave the highest measured throughput at five requests per server, and MIG was relatively close: 626 versus 594 tokens/s. Both beat time-slicing Default at 498 tokens/s. That's a useful result for this workload and configuration, though it doesn't establish a general winner or how either compares with a comparable dedicated-GPU deployment.</p>
@@ -242,6 +242,8 @@ spec:
 <li id="source-15"><a href="https://docs.nvidia.com/deploy/mps/latest/mpsv3-memory-partitioning.html">NVIDIA MPS v3: Memory partitioning, hard/soft limits and pressure handling</a></li>
 <li id="source-16"><a href="https://docs.cloud.google.com/static/kubernetes-engine/images/dra-user-flow.svg">Google Cloud: DRA user-flow diagram</a></li>
 <li id="source-17"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/concepts/gpu-allocation/">NVIDIA DRA driver: Static and dynamic MIG discovery and allocation</a></li>
+<li id="source-18"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/virtualization.html">NVIDIA MIG: GPU passthrough and MIG-backed vGPUs</a></li>
+<li id="source-19"><a href="https://github.com/NVIDIA/product-security/blob/main/2026/5821/5821.md">NVIDIA security bulletin: GPU display drivers and vGPU software, May 2026</a></li>
 </ol></section>
 </div>
 
