@@ -57,6 +57,13 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <p>MIG essentially divides the GPU into smaller pieces. Each GPU has its own set of profiles and can be divided differently, and not all GPUs support MIG. In my case I divided my H100 into two, one slice for each client.</p><p>The main difference from the other methods is that MIG provides dedicated SM resources and isolated memory-system paths, including L2 cache banks, memory controllers, and DRAM buses. This provides a higher degree of isolation between CUDA processes and, as NVIDIA describes it, a defined level of Quality of Service (QoS) for compute and memory bandwidth.<a href="#source-15">[15]</a></p><p>This table I found summarizes the main differences between the sharing methods.</p><div class="table-wrap"><table class="concurrency-table"><caption>CUDA concurrency mechanisms (adapted for this configuration) <a href="#source-8">[8]</a></caption><thead><tr><th scope="col">Feature</th><th scope="col">Streams</th><th scope="col">MPS</th><th scope="col">MIG</th></tr></thead><tbody><tr><th scope="row">Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th scope="row">Max Partitions</th><td>Unlimited</td><td>Hardware-dependent</td><td>7</td></tr><tr><th scope="row">SM Performance Isolation</th><td>No</td><td>Resource cap; no dedicated SMs</td><td>Yes</td></tr><tr><th scope="row">Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th scope="row">Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th scope="row">Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table></div>
 </section>
 <section id="dra"><h2>Deploying the lab in k8s with DRA</h2><p>DRA (Dynamic Resource Allocation) made deploying this lab pretty easy.<a href="#source-3">[3]</a> With the traditional device plugin, you could request GPU resources in your Pod, but configurations such as time-slicing and MIG had to be managed separately. With DRA, it's more like using PVCs: you create a ResourceClaim describing the GPU and configuration you want, and Kubernetes, together with the DRA driver, takes care of finding, allocating, and preparing the resources for your Pod.<a href="#source-7">[7]</a></p>
+<figure class="explainer mechanism">
+<div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="DRA user-flow diagram; scroll sideways on smaller screens">
+<a href="/gpu-sharing/images/dra-user-flow.svg"><img class="sharing-diagram" src="/gpu-sharing/images/dra-user-flow.svg" width="1164" height="283" loading="lazy" alt="DRA workflow: install drivers, create DeviceClasses, choose a ResourceClaim for shared devices or a ResourceClaimTemplate for separate devices, attach the claim to a Pod, and deploy the workload."></a>
+</div>
+<figcaption>DRA user flow. Source: Google Cloud.<a href="#source-20">[20]</a> <a href="/gpu-sharing/images/dra-user-flow.svg">View full-size diagram</a>. <span class="sharing-diagram-hint">Scroll sideways for the full diagram.</span></figcaption>
+</figure>
+
 <h3 id="dra-timeslicing">Time-slicing configuration</h3><p>You just need to create a ResourceClaim requesting a GPU shared through time-slicing, where you can also configure the time-slicing interval.<a href="#source-6">[6]</a></p>
 <details class="yaml-example">
 <summary>Time-slicing ResourceClaim</summary>
@@ -128,7 +135,7 @@ spec:
             mpsConfig:
               defaultActiveThreadPercentage: 50
               defaultPinnedDeviceMemoryLimit: 10Gi</code></pre>
-</details><p>The pinned-memory limit in <code>mpsConfig</code> is only a number you give the MPS server: it says how much memory a client may use, not how much it gets to itself. There are no hard throughput guarantees.<a href="#source-2">[2]</a></p>
+</details>
 <p>It is important to note that if you want multiple pods to share the same GPU through the same MPS server, they should reference the same <code>ResourceClaim</code>. Using a <code>ResourceClaimTemplate</code> creates a separate <code>ResourceClaim</code> for each pod, which does not guarantee that they will share the same GPU or MPS daemon.<a href="#source-2">[2]</a></p>
 <details class="yaml-example">
 <summary>MPS shared claim and Pod</summary>
@@ -277,6 +284,7 @@ spec:
 <li id="source-17"><a href="https://docs.nvidia.com/deploy/mps/latest/troubleshooting.html">NVIDIA MPS: Troubleshooting Guide</a></li>
 <li id="source-18"><a href="https://docs.nvidia.com/deploy/mps/latest/mpsv3-memory-partitioning.html">NVIDIA MPS v3: Memory partitioning, hard/soft limits and pressure handling</a></li>
 <li id="source-19"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/concepts.html#cuda-concurrency-mechanisms">NVIDIA: CUDA concurrency mechanisms and shared memory-system resources</a></li>
+<li id="source-20"><a href="https://docs.cloud.google.com/static/kubernetes-engine/images/dra-user-flow.svg">Google Cloud: DRA user-flow diagram</a></li>
 </ol></section>
 </div>
 
