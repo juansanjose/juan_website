@@ -129,7 +129,7 @@ spec:
               defaultActiveThreadPercentage: 50
               defaultPinnedDeviceMemoryLimit: 10Gi</code></pre>
 </details><p>The pinned-memory limit in <code>mpsConfig</code> is only a number you give the MPS server: it says how much memory a client may use, not how much it gets to itself. There are no hard throughput guarantees.<a href="#source-2">[2]</a></p>
-<p>Also important: you want the pods to reference the same MPS server, not create multiple MPS servers. You need to use a ResourceClaim, not a ResourceClaimTemplate, since that creates a different ResourceClaim for each pod.</p>
+<p>It is important to note that if you want multiple pods to share the same GPU through the same MPS server, they should reference the same <code>ResourceClaim</code>. Using a <code>ResourceClaimTemplate</code> creates a separate <code>ResourceClaim</code> for each pod, which does not guarantee that they will share the same GPU or MPS daemon.<a href="#source-2">[2]</a></p>
 <details class="yaml-example">
 <summary>MPS shared claim and Pod</summary>
 <pre class="claim"><code>apiVersion: resource.k8s.io/v1
@@ -175,26 +175,7 @@ spec:
 </details>
 
 <h3 id="dra-mig">MIG configuration</h3>
-<p>The MIG configuration names the MIG device class and picks the profile with a CEL selector:<a href="#source-9">[9]</a></p>
-<details class="yaml-example">
-<summary>MIG ResourceClaim</summary>
-<pre class="claim"><code># Dynamic MIG: the driver creates a matching partition when the pod is prepared
-apiVersion: resource.k8s.io/v1
-kind: ResourceClaim
-metadata:
-  name: mig-partition
-  namespace: dra-lab
-spec:
-  devices:
-    requests:
-    - name: mig
-      exactly:
-        deviceClassName: mig.nvidia.com
-        selectors:
-        - cel:
-            expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
-</details>
-<p>For several pods, the template form gives each pod its own claim:</p>
+<p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically creates a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-3">[3]</a></p>
 <details class="yaml-example">
 <summary>MIG claim template and Pod</summary>
 <pre class="claim"><code># Template form: Kubernetes creates one ResourceClaim per pod from it.
@@ -232,12 +213,28 @@ spec:
       claims:
       - name: device</code></pre>
 </details>
-
-<p>At first I created the MIG partitions manually. The NVIDIA DRA driver's <code>MPSSupport</code> and <code>DynamicMIG</code> feature gates are mutually exclusive, so I had to disable <code>MPSSupport</code> to enable <code>DynamicMIG</code>.<a href="#source-2">[2]</a> This is a DRA configuration restriction: NVIDIA supports running MPS inside MIG instances.<a href="#source-14">[14]</a></p><p>I also found how it was done with the device plugin: <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">MIG strategies in Kubernetes</a></p><p>As you can see, you needed to define the MIG partitions yourself. With DynamicMIG, the driver can create a partition matching the requested profile on demand.</p>
-
-
-
-
+<p>The equivalent standalone claim is:</p>
+<details class="yaml-example">
+<summary>MIG ResourceClaim</summary>
+<pre class="claim"><code># Dynamic MIG: the driver creates a matching partition when the pod is prepared
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaim
+metadata:
+  name: mig-partition
+  namespace: dra-lab
+spec:
+  devices:
+    requests:
+    - name: mig
+      exactly:
+        deviceClassName: mig.nvidia.com
+        selectors:
+        - cel:
+            expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
+</details>
+<p>Currently, the NVIDIA DRA driver's <code>MPSSupport</code> and <code>DynamicMIG</code> feature gates are mutually exclusive. This means you cannot use MPS to share a dynamically created MIG slice with this DRA configuration, even though NVIDIA supports running multiple MPS clients within the same MIG slice.<a href="#source-2">[2]</a> <a href="#source-14">[14]</a></p>
+<p>You can also compare how MIG was configured with the traditional device plugin: <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">MIG strategies in Kubernetes</a>.</p>
+<p>As you can see, with the traditional device plugin, you generally had to define the MIG partitions yourself. With <code>DynamicMIG</code>, the DRA driver can create a partition matching the requested profile on demand.</p>
 </section>
 <section id="original"><h2>Inference performance</h2>
 <p>I used the <a href="https://github.com/SemiAnalysisAI/InferenceX">InferenceX repo</a> and measured output tokens/s and time to first token (TTFT). At five requests per server, MPS 100% had the highest measured throughput: 626 tokens/s, about 25.7% above time-slicing Default at 498. MIG reached 594 tokens/s, about 19.3% above Default; MPS 100% was about 5.4% above MIG. MPS 50% was also close at 611 tokens/s.</p><p>Time-slicing Short and Long were slower in these runs and drew less power in the <a href="#gpu-captures">recorded nvidia-smi snapshots</a>: 182 W and 186 W, respectively, versus 338 W for Default. I haven't established why they were slower. These are comparisons for this workload and configuration. The table reports medians without variability, so I can't claim statistical significance. The chart also includes a model-alone run, but that single-server workload isn't a like-for-like dedicated-GPU baseline for these two-server totals.</p>
