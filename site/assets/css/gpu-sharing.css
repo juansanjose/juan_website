@@ -67,11 +67,8 @@ pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg
 .workshop-copy p:last-child{margin-bottom:0}
 /* Shared diagrams follow the MPS reference palette and typography. */
 .sharing-diagram-scroll{overflow-x:auto;background:#f7fafb}
-.sharing-diagram-hint{display:none}
-@media(max-width:900px){.sharing-diagram-hint{display:block;margin-top:.5em}}
 .gpu-article .sharing-diagram{width:100%;min-width:820px;max-width:none;margin:0;overflow:hidden}
 .gpu-article .dra-flow .sharing-diagram{min-width:1164px}
-.gpu-article .dra-flow .sharing-diagram-hint{display:block;margin-top:.5em}
 .ts-box,.ts-slot-a,.ts-slot-b{transition:fill 1.2s ease,stroke 1.2s ease,opacity 1.2s ease}
 .ts-state-b{display:none}
 .ts-slot-b{opacity:.4}
@@ -90,6 +87,3 @@ pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg
 .gpu-article .table-wrap:focus-visible,.sharing-diagram-scroll:focus-visible,.gpu-article pre:focus-visible{outline:2px solid var(--link);outline-offset:2px}
 
 .yaml-dialog button{background:var(--button-face);color:var(--button-text)}
-
-.gpu-article .table-scroll-hint{display:none}
-@media(max-width:700px){.gpu-article .table-scroll-hint{display:block;margin:.75rem 0 -.5rem}}
