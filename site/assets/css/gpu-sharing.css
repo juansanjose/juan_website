@@ -1,7 +1,7 @@
 .gpu-article .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:40;pointer-events:none}
 .gpu-article .reading-progress-bar{display:block;height:100%;width:0;background:var(--accent)}
 
-.gpu-modes{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:14px 0 8px}.gpu-modes button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:9px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--chrome-shadow)}.gpu-modes button:hover{border-color:var(--button-face)}.gpu-modes button[aria-pressed=true]{background:var(--button-face);color:var(--button-text)}.gpu-modes button:focus-visible{outline:3px solid #e8a317}#gpu-captures{text-align:center}#gpu-captures pre{width:fit-content;max-width:100%;height:auto;max-height:none;margin:1rem auto;text-align:left;overflow:auto;font:14px/1.5 "Courier New",Courier,monospace}#gpu-captures pre code{font:inherit}#gpu-captures [role=status]:empty{display:none}
+.gpu-modes{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:0;padding:16px 16px 0}.gpu-modes button{font:inherit;font-size:14px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:9px 16px;cursor:pointer;box-shadow:2px 2px 0 var(--chrome-shadow)}.gpu-modes button:hover{border-color:var(--button-face)}.gpu-modes button[aria-pressed=true]{background:var(--button-face);color:var(--button-text)}.gpu-modes button:focus-visible{outline:3px solid #e8a317}#gpu-captures{text-align:center}.gpu-capture-panel{width:fit-content;max-width:100%;margin:1rem auto;background:var(--bg-shade)}#gpu-captures pre{width:auto;max-width:100%;height:auto;max-height:none;margin:0;text-align:left;overflow:auto;font:14px/1.5 "Courier New",Courier,monospace}#gpu-captures pre code{font:inherit}#gpu-captures [role=status]:empty{display:none}
 
 .gpu-article .toc{margin:1.25rem 0}.gpu-article .toc ol{margin:0;padding-left:1.6rem}.gpu-article .toc ol ol{list-style:lower-alpha}
 .gpu-article{--ink:var(--fg);--line:var(--border);--accent:var(--link);color:var(--fg);background:transparent;overflow-wrap:anywhere;font:18px/1.6 Georgia,"Times New Roman",serif}
@@ -34,7 +34,7 @@ html[data-palette]:not([data-palette="white"]):not([data-palette="yellow"]) .yam
 .gpu-article .yaml-example{margin:20px 0;border:1px solid var(--border);border-radius:6px;background:var(--yaml-surface);overflow:hidden}
 .gpu-article .yaml-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start;margin:20px 0}
 .gpu-article .yaml-pair .yaml-example{margin:0;min-width:0}
-@media(max-width:800px){.gpu-article .yaml-pair{grid-template-columns:1fr}}
+@media(max-width:600px){.gpu-article .yaml-pair{gap:12px}.gpu-article .yaml-pair .yaml-example summary{padding:12px 10px;min-height:76px}}
 .gpu-article .yaml-example summary{padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer;color:var(--fg)}
 .gpu-article .yaml-example summary::marker{color:var(--link)}
 .gpu-article .yaml-example summary:focus-visible{outline:2px solid var(--link);outline-offset:-4px}
@@ -91,7 +91,7 @@ pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg
 .gpu-article .console-command{width:100%;max-width:100%;margin:1.25rem 0;border:1px solid var(--border);border-radius:0;background:transparent;font:14px/1.6 "Courier New",Courier,monospace;text-align:left}
 .gpu-article .console-command code{font:inherit}
 
-#gpu-captures .gpu-capture-intro{text-align:right}
+#gpu-captures .gpu-capture-intro{text-align:left}
 
 .gpu-article #original{margin-bottom:1rem}
 .gpu-article #interpretation{margin-top:1rem}
