@@ -32,8 +32,8 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <section id="mps"><h2>MPS</h2>
 <p>MPS allows kernels from separate CUDA processes to execute concurrently on one GPU.<a href="#source-1">[1]</a></p>
 <figure class="explainer mechanism">
-<a href="/gpu-sharing/images/nvidia-mps-architecture.png"><img src="/gpu-sharing/images/nvidia-mps-architecture.png" width="551" height="516" loading="lazy" alt="NVIDIA's legacy MPS diagram: two MPI client processes map to a server CUDA context, with their kernels overlapping in the GPU schedule."></a>
-<figcaption>NVIDIA's MPS client-server illustration.<a href="#source-11">[11]</a> The many-to-one context mapping shown here is the pre-Volta design. On the H100 in this experiment, clients keep their own contexts and submit work directly to the GPU. <a href="/gpu-sharing/images/nvidia-mps-architecture.png">View full-size diagram</a>.</figcaption>
+<a href="/gpu-sharing/images/nvidia-mps-architecture-blog.png"><img src="/gpu-sharing/images/nvidia-mps-architecture-blog.png" width="1568" height="1003" loading="lazy" alt="NVIDIA's legacy MPS diagram: two MPI client processes map to a server CUDA context, with their kernels overlapping in the GPU schedule."></a>
+<figcaption>Adapted from NVIDIA's MPS client-server illustration.<a href="#source-11">[11]</a> The many-to-one context mapping shown here is the pre-Volta design. On the H100 in this experiment, clients keep their own contexts and submit work directly to the GPU. <a href="/gpu-sharing/images/nvidia-mps-architecture-blog.png">View full-size diagram</a>.</figcaption>
 </figure>
 <p>The service has three components:<a href="#source-1">[1]</a></p>
 <ul>
