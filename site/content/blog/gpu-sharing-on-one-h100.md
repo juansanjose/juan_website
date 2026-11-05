@@ -162,7 +162,7 @@ spec:
 
 
 <h3 id="dra-mig">MIG configuration</h3>
-<p>DRA supports <code>DynamicMIG</code>, so the GPU does not have to be partitioned manually. The DRA driver can create MIG partitions automatically based on the requested profile. If the partitions are created manually, they can still be requested through DRA, as the driver discovers existing MIG instances at startup and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.<a href="#source-10">[10]</a></p>
+<p>DRA supports <code>DynamicMIG</code>, so the GPU does not have to be partitioned manually. The DRA driver creates MIG partitions automatically based on the requested profile. If the partitions are created manually, they can still be requested through DRA, as the driver discovers existing MIG instances at startup and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.<a href="#source-10">[10]</a></p>
 <p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically created a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-8">[8]</a></p>
 <details class="yaml-example">
 <summary>MIG claim template and Pod</summary>
