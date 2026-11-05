@@ -1,0 +1,186 @@
+{
+  "description": "Data plotted in the H100 inference chart. Output throughput is summed across both model instances for sharing runs; Model alone uses one instance.",
+  "input_tokens": 1024,
+  "output_tokens": 1024,
+  "repeats_per_point": 3,
+  "series": [
+    {
+      "name": "MIG 2 \u00d7 3g.40gb",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.10486999135009682,
+        0.1920365593495262,
+        0.39363809950109496,
+        0.7746724220001852
+      ],
+      "output_tokens_per_second": [
+        264.50345753454104,
+        417.55416074768607,
+        594.3860935263538,
+        876.3255038851356
+      ]
+    },
+    {
+      "name": "MPS 50%",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.10282835540019733,
+        0.18871807975101548,
+        0.3918334442505511,
+        0.7460591883986126
+      ],
+      "output_tokens_per_second": [
+        284.47621641499217,
+        449.94176742782895,
+        610.6950850728903,
+        889.5951083702605
+      ]
+    },
+    {
+      "name": "Time-slicing Default",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.12947336239922153,
+        0.25483355870001106,
+        0.4714021816492277,
+        0.8881174368997108
+      ],
+      "output_tokens_per_second": [
+        206.16912502519156,
+        341.9233093772768,
+        498.2284345059366,
+        739.6728774804611
+      ]
+    },
+    {
+      "name": "MPS 100%",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.10411388319935214,
+        0.18878339339917147,
+        0.37592326135036275,
+        0.7436410460491061
+      ],
+      "output_tokens_per_second": [
+        277.23227073138617,
+        449.96643740789415,
+        626.2558017728838,
+        900.685176247973
+      ]
+    },
+    {
+      "name": "MPS 25%",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.1357933718489221,
+        0.24950325999998313,
+        0.5160657782500493,
+        1.0182587543006776
+      ],
+      "output_tokens_per_second": [
+        239.95124421757095,
+        378.68853228844245,
+        512.9409197136549,
+        758.1799505446662
+      ]
+    },
+    {
+      "name": "Time-slicing Long",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.46010168035027166,
+        0.8512475726505727,
+        1.3997001528503008,
+        2.8341346419999356
+      ],
+      "output_tokens_per_second": [
+        149.65804560941197,
+        256.89427978213166,
+        412.63840509689845,
+        343.0486190954915
+      ]
+    },
+    {
+      "name": "Time-slicing Short",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.48122972775006473,
+        0.9404021856001691,
+        1.3871609056501712,
+        2.8319219296507527
+      ],
+      "output_tokens_per_second": [
+        141.7572683956528,
+        234.32537464643536,
+        385.0075170712916,
+        343.5507301779433
+      ]
+    },
+    {
+      "name": "Model alone",
+      "requests_per_server": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "p95_ttft_seconds": [
+        0.0896235544000433,
+        0.16102552105012366,
+        0.2769777470999884,
+        0.4551863929000092
+      ],
+      "output_tokens_per_second": [
+        181.78945796472155,
+        308.03568747198455,
+        493.01185057992984,
+        735.8502641075798
+      ]
+    }
+  ],
+  "recorded_nvidia_smi_captures": {
+    "MIG 2 \u00d7 3g.40gb": "/gpu-sharing/results/run-02-core/mig/1024-1024-c5-r0-AB/during-nvidia-smi.txt",
+    "MPS 50%": "/gpu-sharing/results/run-02-core/mps50/1024-1024-c5-r0-AB/during-nvidia-smi.txt",
+    "Time-slicing Default": "/gpu-sharing/results/run-02-core/ts-default/1024-1024-c5-r0-AB/during-nvidia-smi.txt",
+    "MPS 100%": "/gpu-sharing/results/inference-extension-20261025/inference-mps100/1024-1024-c5-r0-AB/during-nvidia-smi.txt",
+    "MPS 25%": "/gpu-sharing/results/inference-extension-20261025/inference-mps25/1024-1024-c5-r0-AB/during-nvidia-smi.txt",
+    "Time-slicing Long": "/gpu-sharing/results/inference-extension-20261025/inference-ts-long/1024-1024-c5-r0-AB/during-nvidia-smi.txt",
+    "Time-slicing Short": "/gpu-sharing/results/inference-extension-20261025/inference-ts-short/1024-1024-c5-r0-AB/during-nvidia-smi.txt",
+    "Model alone": "/gpu-sharing/results/inference-extension-20261025/inference-solo/1024-1024-c5-r0-A/during-nvidia-smi.txt"
+  }
+}
