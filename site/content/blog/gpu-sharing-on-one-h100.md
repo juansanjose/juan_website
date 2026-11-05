@@ -17,7 +17,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <section id="timeslicing"><h2>Time-slicing</h2>
 
 <p>This is the simplest method: processes take turns executing on the GPU, while their allocated memory remains resident. The GPU switches between CUDA contexts, meaning that one process's kernels generally have to wait while another process is executing. This introduces context-switching overhead and prevents the processes from executing their kernels concurrently.<a href="#source-1">[1]</a></p>
-<p>The problem is that if a process decides to be a greedy goblin, it can allocate most of the GPU memory for itself, leaving little available for other processes. Time-slicing does not provide per-process memory limits or automatically reclaim those allocations.<a href="#source-1">[1]</a></p>
+<p>The problem is that if a process decides to be a greedy goblin, it can allocate as much of the available GPU memory as it wants, leaving other processes starving for memory. Time-slicing does not provide per-process memory limits or automatically reclaim those allocations.<a href="#source-1">[1]</a></p>
 <p>You can change the turn length. The presets are <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-1">[1]</a>, which correspond to this setting on the host:</p>
 <pre class="console-command" tabindex="0" aria-label="Time-slice command and option values"><code>nvidia-smi compute-policy --set-timeslice 3
 0=DEFAULT · 1=SHORT · 2=MEDIUM · 3=LONG</code></pre>
