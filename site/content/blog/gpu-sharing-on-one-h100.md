@@ -49,7 +49,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <p>MIG essentially divides the GPU into smaller pieces. The available profiles depend on the GPU model, and not all GPUs support MIG. In my case, I created two MIG instances on my H100, one for each client.</p>
 <figure class="explainer mechanism">
 <div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="MIG diagram; scroll sideways on smaller screens">
-<a href="/gpu-sharing/images/mig-resource-paths.svg"><img class="sharing-diagram" src="/gpu-sharing/images/mig-resource-paths.svg" width="1000" height="655" loading="lazy" alt="Two 3g.40gb GPU instances with separate paths through the system pipe, crossbar ports, 46 SMs, L2 cache, memory controllers and 40 GB HBM."></a>
+<a href="/gpu-sharing/images/mig-resource-paths.svg"><img class="sharing-diagram" src="/gpu-sharing/images/mig-resource-paths.svg" width="1000" height="597" loading="lazy" alt="Two 3g.40gb GPU instances with separate paths through the system pipe, crossbar ports, 46 SMs, L2 cache, memory controllers and 40 GB HBM."></a>
 </div>
 <figcaption>Two separate MIG GPU Instances, each with dedicated SMs and isolated memory-system resources. <a href="#source-7">[7]</a></figcaption>
 </figure>
