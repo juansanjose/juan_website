@@ -225,8 +225,13 @@ spec:
 </section>
 <section id="security"><h2>Security considerations</h2>
 <p>With MIG, CUDA processes running in separate GPU Instances have hardware-level memory isolation, so one process cannot read another's GPU memory.<a href="#source-7">[7]</a> However, MIG doesn't isolate every part of the GPU or host, so it isn't a complete security boundary.</p>
-<p>I found these two LinkedIn articles discussing the security limitations of MIG and GPU sharing, and I think they're worth a read.<a href="#source-16">[16]</a> <a href="#source-17">[17]</a> They explain how resources such as the PCIe link, DMA infrastructure, firmware, and parts of the GPU control plane remain shared, potentially introducing side channels and other security risks.</p>
-<p>Another option is GPU virtualization. With GPU passthrough, a VM normally gets an entire physical GPU, while NVIDIA vGPU allows several VMs to share it,  through MIG-backed or time-scheduled vGPUs.<a href="#source-18">[18]</a> This adds VM-level isolation, but more components must also be secured, such as the vGPU manager and hypervisor, which can have their own vulnerabilities.<a href="#source-19">[19]</a></p></section>
+<p>I found these two LinkedIn articles discussing the security limitations of MIG and GPU sharing, and I think they're worth a read.</p>
+<ul>
+<li><a href="https://www.linkedin.com/pulse/mig-complete-security-boundary-hardware-partitioning-shared-daula-slbac/">MIG Is Not a Complete Security Boundary</a></li>
+<li><a href="https://www.linkedin.com/pulse/gpus-security-boundary-its-architectural-gaps-run-all-kavitha-daula-3zvoe/">GPUs Are Not a Security Boundary and Its Architectural Gaps Run All the Way Down</a></li>
+</ul>
+<p>They explain how resources such as the PCIe link, DMA infrastructure, firmware, and parts of the GPU control plane remain shared, potentially introducing side channels and other security risks.</p>
+<p>Another option is GPU virtualization. With GPU passthrough, a VM normally gets an entire physical GPU, while NVIDIA vGPU allows several VMs to share it,  through MIG-backed or time-scheduled vGPUs.<a href="#source-16">[16]</a> This adds VM-level isolation, but more components must also be secured, such as the vGPU manager and hypervisor, which can have their own vulnerabilities.<a href="#source-17">[17]</a></p></section>
 <section id="conclusions"><h2>Conclusions</h2>
 <p>For me, the most interesting part of this experiment was DRA: setting these resources dynamically is more aligned with what I do as a DevOps engineer. However, some features I used are still alpha, and my agents got confused by the mutually exclusive <code>MPSSupport</code> and <code>DynamicMIG</code> gates.<a href="#source-12">[12]</a></p>
 <p>For these two instances of Nemotron 32B, MPS 100% achieved the highest measured throughput, with MIG relatively close behind. Both performed better than time-slicing.</p>
@@ -248,10 +253,8 @@ spec:
 <li id="source-13"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/getting-started-with-mig.html#mig-with-cuda-mps">NVIDIA MIG: Running MPS inside MIG instances</a></li>
 <li id="source-14"><a href="https://static.sched.com/hosted_files/kccncna2024/fd/KCNA24-DRA-Benchmarking.pdf">Which GPU Sharing Strategy Is Right for You? A Benchmark Study Using DRA</a>, Kevin Klues and Yuan Chen, NVIDIA, KubeCon North America 2024. Inference results: slides 63–68; small matrix-multiplication jobs: slides 70, 73–75.</li>
 <li id="source-15"><a href="https://www.youtube.com/watch?v=_pgOuaYwvBQ">GPU Sharing at CERN: Cutting the Cake Without Losing a Slice!</a>, Diana Gaponcic, KubeCon EU 2025. Benchmark results: <a href="https://www.youtube.com/watch?v=_pgOuaYwvBQ&amp;t=1160s">time-slicing, 19:20</a>; <a href="https://www.youtube.com/watch?v=_pgOuaYwvBQ&amp;t=1260s">two-process MPS, 21:00</a>; <a href="https://www.youtube.com/watch?v=_pgOuaYwvBQ&amp;t=1300s">four-process MPS, 21:40</a>.</li>
-<li id="source-16"><a href="https://www.linkedin.com/pulse/mig-complete-security-boundary-hardware-partitioning-shared-daula-slbac/">MIG Is Not a Complete Security Boundary</a></li>
-<li id="source-17"><a href="https://www.linkedin.com/pulse/gpus-security-boundary-its-architectural-gaps-run-all-kavitha-daula-3zvoe/">GPUs Are Not a Security Boundary and Its Architectural Gaps Run All the Way Down</a></li>
-<li id="source-18"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/virtualization.html">NVIDIA MIG: GPU passthrough and MIG-backed vGPUs</a></li>
-<li id="source-19"><a href="https://github.com/NVIDIA/product-security/blob/main/2026/5821/5821.md">NVIDIA security bulletin: GPU display drivers and vGPU software, May 2026</a></li>
+<li id="source-16"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/virtualization.html">NVIDIA MIG: GPU passthrough and MIG-backed vGPUs</a></li>
+<li id="source-17"><a href="https://github.com/NVIDIA/product-security/blob/main/2026/5821/5821.md">NVIDIA security bulletin: GPU display drivers and vGPU software, May 2026</a></li>
 </ol></section>
 </div>
 
