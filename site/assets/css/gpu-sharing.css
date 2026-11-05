@@ -68,15 +68,15 @@ pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg
 .sharing-diagram-scroll{overflow-x:auto;background:#f7fafb}
 .gpu-article .sharing-diagram{width:100%;min-width:820px;max-width:none;margin:0;overflow:hidden}
 .gpu-article .dra-flow .sharing-diagram{min-width:1164px}
-.ts-box,.ts-slot-a,.ts-slot-b{transition:fill 1.2s ease,stroke 1.2s ease,opacity 1.2s ease}
+.ts-box,.ts-slot-a rect,.ts-slot-b rect{transition:fill 1.2s ease,stroke 1.2s ease}
 .ts-state-b{display:none}
-.ts-slot-b{opacity:.4}
+.ts-slot-b rect{fill:#eaf1f3;stroke:#a4b6bf}
 .ts-diagram.b-active .ts-state-a{display:none}
 .ts-diagram.b-active .ts-state-b{display:inline}
-.ts-diagram.b-active .ts-slot-a{opacity:.4}
-.ts-diagram.b-active .ts-slot-b{opacity:1}
+.ts-diagram.b-active .ts-slot-a rect{fill:#eaf1f3;stroke:#a4b6bf}
+.ts-diagram.b-active .ts-slot-b rect{fill:#e3efc7;stroke:#8fbd60}
 .ts-diagram.b-active .ts-box{fill:#e3efc7;stroke:#8fbd60}
-@media(prefers-reduced-motion:reduce){.ts-box,.ts-slot-a,.ts-slot-b{transition:none}}
+@media(prefers-reduced-motion:reduce){.ts-box,.ts-slot-a rect,.ts-slot-b rect{transition:none}}
 .yaml-dialog{background:var(--yaml-surface);color:var(--fg);width:min(860px,calc(100% - 24px));max-height:90vh;border:1px solid var(--border);border-radius:6px;padding:20px;font:15px/1.5 system-ui,sans-serif;overflow:auto}.yaml-dialog::backdrop{background:#020617b8}.yaml-dialog header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px}.yaml-dialog h2{font-size:21px;margin:0}.yaml-dialog button,.yaml-dialog select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px}.yaml-dialog button{cursor:pointer}.yaml-selectors{display:flex;gap:16px;margin:16px 0;flex-wrap:wrap}.yaml-selectors label{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px}.yaml-selectors select{width:100%}.yaml-dialog .yaml-origin{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.yaml-dialog pre{max-height:48vh;overflow:auto;padding:14px;background:var(--yaml-code-surface);font:13px/1.5 monospace;text-align:left}.yaml-dialog code{color:var(--fg);font:inherit}.yaml-dialog a{color:var(--link)}.yaml-dialog .yaml-status{color:var(--muted);font-size:13px}.yaml-dialog .yaml-status:empty{display:none}.yaml-setting{font:inherit;font-weight:inherit;background:none;border:0;padding:0;color:var(--link);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px;cursor:pointer;text-align:left}.yaml-setting:hover{text-decoration-style:solid}.yaml-node{cursor:pointer}.yaml-node:hover rect,.yaml-node:focus rect{stroke:#fbbf24;stroke-width:3}.yaml-node:focus{outline:none}.yaml-dialog :focus-visible,.yaml-setting:focus-visible{outline:3px solid #008399;outline-offset:2px}
 
 .gpu-article .performance-table{min-width:480px;font-size:16px;line-height:1.5}

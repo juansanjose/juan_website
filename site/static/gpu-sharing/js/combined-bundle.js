@@ -3639,31 +3639,3 @@ chart.on('plotly_restyle',()=>{
 chart.on('plotly_click',e=>{const url=e.points[0].customdata?.[0];if(url)window.open(url,'_blank','noopener');});
 
 ;
-
-(function(){
-  var chart = document.getElementById('combined-chart');
-  if(!chart || !chart.data) return;
-  function yaml(s){
-    return '<span style="display:inline-block;background:#1e1e1e;color:#d4d4d4;padding:7px 9px;border-radius:4px;'
-         + 'font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;line-height:1.5;text-align:left">'
-         + s.split('&').join('&amp;').split('<').join('&lt;').split('\n').join('<br>')
-         + '</span>';
-  }
-  var pod = 'pod:\n  resourceClaims:\n  - name: device\n    resourceClaimName: shared-gpu';
-  var blocks = {
-    'Time-slicing': yaml('sharing:\n  strategy: TimeSlicing\n  timeSlicingConfig:\n    interval: Default\n' + pod),
-    'MPS':          yaml('sharing:\n  strategy: MPS\n  mpsConfig:\n    defaultActiveThreadPercentage: 50\n    defaultPinnedDeviceMemoryLimit: 10Gi\n' + pod),
-    'MIG':          yaml('exactly:\n  deviceClassName: mig.nvidia.com\n  selectors:\n  - cel: profile == \'3g.40gb\'\npod:\n  resourceClaims:\n  - name: device\n    resourceClaimTemplateName: mig-partition')
-  };
-  var sep = '<br><span style="color:#7d8a94;font-size:10px">claim + pod</span><br>';
-  chart.data.forEach(function(t){
-    var g = t.meta && t.meta.group;
-    if(!blocks[g]) return;
-    var ht = t.hovertemplate || '';
-    var extra = ht.indexOf('<extra>');
-    if(extra > -1){ ht = ht.slice(0, extra) + sep + blocks[g] + ht.slice(extra); }
-    else { ht = ht + sep + blocks[g]; }
-    t.hovertemplate = ht;
-  });
-  Plotly.redraw(chart);
-})();
