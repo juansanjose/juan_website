@@ -42,7 +42,6 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <li><strong>Static SM partitioning:</strong> Specific groups of SMs are assigned to different partitions. These SMs are exclusive to their assigned partitions, providing stronger compute isolation and more predictable resource allocation.<a href="#source-4">[4]</a></li>
 <li><strong>Memory-allocation limits:</strong> There are hard and soft limits. Hard limits are enforced during allocation, preventing clients from allocating more memory than permitted.<a href="#source-4">[4]</a> Soft limits, on the other hand, represent a protected allocation budget for a cgroup or container. Clients can exceed that budget when spare memory is available, up to their hard limit.<a href="#source-5">[5]</a></li>
 </ul>
-<p>Under actual memory pressure, the MPS server can identify and terminate an eligible client exceeding its soft limit so another client's allocation can be retried. Crossing the soft limit alone does not trigger termination.<a href="#source-5">[5]</a></p>
 <p>Neither active-thread percentages nor static SM partitioning guarantees end-to-end performance QoS. These mechanisms do not partition the GPU's memory controllers, L2 cache banks, or HBM bandwidth, meaning clients can still compete for the same memory bandwidth even when their memory allocations and compute resources are restricted.<a href="#source-6">[6]</a></p>
 </section>
 <section id="mig"><h2>MIG</h2>
