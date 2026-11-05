@@ -10,9 +10,9 @@
   --chrome-light: #f4f4f4;
   --chrome-shadow: #3f3f3f;
   --chrome-text: #171717;
-  --accent: #ff5a00;
-  --button-face: #ff5a00;
-  --button-hover: #ff7a2e;
+  --accent: #999999;
+  --button-face: #999999;
+  --button-hover: #b8b8b8;
   --button-text: #111111;
   --page-pattern: url("/bg-circuit.svg");
   --pattern-size: 180px auto;

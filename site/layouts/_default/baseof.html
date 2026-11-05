@@ -6,7 +6,7 @@
   <meta name="description" content="{{ site.Params.description }}">
   <title>{{ if .IsHome }}{{ site.Params.author }}{{ else }}{{ .Title }}{{ end }}</title>
 
-  {{ $style := resources.Get "css/retro.css" | minify }}
+  {{ $style := resources.Get "css/retro.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
   {{ if and .File (eq .File.TranslationBaseName "gpu-sharing-on-one-h100") }}
     {{ $articleStyle := resources.Get "css/gpu-sharing.css" | minify | fingerprint }}
@@ -19,7 +19,7 @@
   {{ end }}
 
   <script src="{{ site.BaseURL }}js/new-tab-links.js" defer></script>
-  <script src="{{ site.BaseURL }}js/theme.js" defer></script>
+  <script src="{{ site.BaseURL }}js/theme.js?v={{ readFile "static/js/theme.js" | sha256 }}"></script>
   <script src="{{ site.BaseURL }}js/visitor-counter.js" defer></script>
 </head>
 <body>
@@ -52,7 +52,6 @@
       <nav class="site-nav">
         <a href="{{ site.BaseURL }}">home</a>
         <a href="{{ site.BaseURL }}blog/">blog</a>
-        <a href="{{ site.BaseURL }}topics/">topics</a>
         <a href="{{ site.BaseURL }}about/">about</a>
       </nav>
     </div>

@@ -2,12 +2,8 @@
   'use strict';
 
   var root = document.documentElement;
-  var paletteToggle = document.querySelector('.palette-toggle');
-  var paletteMenu = document.querySelector('.palette-menu');
-  var paletteSwatches = Array.prototype.slice.call(document.querySelectorAll('.palette-swatch'));
-  var soundToggle = document.querySelector('.sound-toggle');
-  var roach = document.querySelector('.blue-roach');
-  var song = document.querySelector('.blue-song');
+  var paletteToggle, paletteMenu, soundToggle, roach, song;
+  var paletteSwatches = [];
 
   var palettes = {
     // The mascot follows the selected palette; controls retain the contrary hue.
@@ -124,48 +120,7 @@
     }
   }
 
-  paletteToggle.addEventListener('click', function () {
-    setMenuOpen(paletteMenu.hidden);
-  });
-
-  paletteSwatches.forEach(function (swatch) {
-    swatch.addEventListener('click', function () {
-      applyPalette(swatch.dataset.palette, true);
-      setMenuOpen(false);
-      paletteToggle.focus();
-    });
-  });
-
-  document.addEventListener('click', function (event) {
-    if (!paletteMenu.hidden && !event.target.closest('.site-brand')) setMenuOpen(false);
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') {
-      setMenuOpen(false);
-      paletteToggle.focus();
-    }
-  });
-
-  soundToggle.addEventListener('click', function () {
-    if (!song.paused && !song.ended) {
-      stopAll();
-      return;
-    }
-
-    song.currentTime = 0;
-    showRoach();
-    song.play().then(updateSoundToggle).catch(function () {
-      hideRoach();
-      updateSoundToggle();
-    });
-  });
-
-  song.addEventListener('ended', function () {
-    hideRoach();
-    updateSoundToggle();
-  });
-
+  // Restore the palette in the head, before any navigation can be painted.
   try {
     var savedPalette = window.localStorage.getItem('paletteName');
     if (!savedPalette && window.localStorage.getItem('theme') === 'dark') savedPalette = 'blue';
@@ -174,6 +129,59 @@
     applyPalette('white', false);
   }
 
-  setMenuOpen(false);
-  updateSoundToggle();
+  document.addEventListener('DOMContentLoaded', function () {
+    paletteToggle = document.querySelector('.palette-toggle');
+    paletteMenu = document.querySelector('.palette-menu');
+    paletteSwatches = Array.prototype.slice.call(document.querySelectorAll('.palette-swatch'));
+    soundToggle = document.querySelector('.sound-toggle');
+    roach = document.querySelector('.blue-roach');
+    song = document.querySelector('.blue-song');
+
+    paletteToggle.addEventListener('click', function () {
+      setMenuOpen(paletteMenu.hidden);
+    });
+
+    paletteSwatches.forEach(function (swatch) {
+      swatch.addEventListener('click', function () {
+        applyPalette(swatch.dataset.palette, true);
+        setMenuOpen(false);
+        paletteToggle.focus();
+      });
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!paletteMenu.hidden && !event.target.closest('.site-brand')) setMenuOpen(false);
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        paletteToggle.focus();
+      }
+    });
+
+    soundToggle.addEventListener('click', function () {
+      if (!song.paused && !song.ended) {
+        stopAll();
+        return;
+      }
+
+      song.currentTime = 0;
+      showRoach();
+      song.play().then(updateSoundToggle).catch(function () {
+        hideRoach();
+        updateSoundToggle();
+      });
+    });
+
+    song.addEventListener('ended', function () {
+      hideRoach();
+      updateSoundToggle();
+    });
+
+    applyPalette(root.getAttribute('data-palette'), false);
+
+    setMenuOpen(false);
+    updateSoundToggle();
+  });
 })();
