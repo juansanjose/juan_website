@@ -66,7 +66,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <figcaption>DRA setup and claim workflow. Source: Google Cloud.<a href="#source-11">[11]</a></figcaption>
 </figure>
 
-<h3 id="dra-timeslicing">Time-slicing configuration</h3><p>A <code>ResourceClaim</code> can be created to request a GPU shared through time-slicing. The interval can also be configured in that claim.<a href="#source-1">[1]</a></p>
+<h3 id="dra-timeslicing">Time-slicing configuration</h3><p>A <code>ResourceClaim</code> is created to request a GPU shared through time-slicing. The interval can also be configured in that claim.<a href="#source-1">[1]</a></p>
 <details class="yaml-example">
 <summary>Time-slicing ResourceClaim</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
