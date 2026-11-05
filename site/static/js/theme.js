@@ -154,7 +154,7 @@
     });
 
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && !paletteMenu.hidden && !document.querySelector('dialog[open]')) {
         setMenuOpen(false);
         paletteToggle.focus();
       }

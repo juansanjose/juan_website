@@ -1,6 +1,6 @@
-// Keep contents and citation jumps in place; open page links in a new tab.
+// Keep internal navigation in this tab; open external web links separately.
 document.querySelectorAll('a[href]').forEach(link => {
-  if (link.getAttribute('href').startsWith('#') || !['http:', 'https:'].includes(link.protocol)) return;
+  if (link.getAttribute('href').startsWith('#') || !['http:', 'https:'].includes(link.protocol) || link.origin === window.location.origin) return;
   link.target = '_blank';
   link.relList.add('noopener', 'noreferrer');
 });

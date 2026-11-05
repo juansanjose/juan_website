@@ -94,3 +94,7 @@ pre.claim code .y-str,pre.claim code .y-val,pre.claim code .y-num{color:var(--fg
 
 .gpu-article #original{margin-bottom:1rem}
 .gpu-article #interpretation{margin-top:1rem}
+
+.diagram-controls{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;padding:.6rem 1rem;background:var(--article-bg);color:var(--fg);font:14px/1.5 Georgia,serif}
+.diagram-controls:has(>span[hidden]:only-child){display:none}
+.diagram-controls button{font:inherit;padding:.25rem .5rem;background:var(--button-face);color:var(--button-text);border:1px solid var(--border);cursor:pointer}

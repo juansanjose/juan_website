@@ -1,17 +1,20 @@
-// Time-slicing animation: A and B alternate on the shared compute box.
-// A is active by default; the box is pink. The cycle repeats automatically.
+// The animation can be paused independently of the system motion preference.
 document.querySelectorAll('svg.ts-diagram').forEach(svg => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const button = document.createElement('button');
+  button.type = 'button';
+  const controls = document.createElement('div');
+  controls.className = 'diagram-controls';
+  controls.append(button);
+  svg.closest('.sharing-diagram-scroll').after(controls);
   let timer;
-
-  const start = () => {
+  let paused = reduced.matches;
+  const update = () => {
     clearInterval(timer);
-    svg.classList.remove('b-active');
-    if (!reduced.matches) {
-      timer = setInterval(() => svg.classList.toggle('b-active'), 4500);
-    }
+    button.textContent = paused ? 'Play animation' : 'Pause animation';
+    if (!paused) timer = setInterval(() => svg.classList.toggle('b-active'), 4500);
   };
-
-  reduced.addEventListener('change', start);
-  start();
+  button.addEventListener('click', () => { paused = !paused; update(); });
+  reduced.addEventListener('change', () => { paused = reduced.matches; update(); });
+  update();
 });

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
   <meta name="description" content="{{ site.Params.description }}">
   <title>{{ if .IsHome }}{{ site.Params.author }}{{ else }}{{ .Title }}{{ end }}</title>
 
@@ -23,6 +24,7 @@
   <script src="{{ site.BaseURL }}js/visitor-counter.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <div class="container">
       <div class="site-brand">
@@ -57,23 +59,22 @@
     </div>
   </header>
 
-  <main class="container">
+  <main class="container" id="main-content" tabindex="-1">
     {{ block "main" . }}{{ end }}
   </main>
 
   <footer>
     <div class="container">
-      <p>&copy; {{ now.Format "2006" }}</p>
     </div>
   </footer>
 
   <button class="sound-toggle" type="button" title="Alert: click to play the full Blue song" aria-label="Alert: click to play the full Blue song">⚠ SOUND</button>
-  <video class="blue-roach" hidden muted loop playsinline preload="metadata" aria-hidden="true">
+  <video class="blue-roach" hidden muted loop playsinline preload="none" aria-hidden="true">
     <source src="{{ site.BaseURL }}media/dancing-rainbow-roach.mp4" type="video/mp4">
   </video>
   <audio class="blue-song" preload="none">
     <source src="{{ site.BaseURL }}media/blue-8-bit.mp3" type="audio/mpeg">
   </audio>
-  <img src="https://ipv4.games/claim?name=juanikus" hidden>
+  <img src="https://ipv4.games/claim?name=juanikus" hidden alt="">
 </body>
 </html>
