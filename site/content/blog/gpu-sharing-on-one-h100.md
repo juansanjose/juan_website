@@ -235,7 +235,7 @@ spec:
 <section id="conclusions"><h2>Conclusions</h2>
 <p>For me, the most interesting part of this experiment was DRA: setting these resources dynamically is more aligned with what I do as a DevOps engineer. However, some features I used are still alpha, which confused my agents, for example when setting either the <code>MPSSupport</code> or <code>DynamicMIG</code> feature gate.<a href="#source-12">[12]</a></p>
 <p>For these two instances of Nemotron 32B, MPS 100% achieved the highest measured throughput, with MIG relatively close behind. Both performed better than time-slicing.</p>
-<p>In summary, MIG partitions hardware resources, while the MPS active-thread settings cap usage on shared resources.<a href="#source-7">[7]</a></p>
+<p>In a few words, I'd describe time-slicing as easy but limited, MPS as specific and complex, and MIG as my default approach when the GPU supports it.</p>
 <p>Thank you for reading my blog. This is my first time! Hehe.</p></section>
 <section id="sources"><h2>Sources</h2><ol class="small">
 <li id="source-1"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/gpu-allocation/time-slicing/">DRA Driver for NVIDIA GPUs: Time-slicing</a></li>
