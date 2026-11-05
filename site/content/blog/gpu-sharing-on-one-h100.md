@@ -229,7 +229,7 @@ spec:
 <section id="conclusions"><h2>Conclusions</h2>
 <p>For me, the most interesting part of this experiment was DRA: setting these resources dynamically is more aligned with what I do as a DevOps engineer. However, some features I used are still alpha, and my agents got confused by the mutually exclusive <code>MPSSupport</code> and <code>DynamicMIG</code> gates.<a href="#source-12">[12]</a></p>
 <p>For these two instances of Nemotron 32B, MPS 100% achieved the highest measured throughput, with MIG relatively close behind. Both performed better than time-slicing.</p>
-<p>The choice also depends on isolation: MIG partitions hardware resources, while the MPS active-thread settings here cap usage on shared resources. CERN's talk gives another example of sharing GPUs between experiment teams that underutilize their allocations.<a href="#source-15">[15]</a> Bare-metal deployment is a separate choice from GPU sharing: both MPS and MIG can run on bare metal.<a href="#source-20">[20]</a> <a href="#source-7">[7]</a></p>
+<p>In summary, MIG partitions hardware resources, while the MPS active-thread settings cap usage on shared resources.<a href="#source-7">[7]</a></p>
 <p>Thank you for reading my blog. This is my first time! Hehe.</p></section>
 <section id="sources"><h2>Sources</h2><ol class="small">
 <li id="source-1"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/gpu-allocation/time-slicing/">DRA Driver for NVIDIA GPUs: Time-slicing</a></li>
@@ -251,7 +251,6 @@ spec:
 <li id="source-17"><a href="https://www.linkedin.com/pulse/gpus-security-boundary-its-architectural-gaps-run-all-kavitha-daula-3zvoe/">GPUs Are Not a Security Boundary and Its Architectural Gaps Run All the Way Down</a></li>
 <li id="source-18"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/virtualization.html">NVIDIA MIG: GPU passthrough and MIG-backed vGPUs</a></li>
 <li id="source-19"><a href="https://github.com/NVIDIA/product-security/blob/main/2026/5821/5821.md">NVIDIA security bulletin: GPU display drivers and vGPU software, May 2026</a></li>
-<li id="source-20"><a href="https://docs.nvidia.com/deploy/mps/latest/index.html">NVIDIA Multi-Process Service guide</a> <a href="/gpu-sharing/NVIDIA-CUDA-MPS-Guide.pdf">Saved PDF</a></li>
 </ol></section>
 </div>
 
