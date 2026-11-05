@@ -1,6 +1,113 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="655" viewBox="0 0 1000 655" role="img" aria-labelledby="mig-title mig-desc" style="font-family:Arial,Helvetica,sans-serif">
-<title id="mig-title">MIG resource paths within two GPU instances</title><desc id="mig-desc">The two 3g.40gb instances used in this experiment are shown as separate coral and green rows inside one H100. Each has a system pipe, isolated control and data crossbar ports, 46 SMs, L2 cache banks, memory controllers and 40 GB HBM. The small SM tiles are schematic, not an SM count.</desc>
-<defs><linearGradient id="mig-panel" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#eef5f7"/></linearGradient><marker id="mps-arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7Z" fill="#172b3a"/></marker></defs>
-<rect width="1000" height="655" fill="#f7fafb"/>
-<text x="600" y="40" text-anchor="middle" font-size="26" fill="#172b3a" font-weight="700" >GPU · H100 with MIG</text><rect x="230" y="62" width="740" height="500" rx="10" fill="url(#mig-panel)" stroke="#57929a" stroke-width="2" /><text x="290" y="93" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >System</text><text x="290" y="115" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >pipe</text><text x="367" y="93" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >Control</text><text x="367" y="115" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >Xbar</text><text x="509" y="93" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >SMs</text><text x="651" y="93" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >Data</text><text x="651" y="115" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >Xbar</text><text x="722" y="93" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >L2</text><text x="722" y="115" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >cache</text><text x="804" y="93" text-anchor="middle" font-size="16" fill="#172b3a" font-weight="700" >Memory</text><text x="804" y="115" text-anchor="middle" font-size="16" fill="#172b3a" font-weight="700" >controllers</text><text x="901" y="93" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >DRAM /</text><text x="901" y="115" text-anchor="middle" font-size="18" fill="#172b3a" font-weight="700" >HBM</text><rect x="30" y="202" width="170" height="94" rx="10" fill="url(#mig-panel)" stroke="#819eac" stroke-width="2" /><text x="115" y="235" text-anchor="middle" font-size="20" fill="#172b3a" font-weight="700" >Model server A</text><text x="115" y="268" text-anchor="middle" font-size="18" fill="#172b3a" >CUDA context A</text><path d="M202 249 H238" fill="none" stroke="#172b3a" stroke-width="2.5" marker-end="url(#mps-arrow)"/><rect x="242" y="144" width="716" height="178" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><text x="600" y="170" text-anchor="middle" font-size="23" fill="#172b3a" font-weight="700" >GPU instance A · 3g.40gb</text><path d="M250 249 H948" fill="none" stroke="#172b3a" stroke-width="2.5"/><rect x="250" y="188" width="80" height="122" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><rect x="340" y="188" width="54" height="122" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><rect x="404" y="188" width="210" height="122" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><rect x="624" y="188" width="54" height="122" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><rect x="688" y="188" width="68" height="122" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><rect x="766" y="188" width="76" height="122" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><rect x="852" y="188" width="98" height="122" rx="10" fill="#f5d4de" stroke="#f46b68" stroke-width="2" /><text x="290" y="241" text-anchor="middle" font-size="18" fill="#172b3a" >System</text><text x="290" y="267" text-anchor="middle" font-size="18" fill="#172b3a" >pipe</text><text x="367" y="249" text-anchor="middle" font-size="18" fill="#172b3a" transform="rotate(-90 367 249)">Ports A</text><text x="651" y="249" text-anchor="middle" font-size="18" fill="#172b3a" transform="rotate(-90 651 249)">Ports A</text><text x="509" y="217" text-anchor="middle" font-size="22" fill="#172b3a" font-weight="700" >46 SMs</text><rect x="422" y="232" width="46" height="26" rx="3" fill="#f3b7c7" stroke="#f46b68" stroke-width="2" /><rect x="486" y="232" width="46" height="26" rx="3" fill="#f3b7c7" stroke="#f46b68" stroke-width="2" /><rect x="550" y="232" width="46" height="26" rx="3" fill="#f3b7c7" stroke="#f46b68" stroke-width="2" /><rect x="422" y="270" width="46" height="26" rx="3" fill="#f3b7c7" stroke="#f46b68" stroke-width="2" /><rect x="486" y="270" width="46" height="26" rx="3" fill="#f3b7c7" stroke="#f46b68" stroke-width="2" /><rect x="550" y="270" width="46" height="26" rx="3" fill="#f3b7c7" stroke="#f46b68" stroke-width="2" /><text x="722" y="241" text-anchor="middle" font-size="21" fill="#172b3a" font-weight="700" >L2</text><text x="722" y="269" text-anchor="middle" font-size="20" fill="#172b3a" >A</text><text x="804" y="241" text-anchor="middle" font-size="20" fill="#172b3a" font-weight="700" >MC</text><text x="804" y="269" text-anchor="middle" font-size="20" fill="#172b3a" >A</text><text x="901" y="241" text-anchor="middle" font-size="20" fill="#172b3a" font-weight="700" >40 GB</text><text x="901" y="269" text-anchor="middle" font-size="20" fill="#172b3a" >HBM</text><rect x="30" y="412" width="170" height="94" rx="10" fill="url(#mig-panel)" stroke="#819eac" stroke-width="2" /><text x="115" y="445" text-anchor="middle" font-size="20" fill="#172b3a" font-weight="700" >Model server B</text><text x="115" y="478" text-anchor="middle" font-size="18" fill="#172b3a" >CUDA context B</text><path d="M202 459 H238" fill="none" stroke="#172b3a" stroke-width="2.5" marker-end="url(#mps-arrow)"/><rect x="242" y="354" width="716" height="178" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><text x="600" y="380" text-anchor="middle" font-size="23" fill="#172b3a" font-weight="700" >GPU instance B · 3g.40gb</text><path d="M250 459 H948" fill="none" stroke="#172b3a" stroke-width="2.5"/><rect x="250" y="398" width="80" height="122" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><rect x="340" y="398" width="54" height="122" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><rect x="404" y="398" width="210" height="122" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><rect x="624" y="398" width="54" height="122" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><rect x="688" y="398" width="68" height="122" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><rect x="766" y="398" width="76" height="122" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><rect x="852" y="398" width="98" height="122" rx="10" fill="#e3efc7" stroke="#8fbd60" stroke-width="2" /><text x="290" y="451" text-anchor="middle" font-size="18" fill="#172b3a" >System</text><text x="290" y="477" text-anchor="middle" font-size="18" fill="#172b3a" >pipe</text><text x="367" y="459" text-anchor="middle" font-size="18" fill="#172b3a" transform="rotate(-90 367 459)">Ports B</text><text x="651" y="459" text-anchor="middle" font-size="18" fill="#172b3a" transform="rotate(-90 651 459)">Ports B</text><text x="509" y="427" text-anchor="middle" font-size="22" fill="#172b3a" font-weight="700" >46 SMs</text><rect x="422" y="442" width="46" height="26" rx="3" fill="#b7d58c" stroke="#8fbd60" stroke-width="2" /><rect x="486" y="442" width="46" height="26" rx="3" fill="#b7d58c" stroke="#8fbd60" stroke-width="2" /><rect x="550" y="442" width="46" height="26" rx="3" fill="#b7d58c" stroke="#8fbd60" stroke-width="2" /><rect x="422" y="480" width="46" height="26" rx="3" fill="#b7d58c" stroke="#8fbd60" stroke-width="2" /><rect x="486" y="480" width="46" height="26" rx="3" fill="#b7d58c" stroke="#8fbd60" stroke-width="2" /><rect x="550" y="480" width="46" height="26" rx="3" fill="#b7d58c" stroke="#8fbd60" stroke-width="2" /><text x="722" y="451" text-anchor="middle" font-size="21" fill="#172b3a" font-weight="700" >L2</text><text x="722" y="479" text-anchor="middle" font-size="20" fill="#172b3a" >B</text><text x="804" y="451" text-anchor="middle" font-size="20" fill="#172b3a" font-weight="700" >MC</text><text x="804" y="479" text-anchor="middle" font-size="20" fill="#172b3a" >B</text><text x="901" y="451" text-anchor="middle" font-size="20" fill="#172b3a" font-weight="700" >40 GB</text><text x="901" y="479" text-anchor="middle" font-size="20" fill="#172b3a" >HBM</text><path d="M244 347 H956" fill="none" stroke="#172b3a" stroke-width="2.5" stroke-dasharray="7 6"/><text x="500" y="605" text-anchor="middle" font-size="21" fill="#172b3a" >Each instance has dedicated SMs and isolated memory-system paths.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="655" viewBox="0 0 1000 655" role="img" aria-labelledby="mig-title mig-desc" font-family="Arial,Helvetica,sans-serif">
+  <title id="mig-title">MIG resource paths within two GPU instances</title>
+  <desc id="mig-desc">The two 3g.40gb instances used in this experiment are shown as separate coral and green rows inside one H100. Each has a system pipe, isolated control and data crossbar ports, 46 SMs, L2 cache banks, memory controllers and 40 GB HBM. The small SM tiles are schematic, not an SM count.</desc>
+  <defs>
+    <linearGradient id="mig-panel" x2="0" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eef5f7"/>
+    </linearGradient>
+    <marker id="mig-arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L8 4 L0 8Z" fill="#172b3a"/>
+    </marker>
+    <style>
+      text { fill: #172b3a; text-anchor: middle; dominant-baseline: middle; }
+      .heading { font-size: 18px; font-weight: 700; }
+      .resource { fill: var(--instance-fill); stroke: currentColor; stroke-width: 2; }
+      .tile { fill: var(--tile-fill); stroke: currentColor; stroke-width: 2; }
+      .label { font-size: 18px; }
+      .value { font-size: 20px; font-weight: 700; }
+    </style>
+    <!-- Shared grid: x=260; widths=84,64,164,64,64,90,84; all gaps=12. -->
+    <g id="mig-resources" transform="translate(260 48)">
+      <g id="mig-system-pipe">
+        <rect class="resource" width="84" height="116" rx="8"/>
+        <text class="label" x="42" y="45">System</text>
+        <text class="label" x="42" y="71">pipe</text>
+      </g>
+      <g id="mig-control-xbar" transform="translate(96)">
+        <rect class="resource" width="64" height="116" rx="8"/>
+      </g>
+      <g id="mig-sm-bank" transform="translate(172)">
+        <rect class="resource" width="164" height="116" rx="8"/>
+        <text x="82" y="26" font-size="22" font-weight="700">46 SMs</text>
+        <g id="mig-sm-tiles">
+          <rect class="tile" x="14" y="48" width="40" height="22" rx="3"/>
+          <rect class="tile" x="62" y="48" width="40" height="22" rx="3"/>
+          <rect class="tile" x="110" y="48" width="40" height="22" rx="3"/>
+          <rect class="tile" x="14" y="82" width="40" height="22" rx="3"/>
+          <rect class="tile" x="62" y="82" width="40" height="22" rx="3"/>
+          <rect class="tile" x="110" y="82" width="40" height="22" rx="3"/>
+        </g>
+      </g>
+      <g id="mig-data-xbar" transform="translate(348)">
+        <rect class="resource" width="64" height="116" rx="8"/>
+      </g>
+      <g id="mig-l2-bank" transform="translate(424)">
+        <rect class="resource" width="64" height="116" rx="8"/>
+        <text class="value" x="32" y="45">L2</text>
+      </g>
+      <g id="mig-memory-controllers" transform="translate(500)">
+        <rect class="resource" width="90" height="116" rx="8"/>
+        <text class="value" x="45" y="45">MC</text>
+      </g>
+      <g id="mig-hbm" transform="translate(602)">
+        <rect class="resource" width="84" height="116" rx="8"/>
+        <text class="value" x="42" y="45">40 GB</text>
+        <text x="42" y="71" font-size="20">HBM</text>
+      </g>
+    </g>
+    <g id="mig-server">
+      <rect x="24" y="61" width="184" height="90" rx="10" fill="url(#mig-panel)" stroke="#819eac" stroke-width="2"/>
+    </g>
+  </defs>
+
+  <rect width="1000" height="655" fill="#f7fafb"/>
+  <text x="603" y="38" font-size="26" font-weight="700">GPU · H100 with MIG</text>
+  <rect x="230" y="68" width="746" height="500" rx="10" fill="url(#mig-panel)" stroke="#57929a" stroke-width="2"/>
+
+  <!-- Heading centres match the shared resource grid below. -->
+  <g class="heading" transform="translate(260 102)">
+    <text x="42" y="-8">System</text><text x="42" y="14">pipe</text>
+    <text x="128" y="-8">Control</text><text x="128" y="14">Xbar</text>
+    <text x="254" y="3">SMs</text>
+    <text x="380" y="-8">Data</text><text x="380" y="14">Xbar</text>
+    <text x="456" y="-8">L2</text><text x="456" y="14">cache</text>
+    <text x="545" y="-8" font-size="16">Memory</text><text x="545" y="14" font-size="16">controllers</text>
+    <text x="644" y="-8">DRAM /</text><text x="644" y="14">HBM</text>
+  </g>
+
+  <!-- Only the palette, instance name and port labels differ between rows. -->
+  <g id="mig-instance-a" transform="translate(0 150)" color="#f46b68" style="--instance-fill:#f5d4de;--tile-fill:#f3b7c7">
+    <use href="#mig-server"/>
+    <text x="116" y="92" font-size="20" font-weight="700">Model server A</text>
+    <text class="label" x="116" y="120">CUDA context A</text>
+    <rect class="resource" x="244" width="718" height="178" rx="10"/>
+    <text x="603" y="25" font-size="23" font-weight="700">GPU instance A · 3g.40gb</text>
+    <use href="#mig-resources"/>
+    <g class="label">
+      <text transform="translate(388 106) rotate(-90)">Ports A</text>
+      <text transform="translate(640 106) rotate(-90)">Ports A</text>
+      <text x="716" y="119">A</text><text x="805" y="119">A</text>
+    </g>
+    <path d="M208 106 H243" fill="none" stroke="#172b3a" stroke-width="2" marker-end="url(#mig-arrow)"/>
+  </g>
+
+  <path d="M244 344 H962" fill="none" stroke="#819eac" stroke-width="2" stroke-dasharray="7 6"/>
+
+  <g id="mig-instance-b" transform="translate(0 360)" color="#8fbd60" style="--instance-fill:#e3efc7;--tile-fill:#b7d58c">
+    <use href="#mig-server"/>
+    <text x="116" y="92" font-size="20" font-weight="700">Model server B</text>
+    <text class="label" x="116" y="120">CUDA context B</text>
+    <rect class="resource" x="244" width="718" height="178" rx="10"/>
+    <text x="603" y="25" font-size="23" font-weight="700">GPU instance B · 3g.40gb</text>
+    <use href="#mig-resources"/>
+    <g class="label">
+      <text transform="translate(388 106) rotate(-90)">Ports B</text>
+      <text transform="translate(640 106) rotate(-90)">Ports B</text>
+      <text x="716" y="119">B</text><text x="805" y="119">B</text>
+    </g>
+    <path d="M208 106 H243" fill="none" stroke="#172b3a" stroke-width="2" marker-end="url(#mig-arrow)"/>
+  </g>
+
+  <text x="500" y="608" font-size="21">Each instance has dedicated SMs and isolated memory-system paths.</text>
 </svg>
