@@ -5,6 +5,7 @@
 
 .gpu-article .toc{margin:1.25rem 0}.gpu-article .toc ol{margin:0;padding-left:1.6rem}.gpu-article .toc ol ol{list-style:lower-alpha}
 .gpu-article{--ink:var(--fg);--line:var(--border);--accent:var(--link);color:var(--fg);background:transparent;overflow-wrap:anywhere;font:18px/1.6 Georgia,"Times New Roman",serif}
+.gpu-article p,.gpu-article section>ul>li{text-align:justify;hyphens:auto}
 .gpu-article h2{font-size:1.3rem;margin:0 0 1.25rem}
 .gpu-article section{margin:2.5rem 0}
 .gpu-article h3{margin:2rem 0 .75rem}
