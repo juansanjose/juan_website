@@ -15,7 +15,7 @@
 .gpu-article .table-wrap{overflow:auto;margin:1.25rem 0}
 .gpu-article table{border-collapse:collapse;width:100%;margin:0}
 .gpu-article th,.gpu-article td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
-.gpu-article caption{text-align:left;font-size:15px;padding:0 0 .75rem}
+.gpu-article caption{text-align:center;font-size:15px;padding:0 0 .75rem}
 .gpu-article .concurrency-table{min-width:660px;font-size:16px;line-height:1.5}
 .gpu-article .concurrency-table th,.gpu-article .concurrency-table td{border:1px solid var(--line);padding:12px 16px;vertical-align:top}
 .gpu-article .concurrency-table thead th{background:var(--bg-shade)}
@@ -25,7 +25,7 @@
 .gpu-article a:focus-visible{outline:3px solid var(--accent)}
 .gpu-article pre{overflow:auto;padding:16px;background:var(--bg-shade);font:13px/1.5 monospace}
 .gpu-article figure{margin:1.25rem 0}
-.gpu-article figcaption{font-size:14px;color:var(--muted)}
+.gpu-article figcaption{text-align:center;font-size:14px;color:var(--muted)}
 .gpu-article .mechanism{margin:1.5rem 0}
 .gpu-article .mechanism img,.gpu-article .capture img{display:block;width:100%;height:auto}
 .gpu-article .performance-chart{height:732px;display:block}
