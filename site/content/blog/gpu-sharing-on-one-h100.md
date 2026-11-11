@@ -14,7 +14,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
 <nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in Kubernetes with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing configuration</a></li><li><a href="#dra-mps">MPS configuration</a></li><li><a href="#dra-mig">MIG configuration</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#workload-choice">Use cases</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
 
-<p>Here I'll briefly introduce each sharing method—time-slicing, MPS and MIG—and explain how they manage GPU resources. Then I'll show how I configured them in Kubernetes and compare the inference results from my H100 experiment.</p>
+<p>Here I'll briefly introduce each sharing method: time-slicing, MPS and MIG. Then I'll explain how I managed the resources in my lab with Kubernetes, compare the inference results from my H100 experiment, discuss use cases and some security considerations, and finish with my conclusions.</p>
 
 <section id="timeslicing"><h2>Time-slicing</h2>
 
