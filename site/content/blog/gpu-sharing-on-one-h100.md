@@ -12,9 +12,9 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <p>After reading <a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">NVIDIA's post on consolidating underutilized GPU workloads</a>, I wanted to try it for myself. I ran two instances of Nemotron 32B on one H100 and compared their inference performance with each sharing method.</p>
 
 <div class="reading-progress" aria-hidden="true"><span class="reading-progress-bar"></span></div>
-<nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in Kubernetes with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing configuration</a></li><li><a href="#dra-mps">MPS configuration</a></li><li><a href="#dra-mig">MIG configuration</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#workload-choice">Use cases</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
-
 <p>I’ll start with a brief overview of the three GPU-sharing methods: time-slicing, MPS, and MIG. Then, I’ll walk through how I managed GPU resources in my Kubernetes lab, compare the inference performance results from my H100 experiments, explore practical use cases and security considerations, and wrap up with my key takeaways.</p>
+
+<nav class="toc" aria-label="Contents"><p><strong>Contents</strong></p><ol><li><a href="#timeslicing">Time-slicing</a></li><li><a href="#mps">MPS</a></li><li><a href="#mig">MIG</a></li><li><a href="#dra">Deploying the lab in Kubernetes with DRA</a><ol><li><a href="#dra-timeslicing">Time-slicing configuration</a></li><li><a href="#dra-mps">MPS configuration</a></li><li><a href="#dra-mig">MIG configuration</a></li></ol></li><li><a href="#original">Inference performance</a></li><li><a href="#workload-choice">Use cases</a></li><li><a href="#security">Security considerations</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#sources">Sources</a></li></ol></nav>
 
 <section id="timeslicing"><h2>Time-slicing</h2>
 
