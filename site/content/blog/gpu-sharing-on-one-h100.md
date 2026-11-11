@@ -149,14 +149,13 @@ metadata:
 spec:
   resourceClaims:
   - name: device
-    resourceClaimName: shared-gpu   # name the claim, do not use a template
+    resourceClaimName: shared-gpu
   containers:
   - name: server-a
     image: &lt;your-image&gt;
     resources:
       claims:
-      - name: device
-# Both pods name the same claim, so they get the same GPU and the same MPS daemon.</code></pre>
+      - name: device</code></pre>
 </details>
 </div>
 
@@ -166,10 +165,7 @@ spec:
 <p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically created a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-8">[8]</a></p>
 <details class="yaml-example">
 <summary>MIG claim template and Pod</summary>
-<pre class="claim" tabindex="0"><code># Template form: Kubernetes creates one ResourceClaim per pod from it.
-# The same manifest works in static and dynamic MIG mode; the difference is
-# only who created the partition (an administrator, or the driver on demand).
-apiVersion: resource.k8s.io/v1
+<pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
   name: mig-partition
