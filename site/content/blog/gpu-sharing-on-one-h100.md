@@ -68,9 +68,11 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <figcaption>DRA setup and claim workflow. Source: Google Cloud.<a href="https://docs.cloud.google.com/kubernetes-engine/docs/concepts/about-dynamic-resource-allocation#how-dra-works">[11]</a></figcaption>
 </figure>
 
-<h3 id="dra-timeslicing">Time-slicing configuration</h3><p>A <code>ResourceClaim</code> is created to request a GPU shared through time-slicing. The interval can also be configured in that claim.</p>
+<h3 id="dra-timeslicing">Time-slicing configuration</h3>
+<p>These examples are copied from the <a href="https://github.com/juansanjose/ideas/tree/5b8231f1c2b12bc989d6443b1f1e37da588a722d/infiniband/experiments/dra-k8s/h100-nemotron/manifests">H100/Nemotron lab manifests at commit 5b8231f</a>. They use the <code>dra-lab</code> namespace and expect the model files at <code>/models/nemotron</code> on the node.</p>
+<p>Both model Pods reference the same <code>shared-gpu</code> claim. The claim below configures the Default time-slice interval.</p>
 <details class="yaml-example">
-<summary>Time-slicing ResourceClaim</summary>
+<summary>Time-slicing ResourceClaim: claim-ts-default.yaml</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -83,7 +85,8 @@ spec:
       exactly:
         deviceClassName: gpu.nvidia.com
     config:
-    - requests: ["gpu"]
+    - requests:
+      - gpu
       opaque:
         driver: gpu.nvidia.com
         parameters:
@@ -95,29 +98,178 @@ spec:
               interval: Default</code></pre>
 </details>
 <details class="yaml-example">
-<summary>Time-slicing Pod</summary>
+<summary>Time-slicing Pod A: shared/model-a.yaml</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: v1
 kind: Pod
 metadata:
-  name: server
+  name: model-a
   namespace: dra-lab
 spec:
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
+  containers:
+  - name: model
+    image: vllm/vllm-openai@sha256:6766ce0c459e24b76f3e9ba14ffc0442131ef4248c904efdcbf0d89e38be01fe
+    command:
+    - python3
+    - -m
+    - vllm.entrypoints.openai.api_server
+    args:
+    - --model
+    - /models/nemotron
+    - --served-model-name
+    - nemotron
+    - --trust-remote-code
+    - --tensor-parallel-size
+    - '1'
+    - --max-model-len
+    - '4096'
+    - --max-num-seqs
+    - '10'
+    - --max-num-batched-tokens
+    - '2048'
+    - --kv-cache-memory-bytes
+    - '2147483648'
+    - --kv-cache-dtype
+    - fp8
+    - --gpu-memory-utilization
+    - '0.45'
+    - --no-enable-prefix-caching
+    - --generation-config
+    - vllm
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    env:
+    - name: OMP_NUM_THREADS
+      value: '4'
+    - name: VLLM_NO_USAGE_STATS
+      value: '1'
+    - name: HF_HUB_OFFLINE
+      value: '1'
+    - name: VLLM_USE_FLASHINFER_MOE_FP8
+      value: '0'
+    resources:
+      requests:
+        cpu: '4'
+        memory: 40Gi
+      claims:
+      - name: device
+        request: gpu
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      periodSeconds: 5
+    volumeMounts:
+    - name: models
+      mountPath: /models
+      readOnly: true
+    - name: shm
+      mountPath: /dev/shm
+  volumes:
+  - name: models
+    hostPath:
+      path: /models
+      type: Directory
+  - name: shm
+    emptyDir:
+      medium: Memory
+      sizeLimit: 4Gi
   resourceClaims:
   - name: device
-    resourceClaimName: shared-gpu
+    resourceClaimName: shared-gpu</code></pre>
+</details>
+<details class="yaml-example">
+<summary>Time-slicing Pod B: shared/model-b.yaml</summary>
+<pre class="claim" tabindex="0"><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: model-b
+  namespace: dra-lab
+spec:
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
   containers:
-  - name: server
-    image: &lt;your-image&gt;
+  - name: model
+    image: vllm/vllm-openai@sha256:6766ce0c459e24b76f3e9ba14ffc0442131ef4248c904efdcbf0d89e38be01fe
+    command:
+    - python3
+    - -m
+    - vllm.entrypoints.openai.api_server
+    args:
+    - --model
+    - /models/nemotron
+    - --served-model-name
+    - nemotron
+    - --trust-remote-code
+    - --tensor-parallel-size
+    - '1'
+    - --max-model-len
+    - '4096'
+    - --max-num-seqs
+    - '10'
+    - --max-num-batched-tokens
+    - '2048'
+    - --kv-cache-memory-bytes
+    - '2147483648'
+    - --kv-cache-dtype
+    - fp8
+    - --gpu-memory-utilization
+    - '0.45'
+    - --no-enable-prefix-caching
+    - --generation-config
+    - vllm
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    env:
+    - name: OMP_NUM_THREADS
+      value: '4'
+    - name: VLLM_NO_USAGE_STATS
+      value: '1'
+    - name: HF_HUB_OFFLINE
+      value: '1'
+    - name: VLLM_USE_FLASHINFER_MOE_FP8
+      value: '0'
     resources:
+      requests:
+        cpu: '4'
+        memory: 40Gi
       claims:
-      - name: device</code></pre>
+      - name: device
+        request: gpu
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      periodSeconds: 5
+    volumeMounts:
+    - name: models
+      mountPath: /models
+      readOnly: true
+    - name: shm
+      mountPath: /dev/shm
+  volumes:
+  - name: models
+    hostPath:
+      path: /models
+      type: Directory
+  - name: shm
+    emptyDir:
+      medium: Memory
+      sizeLimit: 4Gi
+  resourceClaims:
+  - name: device
+    resourceClaimName: shared-gpu</code></pre>
 </details>
 <h3 id="dra-mps">MPS configuration</h3>
 <p>To share one GPU through the same MPS server, both Pods must reference the same <code>ResourceClaim</code>. A <code>ResourceClaimTemplate</code> creates a separate claim for each Pod, so using the same template does not guarantee the same GPU or MPS daemon.<a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/#how-mps-works">[12]</a></p>
-<p>The recorded MPS lab manifests set the active-thread percentage without an explicit device-memory limit. The example below matches the 50% run.</p>
-<div class="yaml-pair">
+<p>The MPS claim sets the active-thread percentage to 50 without an explicit device-memory limit. The model Pods are the same as for time-slicing. Their <code>resources.requests.memory: 40Gi</code> requests host RAM; it is not a GPU-memory limit.</p>
 <details class="yaml-example">
-<summary>MPS ResourceClaim</summary>
+<summary>MPS ResourceClaim: claim-mps50.yaml</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -130,7 +282,8 @@ spec:
       exactly:
         deviceClassName: gpu.nvidia.com
     config:
-    - requests: ["gpu"]
+    - requests:
+      - gpu
       opaque:
         driver: gpu.nvidia.com
         parameters:
@@ -142,64 +295,377 @@ spec:
               defaultActiveThreadPercentage: 50</code></pre>
 </details>
 <details class="yaml-example">
-<summary>MPS Pod</summary>
+<summary>MPS Pod A: shared/model-a.yaml</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: v1
 kind: Pod
 metadata:
-  name: server-a
+  name: model-a
   namespace: dra-lab
 spec:
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
+  containers:
+  - name: model
+    image: vllm/vllm-openai@sha256:6766ce0c459e24b76f3e9ba14ffc0442131ef4248c904efdcbf0d89e38be01fe
+    command:
+    - python3
+    - -m
+    - vllm.entrypoints.openai.api_server
+    args:
+    - --model
+    - /models/nemotron
+    - --served-model-name
+    - nemotron
+    - --trust-remote-code
+    - --tensor-parallel-size
+    - '1'
+    - --max-model-len
+    - '4096'
+    - --max-num-seqs
+    - '10'
+    - --max-num-batched-tokens
+    - '2048'
+    - --kv-cache-memory-bytes
+    - '2147483648'
+    - --kv-cache-dtype
+    - fp8
+    - --gpu-memory-utilization
+    - '0.45'
+    - --no-enable-prefix-caching
+    - --generation-config
+    - vllm
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    env:
+    - name: OMP_NUM_THREADS
+      value: '4'
+    - name: VLLM_NO_USAGE_STATS
+      value: '1'
+    - name: HF_HUB_OFFLINE
+      value: '1'
+    - name: VLLM_USE_FLASHINFER_MOE_FP8
+      value: '0'
+    resources:
+      requests:
+        cpu: '4'
+        memory: 40Gi
+      claims:
+      - name: device
+        request: gpu
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      periodSeconds: 5
+    volumeMounts:
+    - name: models
+      mountPath: /models
+      readOnly: true
+    - name: shm
+      mountPath: /dev/shm
+  volumes:
+  - name: models
+    hostPath:
+      path: /models
+      type: Directory
+  - name: shm
+    emptyDir:
+      medium: Memory
+      sizeLimit: 4Gi
   resourceClaims:
   - name: device
-    resourceClaimName: shared-gpu
-  containers:
-  - name: server-a
-    image: &lt;your-image&gt;
-    resources:
-      claims:
-      - name: device</code></pre>
+    resourceClaimName: shared-gpu</code></pre>
 </details>
-</div>
-
-
+<details class="yaml-example">
+<summary>MPS Pod B: shared/model-b.yaml</summary>
+<pre class="claim" tabindex="0"><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: model-b
+  namespace: dra-lab
+spec:
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
+  containers:
+  - name: model
+    image: vllm/vllm-openai@sha256:6766ce0c459e24b76f3e9ba14ffc0442131ef4248c904efdcbf0d89e38be01fe
+    command:
+    - python3
+    - -m
+    - vllm.entrypoints.openai.api_server
+    args:
+    - --model
+    - /models/nemotron
+    - --served-model-name
+    - nemotron
+    - --trust-remote-code
+    - --tensor-parallel-size
+    - '1'
+    - --max-model-len
+    - '4096'
+    - --max-num-seqs
+    - '10'
+    - --max-num-batched-tokens
+    - '2048'
+    - --kv-cache-memory-bytes
+    - '2147483648'
+    - --kv-cache-dtype
+    - fp8
+    - --gpu-memory-utilization
+    - '0.45'
+    - --no-enable-prefix-caching
+    - --generation-config
+    - vllm
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    env:
+    - name: OMP_NUM_THREADS
+      value: '4'
+    - name: VLLM_NO_USAGE_STATS
+      value: '1'
+    - name: HF_HUB_OFFLINE
+      value: '1'
+    - name: VLLM_USE_FLASHINFER_MOE_FP8
+      value: '0'
+    resources:
+      requests:
+        cpu: '4'
+        memory: 40Gi
+      claims:
+      - name: device
+        request: gpu
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      periodSeconds: 5
+    volumeMounts:
+    - name: models
+      mountPath: /models
+      readOnly: true
+    - name: shm
+      mountPath: /dev/shm
+  volumes:
+  - name: models
+    hostPath:
+      path: /models
+      type: Directory
+  - name: shm
+    emptyDir:
+      medium: Memory
+      sizeLimit: 4Gi
+  resourceClaims:
+  - name: device
+    resourceClaimName: shared-gpu</code></pre>
+</details>
 <h3 id="dra-mig">MIG configuration</h3>
 <p>DRA supports <code>DynamicMIG</code>, so the GPU does not have to be partitioned manually. The DRA driver creates MIG partitions automatically based on the requested profile. If the partitions are created manually, they can still be requested through DRA, as the driver discovers existing MIG instances at startup and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.</p>
-<p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically created a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.</p>
+<p>For the MIG runs, I used two separate <code>ResourceClaim</code> objects, <code>mig-a</code> and <code>mig-b</code>, each requesting a <code>3g.40gb</code> instance. Pod <code>model-a</code> references <code>mig-a</code>, and Pod <code>model-b</code> references <code>mig-b</code>.</p>
 <details class="yaml-example">
-<summary>MIG ResourceClaimTemplate</summary>
+<summary>MIG ResourceClaim A: claim-mig-a.yaml</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
-kind: ResourceClaimTemplate
+kind: ResourceClaim
 metadata:
-  name: mig-partition
+  name: mig-a
   namespace: dra-lab
 spec:
-  spec:
-    devices:
-      requests:
-      - name: mig
-        exactly:
-          deviceClassName: mig.nvidia.com
-          selectors:
-          - cel:
-              expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
+  devices:
+    requests:
+    - name: gpu
+      exactly:
+        deviceClassName: mig.nvidia.com
+        selectors:
+        - cel:
+            expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
 </details>
 <details class="yaml-example">
-<summary>MIG Pod</summary>
+<summary>MIG ResourceClaim B: claim-mig-b.yaml</summary>
+<pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
+kind: ResourceClaim
+metadata:
+  name: mig-b
+  namespace: dra-lab
+spec:
+  devices:
+    requests:
+    - name: gpu
+      exactly:
+        deviceClassName: mig.nvidia.com
+        selectors:
+        - cel:
+            expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
+</details>
+<details class="yaml-example">
+<summary>MIG Pod A: mig/model-a.yaml</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: v1
 kind: Pod
 metadata:
-  name: mig-probe
+  name: model-a
   namespace: dra-lab
 spec:
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
+  containers:
+  - name: model
+    image: vllm/vllm-openai@sha256:6766ce0c459e24b76f3e9ba14ffc0442131ef4248c904efdcbf0d89e38be01fe
+    command:
+    - python3
+    - -m
+    - vllm.entrypoints.openai.api_server
+    args:
+    - --model
+    - /models/nemotron
+    - --served-model-name
+    - nemotron
+    - --trust-remote-code
+    - --tensor-parallel-size
+    - '1'
+    - --max-model-len
+    - '4096'
+    - --max-num-seqs
+    - '10'
+    - --max-num-batched-tokens
+    - '2048'
+    - --kv-cache-memory-bytes
+    - '2147483648'
+    - --kv-cache-dtype
+    - fp8
+    - --gpu-memory-utilization
+    - '0.45'
+    - --no-enable-prefix-caching
+    - --generation-config
+    - vllm
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    env:
+    - name: OMP_NUM_THREADS
+      value: '4'
+    - name: VLLM_NO_USAGE_STATS
+      value: '1'
+    - name: HF_HUB_OFFLINE
+      value: '1'
+    - name: VLLM_USE_FLASHINFER_MOE_FP8
+      value: '0'
+    resources:
+      requests:
+        cpu: '4'
+        memory: 40Gi
+      claims:
+      - name: device
+        request: gpu
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      periodSeconds: 5
+    volumeMounts:
+    - name: models
+      mountPath: /models
+      readOnly: true
+    - name: shm
+      mountPath: /dev/shm
+  volumes:
+  - name: models
+    hostPath:
+      path: /models
+      type: Directory
+  - name: shm
+    emptyDir:
+      medium: Memory
+      sizeLimit: 4Gi
   resourceClaims:
   - name: device
-    resourceClaimTemplateName: mig-partition
+    resourceClaimName: mig-a</code></pre>
+</details>
+<details class="yaml-example">
+<summary>MIG Pod B: mig/model-b.yaml</summary>
+<pre class="claim" tabindex="0"><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: model-b
+  namespace: dra-lab
+spec:
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
   containers:
-  - name: probe
-    image: &lt;your-image&gt;
+  - name: model
+    image: vllm/vllm-openai@sha256:6766ce0c459e24b76f3e9ba14ffc0442131ef4248c904efdcbf0d89e38be01fe
+    command:
+    - python3
+    - -m
+    - vllm.entrypoints.openai.api_server
+    args:
+    - --model
+    - /models/nemotron
+    - --served-model-name
+    - nemotron
+    - --trust-remote-code
+    - --tensor-parallel-size
+    - '1'
+    - --max-model-len
+    - '4096'
+    - --max-num-seqs
+    - '10'
+    - --max-num-batched-tokens
+    - '2048'
+    - --kv-cache-memory-bytes
+    - '2147483648'
+    - --kv-cache-dtype
+    - fp8
+    - --gpu-memory-utilization
+    - '0.45'
+    - --no-enable-prefix-caching
+    - --generation-config
+    - vllm
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    env:
+    - name: OMP_NUM_THREADS
+      value: '4'
+    - name: VLLM_NO_USAGE_STATS
+      value: '1'
+    - name: HF_HUB_OFFLINE
+      value: '1'
+    - name: VLLM_USE_FLASHINFER_MOE_FP8
+      value: '0'
     resources:
+      requests:
+        cpu: '4'
+        memory: 40Gi
       claims:
-      - name: device</code></pre>
+      - name: device
+        request: gpu
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8000
+      periodSeconds: 5
+    volumeMounts:
+    - name: models
+      mountPath: /models
+      readOnly: true
+    - name: shm
+      mountPath: /dev/shm
+  volumes:
+  - name: models
+    hostPath:
+      path: /models
+      type: Directory
+  - name: shm
+    emptyDir:
+      medium: Memory
+      sizeLimit: 4Gi
+  resourceClaims:
+  - name: device
+    resourceClaimName: mig-b</code></pre>
 </details>
 <p>Currently, the NVIDIA DRA driver's <code>MPSSupport</code> and <code>DynamicMIG</code> feature gates are mutually exclusive. This means MPS cannot be used to share a dynamically created MIG slice with this DRA configuration, even though NVIDIA supports running multiple MPS clients within the same MIG slice.<a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/getting-started-with-mig.html#mig-with-cuda-mps">[13]</a></p>
 <p>The traditional device-plugin setup for MIG is described in <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">MIG strategies in Kubernetes</a>. The MIG layout is configured separately from the Pod's GPU request.</p>
