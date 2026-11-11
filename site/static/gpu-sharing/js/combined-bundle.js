@@ -48,7 +48,7 @@
         box.indeterminate = visible > 0 && visible < traces.length;
       }
     });
-    status.textContent = 'Scroll sideways or use the arrow keys to see the whole chart. Toggle series above; hover or tap points for values.';
+    status.textContent = '';
   } catch (error) {
     status.textContent = 'The chart could not load. The results table in the article is still available.';
   }
