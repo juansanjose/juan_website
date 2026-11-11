@@ -73,7 +73,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <p>These examples use the <a href="https://github.com/juansanjose/ideas/tree/5b8231f1c2b12bc989d6443b1f1e37da588a722d/infiniband/experiments/dra-k8s/h100-nemotron/manifests">H100/Nemotron lab manifests at commit 5b8231f</a>. The Pod excerpts show only the DRA wiring in the <code>dra-lab</code> namespace; <code>...</code> marks omitted workload settings. The linked manifests contain the complete Pod definitions.</p>
 <p>Both model Pods reference the same <code>shared-gpu</code> claim. The claim below configures the Default time-slice interval.</p>
 <details class="yaml-example">
-<summary>Time-slicing ResourceClaim: claim-ts-default.yaml</summary>
+<summary>Time-slicing ResourceClaim</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -123,7 +123,7 @@ spec:
 <p>To share one GPU through the same MPS server, both Pods must reference the same <code>ResourceClaim</code>. A <code>ResourceClaimTemplate</code> creates a separate claim for each Pod, so using the same template does not guarantee the same GPU or MPS daemon.<a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/#how-mps-works">[12]</a></p>
 <p>The MPS claim sets the active-thread percentage to 50 without an explicit device-memory limit. The model Pod uses the same DRA wiring as for time-slicing.</p>
 <details class="yaml-example">
-<summary>MPS ResourceClaim: claim-mps50.yaml</summary>
+<summary>MPS ResourceClaim</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -173,7 +173,7 @@ spec:
 <p>DRA supports <code>DynamicMIG</code>, so the GPU does not have to be partitioned manually. The DRA driver creates MIG partitions automatically based on the requested profile. If the partitions are created manually, they can still be requested through DRA, as the driver discovers existing MIG instances at startup and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.</p>
 <p>For the MIG runs, I used two separate <code>ResourceClaim</code> objects, <code>mig-a</code> and <code>mig-b</code>, each requesting a <code>3g.40gb</code> instance. The model Pod below references <code>mig-a</code>. For a second Pod, use a different Pod name and reference <code>mig-b</code>.</p>
 <details class="yaml-example">
-<summary>MIG ResourceClaim A: claim-mig-a.yaml</summary>
+<summary>MIG ResourceClaim A</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
@@ -190,7 +190,7 @@ spec:
             expression: "device.attributes['gpu.nvidia.com'].profile == '3g.40gb'"</code></pre>
 </details>
 <details class="yaml-example">
-<summary>MIG ResourceClaim B: claim-mig-b.yaml</summary>
+<summary>MIG ResourceClaim B</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
 kind: ResourceClaim
 metadata:
