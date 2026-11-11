@@ -18,9 +18,9 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 
 <section id="timeslicing"><h2>Time-slicing</h2>
 
-<p>Processes take turns executing on the GPU, while their allocated memory remains resident. The GPU switches between CUDA contexts, meaning that one process's kernels have to wait while another process is executing. This introduces context-switching overhead and prevents the processes from executing their kernels concurrently.<a href="#source-2">[2]</a> <a href="#source-3">[3]</a></p>
+<p>Processes take turns executing on the GPU, while their allocated memory remains resident. The GPU switches between CUDA contexts, meaning that one process's kernels have to wait while another process is executing. This introduces context-switching overhead and prevents the processes from executing their kernels concurrently.<a href="#source-2">[2]</a></p>
 <p>The problem is that if a process decides to be a greedy goblin, it can allocate as much of the available GPU memory as it wants, leaving other processes starving for memory. Time-slicing neither provides per-process memory limits nor automatically reclaims those allocations.<a href="#source-2">[2]</a></p>
-<p>The turn length can be changed. The presets are <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-2">[2]</a>, which correspond to this setting on the host:<a href="#source-4">[4]</a></p>
+<p>The turn length can be changed. The presets are <code>Default</code>, <code>Short</code>, <code>Medium</code> or <code>Long</code><a href="#source-2">[2]</a>, which correspond to this setting on the host:<a href="#source-3">[3]</a></p>
 <pre class="console-command" tabindex="0" aria-label="Time-slice command and option values"><code>nvidia-smi compute-policy --set-timeslice 3
 0=DEFAULT · 1=SHORT · 2=MEDIUM · 3=LONG</code></pre>
 <figure class="explainer mechanism" aria-labelledby="ts-t">
@@ -31,20 +31,20 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 </figure>
 </section>
 <section id="mps"><h2>MPS</h2>
-<p>MPS introduces a client-server architecture to allow multiple CUDA processes to execute concurrently on the same GPU. Under MPS, clients draw from a common pool of connections mapped to GPU work queues. The MPS server manages the shared scheduling resources, while clients get assigned connections. Once connected, clients submit their work directly to the GPU without passing every kernel launch through the MPS server.<a href="#source-3">[3]</a> <a href="#source-5">[5]</a></p>
+<p>MPS introduces a client-server architecture to allow multiple CUDA processes to execute concurrently on the same GPU. Under MPS, clients draw from a common pool of connections mapped to GPU work queues. The MPS server manages the shared scheduling resources, while clients get assigned connections. Once connected, clients submit their work directly to the GPU without passing every kernel launch through the MPS server.<a href="#source-4">[4]</a></p>
 <figure class="explainer mechanism">
 <div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="MPS diagram; scroll sideways on smaller screens">
 <a href="/gpu-sharing/images/mps-volta-architecture.svg"><img class="sharing-diagram" src="/gpu-sharing/images/mps-volta-architecture.svg" width="1000" height="740" loading="lazy" alt="MPS: separate client contexts, address spaces and connections submit work directly to the GPU; dashed paths show server coordination."></a>
 </div>
-<figcaption>MPS clients submit work directly through their assigned GPU connections, while the server manages shared scheduling resources. <a href="#source-3">[3]</a> <a href="#source-5">[5]</a></figcaption>
+<figcaption>MPS clients submit work directly through their assigned GPU connections, while the server manages shared scheduling resources. <a href="#source-4">[4]</a></figcaption>
 </figure>
 <p>MPS provides different ways to restrict resource usage:</p>
 <ul>
-<li><strong>Active-thread percentage:</strong> Limits the execution resources available to a client. For example, setting the limit to 50% restricts the client to approximately half of the GPU's available execution capacity. However, this does not reserve a fixed half of the physical SMs, as different clients can still execute on the same SMs.<a href="#source-6">[6]</a></li>
-<li><strong>Static SM partitioning:</strong> Specific groups of SMs are assigned to different partitions. These SMs are exclusive to their assigned partitions, providing stronger compute isolation and more predictable resource allocation.<a href="#source-6">[6]</a></li>
-<li><strong>Memory-allocation limits:</strong> The per-client device-memory limit rejects allocations that would exceed the configured limit.<a href="#source-6">[6]</a> Separately, MPS v3 supports cgroup-based hard and soft limits on non-MIG devices with CUDA 13.4 or newer. The soft limit provides a protected budget that clients can exceed when spare memory is available, up to the hard limit; under memory pressure, clients above their soft limit can be evicted. This is separate from the per-client limit shown in the lab's DRA configuration.<a href="#source-7">[7]</a></li>
+<li><strong>Active-thread percentage:</strong> Limits the execution resources available to a client. For example, setting the limit to 50% restricts the client to approximately half of the GPU's available execution capacity. However, this does not reserve a fixed half of the physical SMs, as different clients can still execute on the same SMs.<a href="#source-5">[5]</a></li>
+<li><strong>Static SM partitioning:</strong> Specific groups of SMs are assigned to different partitions. These SMs are exclusive to their assigned partitions, providing stronger compute isolation and more predictable resource allocation.<a href="#source-5">[5]</a></li>
+<li><strong>Memory-allocation limits:</strong> The per-client device-memory limit rejects allocations that would exceed the configured limit.<a href="#source-5">[5]</a> Separately, MPS v3 supports cgroup-based hard and soft limits on non-MIG devices with CUDA 13.4 or newer. The soft limit provides a protected budget that clients can exceed when spare memory is available, up to the hard limit; under memory pressure, clients above their soft limit can be evicted. This is separate from the per-client limit shown in the lab's DRA configuration.<a href="#source-6">[6]</a></li>
 </ul>
-<p>Active-thread percentages and static SM partitioning control compute resources, but those controls alone do not provide MIG-style memory-bandwidth isolation. Clients can still compete for memory bandwidth even when their memory allocations and compute resources are restricted.<a href="#source-6">[6]</a> <a href="#source-8">[8]</a></p>
+<p>Active-thread percentages and static SM partitioning control compute resources, but those controls alone do not provide MIG-style memory-bandwidth isolation. Clients can still compete for memory bandwidth even when their memory allocations and compute resources are restricted.<a href="#source-7">[7]</a></p>
 </section>
 <section id="mig"><h2>MIG</h2>
 
@@ -53,19 +53,19 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="MIG diagram; scroll sideways on smaller screens">
 <a href="/gpu-sharing/images/mig-resource-paths.svg"><img class="sharing-diagram" src="/gpu-sharing/images/mig-resource-paths.svg" width="1000" height="597" loading="lazy" alt="Two 3g.40gb GPU instances with separate paths through the system pipe, crossbar ports, 46 SMs, L2 cache, memory controllers and 40 GB HBM."></a>
 </div>
-<figcaption>Two separate MIG GPU Instances, each with dedicated SMs and isolated memory-system resources. <a href="#source-9">[9]</a></figcaption>
+<figcaption>Two separate MIG GPU Instances, each with dedicated SMs and isolated memory-system resources. <a href="#source-8">[8]</a></figcaption>
 </figure>
-<p>The main difference from the other methods is that MIG physically partitions the GPU, providing each GPU Instance with dedicated SM resources and isolated memory-system paths, including L2 cache banks, memory controllers, and DRAM buses.<a href="#source-9">[9]</a></p>
-<p>MIG provides predictable performance or, in NVIDIA's words, a "defined level of QoS".<a href="#source-9">[9]</a></p><p>This table from NVIDIA summarizes the main differences between the sharing methods.</p><div class="table-wrap" tabindex="0" role="region" aria-label="CUDA concurrency comparison; scroll horizontally on smaller screens"><table class="concurrency-table"><caption>CUDA concurrency mechanisms (adapted for this configuration) <a href="#source-8">[8]</a></caption><thead><tr><th scope="col">Feature</th><th scope="col">Streams</th><th scope="col">MPS</th><th scope="col">MIG</th></tr></thead><tbody><tr><th scope="row">Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th scope="row">Max Partitions</th><td>Unlimited</td><td>Hardware-dependent</td><td>7</td></tr><tr><th scope="row">SM Performance Isolation</th><td>No</td><td>Resource cap; no dedicated SMs</td><td>Yes</td></tr><tr><th scope="row">Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th scope="row">Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th scope="row">Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table></div>
+<p>The main difference from the other methods is that MIG physically partitions the GPU, providing each GPU Instance with dedicated SM resources and isolated memory-system paths, including L2 cache banks, memory controllers, and DRAM buses.<a href="#source-8">[8]</a></p>
+<p>MIG provides predictable performance or, in NVIDIA's words, a "defined level of QoS".<a href="#source-8">[8]</a></p><p>This table from NVIDIA summarizes the main differences between the sharing methods.</p><div class="table-wrap" tabindex="0" role="region" aria-label="CUDA concurrency comparison; scroll horizontally on smaller screens"><table class="concurrency-table"><caption>CUDA concurrency mechanisms (adapted for this configuration) <a href="#source-7">[7]</a></caption><thead><tr><th scope="col">Feature</th><th scope="col">Streams</th><th scope="col">MPS</th><th scope="col">MIG</th></tr></thead><tbody><tr><th scope="row">Partition Type</th><td>Single Process</td><td>Logical</td><td>Physical</td></tr><tr><th scope="row">Max Partitions</th><td>Unlimited</td><td>Hardware-dependent</td><td>7</td></tr><tr><th scope="row">SM Performance Isolation</th><td>No</td><td>Resource cap; no dedicated SMs</td><td>Yes</td></tr><tr><th scope="row">Memory Protection</th><td>No</td><td>Yes</td><td>Yes</td></tr><tr><th scope="row">Memory Bandwidth QoS</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Error Isolation</th><td>No</td><td>No</td><td>Yes</td></tr><tr><th scope="row">Cross-Partition Interop</th><td>Always</td><td>IPC</td><td>Limited IPC</td></tr><tr><th scope="row">Reconfigure</th><td>Dynamic</td><td>Process Launch</td><td>When Idle</td></tr></tbody></table></div>
 
 </section>
-<section id="dra"><h2>Deploying the lab in Kubernetes with DRA</h2><p>DRA (Dynamic Resource Allocation) made deploying this lab pretty easy.<a href="#source-10">[10]</a> With the traditional device plugin, GPU resources could be requested in a Pod, but configurations such as MPS or MIG had to be managed separately.<a href="#source-11">[11]</a></p>
-<p>With DRA, it's more like using PVCs. The NVIDIA DRA driver discovers the available GPUs and publishes them through <code>ResourceSlices</code>. A <code>ResourceClaim</code> is created to describe the requested GPU and configuration, and Kubernetes uses the published resources to find and allocate a matching device. Finally, the kubelet calls the DRA driver to prepare the GPU for the Pod.<a href="#source-10">[10]</a> <a href="#source-12">[12]</a></p>
+<section id="dra"><h2>Deploying the lab in Kubernetes with DRA</h2><p>DRA (Dynamic Resource Allocation) made deploying this lab pretty easy.<a href="#source-9">[9]</a> With the traditional device plugin, GPU resources could be requested in a Pod, but configurations such as MPS or MIG had to be managed separately.<a href="#source-10">[10]</a></p>
+<p>With DRA, it's more like using PVCs. The NVIDIA DRA driver discovers the available GPUs and publishes them through <code>ResourceSlices</code>. A <code>ResourceClaim</code> is created to describe the requested GPU and configuration, and Kubernetes uses the published resources to find and allocate a matching device. Finally, the kubelet calls the DRA driver to prepare the GPU for the Pod.<a href="#source-11">[11]</a></p>
 <figure class="explainer mechanism dra-flow">
 <div class="sharing-diagram-scroll" tabindex="0" role="region" aria-label="DRA user-flow diagram; scroll sideways on smaller screens">
 <a href="/gpu-sharing/images/dra-user-flow.svg"><img class="sharing-diagram" src="/gpu-sharing/images/dra-user-flow.svg" width="1164" height="283" loading="lazy" alt="DRA workflow: install drivers, create DeviceClasses, choose a ResourceClaim for shared devices or a ResourceClaimTemplate for separate devices, attach the claim to a Pod, and deploy the workload."></a>
 </div>
-<figcaption>DRA setup and claim workflow. Source: Google Cloud.<a href="#source-13">[13]</a></figcaption>
+<figcaption>DRA setup and claim workflow. Source: Google Cloud.<a href="#source-12">[12]</a></figcaption>
 </figure>
 
 <h3 id="dra-timeslicing">Time-slicing configuration</h3><p>A <code>ResourceClaim</code> is created to request a GPU shared through time-slicing. The interval can also be configured in that claim.<a href="#source-2">[2]</a></p>
@@ -113,7 +113,7 @@ spec:
       - name: device</code></pre>
 </details>
 <h3 id="dra-mps">MPS configuration</h3>
-<p>To share one GPU through the same MPS server, both Pods must reference the same <code>ResourceClaim</code>. A <code>ResourceClaimTemplate</code> creates a separate claim for each Pod, so using the same template does not guarantee the same GPU or MPS daemon.<a href="#source-14">[14]</a></p>
+<p>To share one GPU through the same MPS server, both Pods must reference the same <code>ResourceClaim</code>. A <code>ResourceClaimTemplate</code> creates a separate claim for each Pod, so using the same template does not guarantee the same GPU or MPS daemon.<a href="#source-13">[13]</a></p>
 <div class="yaml-pair">
 <details class="yaml-example">
 <summary>MPS ResourceClaim</summary>
@@ -163,8 +163,8 @@ spec:
 
 
 <h3 id="dra-mig">MIG configuration</h3>
-<p>DRA supports <code>DynamicMIG</code>, so the GPU does not have to be partitioned manually. The DRA driver creates MIG partitions automatically based on the requested profile. If the partitions are created manually, they can still be requested through DRA, as the driver discovers existing MIG instances at startup and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.<a href="#source-12">[12]</a></p>
-<p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically created a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-10">[10]</a></p>
+<p>DRA supports <code>DynamicMIG</code>, so the GPU does not have to be partitioned manually. The DRA driver creates MIG partitions automatically based on the requested profile. If the partitions are created manually, they can still be requested through DRA, as the driver discovers existing MIG instances at startup and publishes them in <code>ResourceSlices</code>, making them available through the <code>mig.nvidia.com</code> DeviceClass.<a href="#source-11">[11]</a></p>
+<p>For MIG, unlike the MPS configuration, I used a <code>ResourceClaimTemplate</code> so that Kubernetes automatically created a separate <code>ResourceClaim</code> for each Pod, giving each inference server its own MIG instance.<a href="#source-9">[9]</a></p>
 <details class="yaml-example">
 <summary>MIG ResourceClaimTemplate</summary>
 <pre class="claim" tabindex="0"><code>apiVersion: resource.k8s.io/v1
@@ -201,11 +201,11 @@ spec:
       claims:
       - name: device</code></pre>
 </details>
-<p>Currently, the NVIDIA DRA driver's <code>MPSSupport</code> and <code>DynamicMIG</code> feature gates are mutually exclusive. This means MPS cannot be used to share a dynamically created MIG slice with this DRA configuration, even though NVIDIA supports running multiple MPS clients within the same MIG slice.<a href="#source-14">[14]</a> <a href="#source-15">[15]</a></p>
-<p>The traditional device-plugin setup for MIG is described in <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">MIG strategies in Kubernetes</a>. The MIG layout is configured separately from the Pod's GPU request.<a href="#source-16">[16]</a></p>
+<p>Currently, the NVIDIA DRA driver's <code>MPSSupport</code> and <code>DynamicMIG</code> feature gates are mutually exclusive.<a href="#source-13">[13]</a> This means MPS cannot be used to share a dynamically created MIG slice with this DRA configuration, even though NVIDIA supports running multiple MPS clients within the same MIG slice.<a href="#source-14">[14]</a></p>
+<p>The traditional device-plugin setup for MIG is described in <a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">MIG strategies in Kubernetes</a>. The MIG layout is configured separately from the Pod's GPU request.<a href="#source-15">[15]</a></p>
 </section>
 <section id="original"><h2>Inference performance</h2>
-<p>I used the <a href="https://github.com/SemiAnalysisAI/InferenceX">InferenceX repo</a><a href="#source-17">[17]</a> and measured output tokens/s and time to first token (TTFT). <strong>For the sharing runs, tokens/s is the sum of the output throughput from both model instances on the H100.</strong> At five requests per server, MPS 100% had the highest measured throughput: 626 tokens/s, about 25.7% above time-slicing Default at 498. MIG reached 594 tokens/s, about 19.3% above Default; MPS 100% was about 5.4% above MIG. MPS 50% was also close at 611 tokens/s.</p><p>Time-slicing Short and Long were slower in these runs and drew less power in the <a href="#gpu-captures">recorded nvidia-smi snapshots</a>: 182 W and 186 W, respectively, versus 338 W for Default. I haven't established why that happens.</p>
+<p>I used the <a href="https://github.com/SemiAnalysisAI/InferenceX">InferenceX repo</a><a href="#source-16">[16]</a> and measured output tokens/s and time to first token (TTFT). <strong>For the sharing runs, tokens/s is the sum of the output throughput from both model instances on the H100.</strong> At five requests per server, MPS 100% had the highest measured throughput: 626 tokens/s, about 25.7% above time-slicing Default at 498. MIG reached 594 tokens/s, about 19.3% above Default; MPS 100% was about 5.4% above MIG. MPS 50% was also close at 611 tokens/s.</p><p>Time-slicing Short and Long were slower in these runs and drew less power in the <a href="#gpu-captures">recorded nvidia-smi snapshots</a>: 182 W and 186 W, respectively, versus 338 W for Default. I haven't established why that happens.</p>
 <div class="table-wrap" tabindex="0" role="region" aria-label="Inference results; scroll horizontally on smaller screens"><table class="performance-table"><caption>1,024 input / 1,024 output tokens. Medians of three repeats at five requests per server. Sharing runs use two model instances; model alone uses one.</caption><thead><tr><th scope="col">Sharing setting</th><th scope="col">Total output (tokens/s)</th><th scope="col">p95 first-token wait (ms)</th></tr></thead><tbody><tr><th scope="row">Time-slicing Default</th><td>498</td><td>471</td></tr><tr><th scope="row">Time-slicing Short</th><td>385</td><td>1,387</td></tr><tr><th scope="row">Time-slicing Long</th><td>413</td><td>1,400</td></tr><tr><th scope="row">MPS 25%</th><td>513</td><td>516</td></tr><tr><th scope="row">MPS 50%</th><td>611</td><td>392</td></tr><tr><th scope="row">MPS 100%</th><td>626</td><td>376</td></tr><tr><th scope="row">MIG: two 3g.40gb slices</th><td>594</td><td>394</td></tr><tr><th scope="row">Model alone (one instance)</th><td>493</td><td>277</td></tr></tbody></table></div>
 
 
@@ -213,52 +213,51 @@ spec:
 <p>At five requests per server, the standalone model has shorter p95 TTFT: 277 ms, compared with 376 ms for MPS 100% and 394 ms for MIG. The standalone run handles five requests in total, while the two shared servers handle ten. For equal total concurrency, the shared runs at five requests per server should be compared with the standalone run at ten requests, which delivers 736 tokens/s at 455 ms p95 TTFT.</p></section>
 <section id="interpretation"><div id="gpu-captures"><div class="gpu-capture-intro">Below is the recorded <code>nvidia-smi</code> output for each method.</div><div class="gpu-capture-panel"><div class="gpu-modes" role="group" aria-label="GPU capture mode"></div><p role="status"></p><pre tabindex="0" aria-label="Recorded nvidia-smi output"><code></code></pre></div></div>
 <script src="/js/gpu-captures-bundled.js"></script>
-<p>With MPS, the percentage configured for a client is what changes its resource usage: server A's device probes reported 28 multiprocessors at MPS 25% and 114 at MPS 100%. Those counts reflect the execution-resource limit, not ownership of that many exclusive physical SMs.<a href="#source-6">[6]</a></p></section>
+<p>With MPS, the percentage configured for a client is what changes its resource usage: server A's device probes reported 28 multiprocessors at MPS 25% and 114 at MPS 100%. Those counts reflect the execution-resource limit, not ownership of that many exclusive physical SMs.<a href="#source-5">[5]</a></p></section>
 
 
 
 <section id="workload-choice"><h2>Use cases</h2>
 <p>I wouldn't consider these techniques for inference workloads where a single model already keeps the GPU pretty busy. Sharing has more appeal when individual workloads leave spare capacity.</p>
-<p>NVIDIA also compared these sharing methods at KubeCon North America 2024, and the results varied quite a bit depending on the workload.<a href="#source-18">[18]</a></p>
-<p>CERN's presentation also compares time-slicing, MPS and MIG for machine-learning and scientific workloads, using benchmarks to choose a suitable sharing method for each workload.<a href="#source-19">[19]</a></p>
-<p>In general, I'd choose time-slicing for occasional development work that can tolerate variable performance. One neat trick in Kubernetes is oversubscribing a GPU by assigning it to multiple Pods through time-slicing. I'd use MPS for multiple CUDA processes that benefit from running concurrently, although its setup is more complex because it requires a control daemon and server. And finally, I'd use MIG when performance isolation and QoS guarantees are needed. I find it quite straightforward to manage with DynamicMIG.<a href="#source-2">[2]</a> <a href="#source-3">[3]</a> <a href="#source-9">[9]</a> <a href="#source-11">[11]</a> <a href="#source-12">[12]</a></p>
+<p>NVIDIA also compared these sharing methods at KubeCon North America 2024, and the results varied quite a bit depending on the workload.<a href="#source-17">[17]</a></p>
+<p>CERN's presentation also compares time-slicing, MPS and MIG for machine-learning and scientific workloads, using benchmarks to choose a suitable sharing method for each workload.<a href="#source-18">[18]</a></p>
+<p>In general, I'd choose time-slicing for occasional development work that can tolerate variable performance. One neat trick in Kubernetes is oversubscribing a GPU by assigning it to multiple Pods through time-slicing. I'd use MPS for multiple CUDA processes that benefit from running concurrently, although its setup is more complex because it requires a control daemon and server. And finally, I'd use MIG when performance isolation and QoS guarantees are needed. I find it quite straightforward to manage with DynamicMIG.<a href="#source-11">[11]</a></p>
 </section>
 <section id="security"><h2>Security considerations</h2>
-<p>With MIG, CUDA processes running in separate GPU Instances have hardware-level memory isolation, so one process cannot read another process's GPU memory.<a href="#source-9">[9]</a> However, MIG doesn't isolate every part of the GPU or host, so it isn't a complete security boundary.</p>
+<p>With MIG, CUDA processes running in separate GPU Instances have hardware-level memory isolation, so one process cannot read another process's GPU memory.<a href="#source-8">[8]</a> However, MIG doesn't isolate every part of the GPU or host, so it isn't a complete security boundary.</p>
 <p>I found these two LinkedIn articles discussing the security limitations of MIG and GPU sharing, and I think they're worth a read.</p>
 <ul>
 <li><a href="https://www.linkedin.com/pulse/mig-complete-security-boundary-hardware-partitioning-shared-daula-slbac/">MIG Is Not a Complete Security Boundary</a></li>
 <li><a href="https://www.linkedin.com/pulse/gpus-security-boundary-its-architectural-gaps-run-all-kavitha-daula-3zvoe/">GPUs Are Not a Security Boundary and Its Architectural Gaps Run All the Way Down</a></li>
 </ul>
 <p>They explain how resources such as the PCIe link, DMA infrastructure, firmware, and parts of the GPU control plane remain shared, potentially introducing side channels and other security risks.</p>
-<p>Another option is GPU virtualization. With GPU passthrough, a VM normally gets an entire physical GPU, while NVIDIA vGPU allows several VMs to share it, through MIG-backed or time-sliced vGPUs.<a href="#source-20">[20]</a> This adds VM-level isolation, but more components must also be secured, such as the vGPU manager and hypervisor, which can have their own vulnerabilities.<a href="#source-21">[21]</a></p></section>
+<p>Another option is GPU virtualization. With GPU passthrough, a VM normally gets an entire physical GPU, while NVIDIA vGPU allows several VMs to share it, through MIG-backed or time-sliced vGPUs.<a href="#source-19">[19]</a> This adds VM-level isolation, but more components must also be secured, such as the vGPU manager and hypervisor, which can have their own vulnerabilities.<a href="#source-20">[20]</a></p></section>
 <section id="conclusions"><h2>Conclusions</h2>
-<p>For me, the most interesting part of this experiment was DRA: setting these resources dynamically is more aligned with what I do as a DevOps engineer. However, some features I used are still alpha, which confused my agents, for example when setting either the <code>MPSSupport</code> or <code>DynamicMIG</code> feature gate.<a href="#source-14">[14]</a></p>
+<p>For me, the most interesting part of this experiment was DRA: setting these resources dynamically is more aligned with what I do as a DevOps engineer. However, some features I used are still alpha, which confused my agents, for example when setting either the <code>MPSSupport</code> or <code>DynamicMIG</code> feature gate.<a href="#source-13">[13]</a></p>
 <p>For these two instances of Nemotron 32B, MPS 100% achieved the highest measured throughput, with MIG relatively close behind. Both performed better than time-slicing.</p>
 <p>In a few words, I'd describe time-slicing as easy but limited, MPS as specific and complex, and MIG as my default approach when the GPU supports it.</p>
 <p>Thank you for reading my blog. This is my first time! Hehe.</p></section>
 <section id="sources"><h2>Sources</h2><ol class="small">
 <li id="source-1"><a href="https://developer.nvidia.com/blog/maximize-ai-infrastructure-throughput-by-consolidating-underutilized-gpu-workloads/">NVIDIA: Maximize AI Infrastructure Throughput by Consolidating Underutilized GPU Workloads</a></li>
 <li id="source-2"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/gpu-allocation/time-slicing/">DRA Driver for NVIDIA GPUs: Time-slicing</a></li>
-<li id="source-3"><a href="https://docs.nvidia.com/deploy/mps/latest/architecture.html">NVIDIA MPS: Architecture</a></li>
-<li id="source-4"><a href="https://docs.nvidia.com/deploy/nvidia-smi/index.html#compute-policy">NVIDIA System Management Interface: Compute policy and time-slice values</a></li>
-<li id="source-5"><a href="https://docs.nvidia.com/deploy/mps/latest/appendix-environment-variables.html">NVIDIA MPS: Environment variables and connection pools</a></li>
-<li id="source-6"><a href="https://docs.nvidia.com/deploy/mps/latest/when-to-use-mps.html">NVIDIA MPS: Execution-resource provisioning</a></li>
-<li id="source-7"><a href="https://docs.nvidia.com/deploy/mps/latest/mpsv3-memory-partitioning.html">NVIDIA MPS v3: Memory partitioning, hard/soft limits and pressure handling</a></li>
-<li id="source-8"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/concepts.html#cuda-concurrency-mechanisms">NVIDIA: CUDA concurrency mechanisms and shared memory-system resources</a></li>
-<li id="source-9"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/introduction.html">NVIDIA MIG: Hardware isolation and deployment options</a></li>
-<li id="source-10"><a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/dra-api/">Kubernetes: DRA API objects, ResourceClaims and ResourceClaimTemplates</a></li>
-<li id="source-11"><a href="https://github.com/NVIDIA/k8s-device-plugin/blob/main/README.md#shared-access-to-gpus">NVIDIA device plugin for Kubernetes: Shared Access to GPUs</a></li>
-<li id="source-12"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/concepts/gpu-allocation/">NVIDIA DRA driver: Static and dynamic MIG discovery and allocation</a></li>
-<li id="source-13"><a href="https://docs.cloud.google.com/kubernetes-engine/docs/concepts/about-dynamic-resource-allocation#how_dra_works">Google Cloud: How DRA works and user-flow diagram</a></li>
-<li id="source-14"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/">DRA Driver for NVIDIA GPUs: GPU sharing with Multi-Process Service</a></li>
-<li id="source-15"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/getting-started-with-mig.html#mig-with-cuda-mps">NVIDIA MIG: Running MPS inside MIG instances</a></li>
-<li id="source-16"><a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">NVIDIA: MIG strategies in Kubernetes</a></li>
-<li id="source-17"><a href="https://github.com/SemiAnalysisAI/InferenceX">SemiAnalysis: InferenceX benchmark framework</a></li>
-<li id="source-18"><a href="https://static.sched.com/hosted_files/kccncna2024/fd/KCNA24-DRA-Benchmarking.pdf">Which GPU Sharing Strategy Is Right for You? A Benchmark Study Using DRA</a>, Kevin Klues and Yuan Chen, NVIDIA, KubeCon North America 2024. Inference results: PDF pages 62–67; small matrix-multiplication results: PDF pages 72–74.</li>
-<li id="source-19"><a href="https://www.youtube.com/watch?v=_pgOuaYwvBQ">GPU Sharing at CERN: Cutting the Cake Without Losing a Slice!</a>, Diana Gaponcic, KubeCon EU 2025.</li>
-<li id="source-20"><a href="https://docs.nvidia.com/vgpu/latest/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html#nvidia-vgpu-architecture">NVIDIA vGPU: Architecture, time-sliced and MIG-backed vGPUs</a></li>
-<li id="source-21"><a href="https://github.com/NVIDIA/product-security/blob/main/2026/5821/5821.md">NVIDIA security bulletin: GPU display drivers and vGPU software, May 2026</a></li>
+<li id="source-3"><a href="https://docs.nvidia.com/deploy/nvidia-smi/index.html#compute-policy">NVIDIA System Management Interface: Compute policy and time-slice values</a></li>
+<li id="source-4"><a href="https://docs.nvidia.com/deploy/mps/latest/architecture.html">NVIDIA MPS: Architecture</a></li>
+<li id="source-5"><a href="https://docs.nvidia.com/deploy/mps/latest/when-to-use-mps.html">NVIDIA MPS: Execution-resource provisioning</a></li>
+<li id="source-6"><a href="https://docs.nvidia.com/deploy/mps/latest/mpsv3-memory-partitioning.html">NVIDIA MPS v3: Memory partitioning, hard/soft limits and pressure handling</a></li>
+<li id="source-7"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/concepts.html#cuda-concurrency-mechanisms">NVIDIA: CUDA concurrency mechanisms and shared memory-system resources</a></li>
+<li id="source-8"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/introduction.html">NVIDIA MIG: Hardware isolation and deployment options</a></li>
+<li id="source-9"><a href="https://kubernetes.io/docs/concepts/resource-management/dynamic-resource-allocation/dra-api/">Kubernetes: DRA API objects, ResourceClaims and ResourceClaimTemplates</a></li>
+<li id="source-10"><a href="https://github.com/NVIDIA/k8s-device-plugin/blob/main/README.md#shared-access-to-gpus">NVIDIA device plugin for Kubernetes: Shared Access to GPUs</a></li>
+<li id="source-11"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/concepts/gpu-allocation/">NVIDIA DRA driver: Static and dynamic MIG discovery and allocation</a></li>
+<li id="source-12"><a href="https://docs.cloud.google.com/kubernetes-engine/docs/concepts/about-dynamic-resource-allocation#how_dra_works">Google Cloud: How DRA works and user-flow diagram</a></li>
+<li id="source-13"><a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/">DRA Driver for NVIDIA GPUs: GPU sharing with Multi-Process Service</a></li>
+<li id="source-14"><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/getting-started-with-mig.html#mig-with-cuda-mps">NVIDIA MIG: Running MPS inside MIG instances</a></li>
+<li id="source-15"><a href="https://docs.nvidia.com/datacenter/cloud-native/kubernetes/latest/index.html#using-mig-strategies-in-kubernetes">NVIDIA: MIG strategies in Kubernetes</a></li>
+<li id="source-16"><a href="https://github.com/SemiAnalysisAI/InferenceX">SemiAnalysis: InferenceX benchmark framework</a></li>
+<li id="source-17"><a href="https://static.sched.com/hosted_files/kccncna2024/fd/KCNA24-DRA-Benchmarking.pdf">Which GPU Sharing Strategy Is Right for You? A Benchmark Study Using DRA</a>, Kevin Klues and Yuan Chen, NVIDIA, KubeCon North America 2024. Inference results: PDF pages 62–67; small matrix-multiplication results: PDF pages 72–74.</li>
+<li id="source-18"><a href="https://www.youtube.com/watch?v=_pgOuaYwvBQ">GPU Sharing at CERN: Cutting the Cake Without Losing a Slice!</a>, Diana Gaponcic, KubeCon EU 2025.</li>
+<li id="source-19"><a href="https://docs.nvidia.com/vgpu/latest/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html#nvidia-vgpu-architecture">NVIDIA vGPU: Architecture, time-sliced and MIG-backed vGPUs</a></li>
+<li id="source-20"><a href="https://github.com/NVIDIA/product-security/blob/main/2026/5821/5821.md">NVIDIA security bulletin: GPU display drivers and vGPU software, May 2026</a></li>
 </ol></section>
 </div>
 
