@@ -44,7 +44,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <li><strong>Static SM partitioning:</strong> Specific groups of SMs are assigned to different partitions. These SMs are exclusive to their assigned partitions, providing stronger compute isolation and more predictable resource allocation.</li>
 <li><strong>Memory-allocation limits:</strong> There are hard and soft limits. A hard limit rejects allocations that would exceed the configured limit. A soft limit provides a protected budget that clients can exceed when spare memory is available, up to the hard limit; under memory pressure, clients above their soft limit can be evicted. This is separate from the per-client limit shown in the lab's DRA configuration.<a href="#source-5">[5]</a></li>
 </ul>
-<p>Active-thread percentages and static SM partitioning control compute resources, but those controls alone do not provide MIG-style memory-bandwidth isolation. Clients can still compete for memory bandwidth even when their memory allocations and compute resources are restricted.<a href="#source-6">[6]</a></p>
+<p>Active-thread percentages and static SM partitioning control compute resources, while memory-allocation limits restrict memory usage. These controls alone do not provide MIG-style memory-bandwidth isolation. Clients can still compete for memory bandwidth even when their memory allocations and compute resources are restricted.<a href="#source-6">[6]</a></p>
 </section>
 <section id="mig"><h2>MIG</h2>
 
