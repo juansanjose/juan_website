@@ -2,7 +2,8 @@
 title = "Model inference on a shared GPU"
 slug = "model-inferencing-on-a-shared-gpu"
 date = 2026-11-05
-url = "/blog/2026/10/model-inferencing-on-a-shared-gpu/"
+aliases = ["/blog/2026/10/model-inferencing-on-a-shared-gpu/"]
+comments_issue_term = "/blog/2026/10/model-inferencing-on-a-shared-gpu/"
 description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kubernetes DRA."
 +++
 

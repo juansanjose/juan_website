@@ -8,7 +8,7 @@ disableKinds = ["taxonomy", "term"]
   description = "Personal blog"
 
 [permalinks]
-  blog = "/blog/:year/:month/:slug/"
+  blog = "/blog/:slug/"
 
 [outputs]
   home = ["HTML", "RSS"]
