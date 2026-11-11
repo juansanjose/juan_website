@@ -42,7 +42,7 @@ description = "Time-slicing, MPS and MIG on one rented H100, deployed with Kuber
 <ul>
 <li><strong>Active-thread percentage:</strong> Limits the execution resources available to a client. For example, setting the limit to 50% restricts the client to approximately half of the GPU's available execution capacity. However, this does not reserve a fixed half of the physical SMs, as different clients can still execute on the same SMs.<a href="https://docs.nvidia.com/deploy/mps/latest/when-to-use-mps.html#dynamic-execution-resource-provisioning">[4]</a></li>
 <li><strong>Static SM partitioning:</strong> Specific groups of SMs are assigned to different partitions. These SMs are exclusive to their assigned partitions, providing stronger compute isolation and more predictable resource allocation.</li>
-<li><strong>Memory-allocation limits:</strong> There are hard and soft limits. A hard limit rejects allocations that would exceed the configured limit. A soft limit provides a protected budget that clients can exceed when spare memory is available, up to the hard limit; under memory pressure, clients above their soft limit can be evicted. This is separate from the per-client limit shown in the lab's DRA configuration.<a href="https://docs.nvidia.com/deploy/mps/latest/mpsv3-memory-partitioning.html#soft-and-hard-limits">[5]</a></li>
+<li><strong>Memory-allocation limits:</strong> There are hard and soft limits. A hard limit rejects allocations that would exceed the configured limit. A soft limit provides a protected budget that clients can exceed when spare memory is available, up to the hard limit; under memory pressure, clients above their soft limit can be evicted.<a href="https://docs.nvidia.com/deploy/mps/latest/mpsv3-memory-partitioning.html#soft-and-hard-limits">[5]</a></li>
 </ul>
 <p>Active-thread percentages and static SM partitioning control compute resources, while memory-allocation limits restrict memory usage. These controls alone do not provide MIG-style memory-bandwidth isolation. Clients can still compete for memory bandwidth even when their memory allocations and compute resources are restricted.<a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/concepts.html#cuda-concurrency-mechanisms">[6]</a></p>
 </section>
@@ -114,6 +114,7 @@ spec:
 </details>
 <h3 id="dra-mps">MPS configuration</h3>
 <p>To share one GPU through the same MPS server, both Pods must reference the same <code>ResourceClaim</code>. A <code>ResourceClaimTemplate</code> creates a separate claim for each Pod, so using the same template does not guarantee the same GPU or MPS daemon.<a href="https://dra-driver-nvidia-gpu.sigs.k8s.io/docs/guides/mps/#how-mps-works">[12]</a></p>
+<p>The recorded MPS lab manifests set the active-thread percentage without an explicit device-memory limit. The example below matches the 50% run.</p>
 <div class="yaml-pair">
 <details class="yaml-example">
 <summary>MPS ResourceClaim</summary>
@@ -138,8 +139,7 @@ spec:
           sharing:
             strategy: MPS
             mpsConfig:
-              defaultActiveThreadPercentage: 50
-              defaultPinnedDeviceMemoryLimit: 10Gi</code></pre>
+              defaultActiveThreadPercentage: 50</code></pre>
 </details>
 <details class="yaml-example">
 <summary>MPS Pod</summary>
