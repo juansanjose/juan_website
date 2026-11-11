@@ -263,5 +263,4 @@ spec:
 <script src="/js/workshop-video.js"></script>
 <script src="/js/resource-yaml.js"></script>
 <script src="/js/calm-sharing.js"></script>
-<script src="/js/diagram-controls.js" defer></script>
 <script src="/js/reading-progress.js"></script>
