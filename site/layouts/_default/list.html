@@ -4,6 +4,7 @@
 
   {{ .Content }}
 
+  {{ if .Pages }}
   <ul class="post-list">
     {{ range sort .Pages "Date" "desc" }}
     <li>
@@ -12,5 +13,6 @@
     </li>
     {{ end }}
   </ul>
+  {{ end }}
 
 {{ end }}

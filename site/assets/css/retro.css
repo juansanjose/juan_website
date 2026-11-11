@@ -130,13 +130,11 @@ html:not([data-palette]) main.container {
 }
 
 html[data-palette="white"] .site-header,
-html[data-palette="white"] footer,
-html:not([data-palette]) .site-header,
-html:not([data-palette]) footer {
+html:not([data-palette]) .site-header {
   background: var(--article-bg);
 }
 
-/* Keep header/footer content aligned with the article's text edge. */
+/* Keep header content aligned with the article's text edge. */
 .site-header .container {
   max-width: 64rem;
   margin: 0 auto;
@@ -144,13 +142,7 @@ html:not([data-palette]) footer {
   padding-right: clamp(1rem, 3vw, 2.5rem);
 }
 
-footer .container {
-  padding-left: clamp(1rem, 3vw, 2.5rem);
-  padding-right: clamp(1rem, 3vw, 2.5rem);
-}
-
-[data-theme="dark"] .site-header,
-[data-theme="dark"] footer {
+[data-theme="dark"] .site-header {
   background: var(--bg);
 }
 
@@ -271,31 +263,6 @@ a:hover {
   pointer-events: none;
 }
 
-.visitor-counter {
-  display: inline-grid;
-  grid-template-columns: auto;
-  width: 6rem;
-  flex: 0 0 6rem;
-  padding: 0.2rem 0.4rem;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background: var(--button-face);
-  box-shadow: 2px 2px 0 var(--chrome-shadow);
-  color: var(--button-text);
-  font: bold 0.55rem/1 "Courier New", Courier, monospace;
-  text-align: center;
-}
-
-.visitor-counter__label {
-  letter-spacing: 0.08em;
-}
-
-.visitor-counter__value {
-  margin-top: 0.2rem;
-  font-size: 0.78rem;
-  font-variant-numeric: tabular-nums;
-}
-
 [data-theme="dark"] .site-mascot {
   filter: var(--mascot-filter, hue-rotate(92deg) saturate(1.35) brightness(1.15)) var(--mascot-glow, drop-shadow(2px 2px 0 var(--chrome-shadow)));
 }
@@ -330,8 +297,7 @@ a:hover {
   text-align: center;
 }
 
-[data-palette="white"] .site-nav a,
-[data-palette="white"] .visitor-counter {
+[data-palette="white"] .site-nav a {
   border-color: #5a5a5a;
 }
 
@@ -524,13 +490,6 @@ pre code {
   font-size: 0.9rem;
 }
 
-footer {
-  padding: 0.75rem 0;
-  border-top: 1px solid var(--border);
-  font: 0.75rem Verdana, Arial, sans-serif;
-  color: var(--muted);
-}
-
 @media (max-width: 720px) {
   .site-header .container {
     gap: 0.4rem;
@@ -539,11 +498,6 @@ footer {
   .site-mascot-frame {
     width: 36px;
     height: 36px;
-  }
-
-  .visitor-counter {
-    width: 6rem;
-    padding-inline: 0.25rem;
   }
 
   .site-nav {
