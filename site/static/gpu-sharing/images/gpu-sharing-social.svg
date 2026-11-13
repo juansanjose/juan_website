@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">GPU sharing in Kubernetes</title>
+  <desc id="desc">Three simple illustrations: time-slicing takes turns, MPS runs together, and MIG splits the GPU into separate instances.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#173248" stroke-opacity=".035"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#faf8f2"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#142d43">
+    <rect x="48" y="42" width="151" height="30" rx="15" fill="#dfebe9"/>
+    <text x="123" y="62" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="2">FROM THE BLOG</text>
+    <text x="48" y="143" font-size="58" font-weight="700" letter-spacing="-2">GPU sharing in Kubernetes</text>
+    <text x="50" y="187" font-size="25" fill="#526475">One GPU. Three ways to share.</text>
+
+    <rect x="48" y="232" width="352" height="290" rx="22" fill="#fff" stroke="#d5e7e4" stroke-width="2"/>
+    <rect x="424" y="232" width="352" height="290" rx="22" fill="#fff" stroke="#f0dcd5" stroke-width="2"/>
+    <rect x="800" y="232" width="352" height="290" rx="22" fill="#fff" stroke="#dce7d6" stroke-width="2"/>
+
+    <g transform="translate(96 266)">
+      <g stroke="#92adae" stroke-width="7" stroke-linecap="round">
+        <path d="M65 10V24M107 10V24M149 10V24M191 10V24M65 151V165M107 151V165M149 151V165M191 151V165M35 51H21M35 87H21M35 123H21M221 51H235M221 87H235M221 123H235"/>
+      </g>
+      <rect x="35" y="24" width="186" height="127" rx="16" fill="#e6f4f1" stroke="#147f85" stroke-width="3"/>
+      <text x="128" y="62" text-anchor="middle" font-size="19" font-weight="700">GPU</text>
+      <rect x="49" y="80" width="42" height="44" rx="7" fill="#168d93"/>
+      <rect x="91" y="80" width="37" height="44" rx="7" fill="#f18c77"/>
+      <rect x="128" y="80" width="37" height="44" rx="7" fill="#168d93"/>
+      <rect x="165" y="80" width="42" height="44" rx="7" fill="#f18c77"/>
+      <path d="M53 136H200M194 131L201 136L194 141" fill="none" stroke="#147f85" stroke-width="2"/>
+    </g>
+    <g transform="translate(472 266)">
+      <g stroke="#c7a59b" stroke-width="7" stroke-linecap="round">
+        <path d="M65 10V24M107 10V24M149 10V24M191 10V24M65 151V165M107 151V165M149 151V165M191 151V165M35 51H21M35 87H21M35 123H21M221 51H235M221 87H235M221 123H235"/>
+      </g>
+      <rect x="35" y="24" width="186" height="127" rx="16" fill="#fff0e9" stroke="#d9745f" stroke-width="3"/>
+      <text x="128" y="62" text-anchor="middle" font-size="19" font-weight="700">GPU</text>
+      <rect x="54" y="79" width="115" height="23" rx="8" fill="#168d93"/>
+      <rect x="87" y="111" width="115" height="23" rx="8" fill="#f18c77"/>
+    </g>
+    <g transform="translate(848 266)">
+      <g stroke="#9aae8c" stroke-width="7" stroke-linecap="round">
+        <path d="M65 10V24M107 10V24M149 10V24M191 10V24M65 151V165M107 151V165M149 151V165M191 151V165M35 51H21M35 87H21M35 123H21M221 51H235M221 87H235M221 123H235"/>
+      </g>
+      <rect x="35" y="24" width="186" height="127" rx="16" fill="#eef5e9" stroke="#558744" stroke-width="3"/>
+      <text x="128" y="62" text-anchor="middle" font-size="19" font-weight="700">GPU</text>
+      <rect x="50" y="78" width="70" height="56" rx="9" fill="#8cbd75"/>
+      <rect x="136" y="78" width="70" height="56" rx="9" fill="#bfdba7"/>
+      <path d="M128 75V138" stroke="#558744" stroke-width="2" stroke-dasharray="4 4"/>
+    </g>
+
+    <g text-anchor="middle">
+      <text x="224" y="467" font-size="27" font-weight="700">Time-slicing</text>
+      <text x="224" y="497" font-size="19" fill="#526475">Take turns</text>
+      <text x="600" y="467" font-size="27" font-weight="700">MPS</text>
+      <text x="600" y="497" font-size="19" fill="#526475">Run together</text>
+      <text x="976" y="467" font-size="27" font-weight="700">MIG</text>
+      <text x="976" y="497" font-size="19" fill="#526475">Separate instances</text>
+    </g>
+    <path d="M48 559H1152" stroke="#d7dedc"/>
+    <text x="48" y="598" font-size="18" font-weight="700">Juan San José</text>
+    <text x="1152" y="598" text-anchor="end" font-size="18" fill="#526475">jsanjosep.com</text>
+  </g>
+</svg>
